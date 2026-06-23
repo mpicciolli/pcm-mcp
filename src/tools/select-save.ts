@@ -35,15 +35,6 @@ export function registerSelectSave(server: McpServer): void {
 				};
 
 				return validResponse(output);
-				/* return {
-					content: [
-						{
-							type: "text",
-							text: JSON.stringify(output),
-						},
-					],
-					structuredContent: output,
-				}; */
 			} catch (error) {
 				return errorResponse(String(error));
 			}
