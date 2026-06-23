@@ -1,6 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { errorResult } from "../helpers";
+import { errorResponse, validResponse } from "../helpers";
 import { listSaves } from "../saves";
 
 const outputSchema = z.object({
@@ -37,7 +37,8 @@ export function registerListSaves(server: McpServer): void {
 					saves,
 				};
 
-				return {
+				return validResponse(output);
+				/* return {
 					content: [
 						{
 							type: "text",
@@ -45,9 +46,9 @@ export function registerListSaves(server: McpServer): void {
 						},
 					],
 					structuredContent: output,
-				};
+				}; */
 			} catch (error) {
-				return errorResult(error);
+				return errorResponse(String(error));
 			}
 		},
 	);

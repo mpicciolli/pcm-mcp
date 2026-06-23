@@ -1,7 +1,18 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { errorResult, jsonResult } from "../helpers";
+import { errorResponse, validResponse } from "../helpers";
 import { validateSave } from "../saves";
+
+const outputSchema = z.object({
+	path: z.string().describe("Absolute path to the .cdb save file"),
+	name: z.string().describe("File name, e.g. `MyCareer.cdb`"),
+	lastModified: z
+		.string()
+		.describe(
+			"Last modified timestamp in ISO 8601 format, e.g. `2024-06-01T12:34:56.789Z`",
+		),
+	sizeBytes: z.number().describe("File size in bytes"),
+});
 
 export function registerSelectSave(server: McpServer): void {
 	server.registerTool(
@@ -13,22 +24,28 @@ export function registerSelectSave(server: McpServer): void {
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 			},
-			outputSchema: z.object({
-				path: z.string().describe("Absolute path to the .cdb save file"),
-				name: z.string().describe("File name, e.g. `MyCareer.cdb`"),
-				lastModified: z
-					.string()
-					.describe(
-						"Last modified timestamp in ISO 8601 format, e.g. `2024-06-01T12:34:56.789Z`",
-					),
-				sizeBytes: z.number().describe("File size in bytes"),
-			})
+			outputSchema,
 		},
 		async ({ savePath }) => {
 			try {
-				return jsonResult(await validateSave(savePath));
+				const save = await validateSave(savePath);
+
+				const output: z.infer<typeof outputSchema> = {
+					...save,
+				};
+
+				return validResponse(output);
+				/* return {
+					content: [
+						{
+							type: "text",
+							text: JSON.stringify(output),
+						},
+					],
+					structuredContent: output,
+				}; */
 			} catch (error) {
-				return errorResult(error);
+				return errorResponse(String(error));
 			}
 		},
 	);
