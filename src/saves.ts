@@ -18,7 +18,9 @@ export interface SaveFile {
 const PCM_FOLDER_PREFIX = "Pro Cycling Manager";
 
 /**
- * Within each version folder, ongoing careers live under `Cloud/<SteamID>/`.
+ * Within each version folder, ongoing careers live under `Cloud/<profile>/`,
+ * where `<profile>` is the player's SteamID64 or a
+ * profile name, depending on the PCM version.
  * (Timestamped backups live in a sibling `WeeklySaves/` folder, which we
  * intentionally do not scan — only live careers are surfaced.)
  */
@@ -29,7 +31,8 @@ const CLOUD_DIR = "Cloud";
  * `Pro Cycling Manager <year>` folders.
  *
  * PCM only ships on Windows, where careers live under
- * `%APPDATA%/Pro Cycling Manager <year>/Cloud/<SteamID>/`. On macOS/Linux the
+ * `%APPDATA%/Pro Cycling Manager <year>/Cloud/<profile>/` (where `<profile>` is
+ * a SteamID64 or a profile name). On macOS/Linux the
  * saves live inside a Wine/Proton prefix that we can't reliably locate, so
  * auto-discovery is unsupported there — pass an absolute `.cdb` path to
  * `select_save` instead.
@@ -85,7 +88,7 @@ export async function findCloudDirectories(
 
 /**
  * Recursively collect `.cdb` files under `dir` (careers nest one level deep
- * inside a `<SteamID>` folder, but we walk arbitrary depth to be safe).
+ * inside a `<profile>` folder, but we walk arbitrary depth to be safe).
  */
 async function collectCdbFiles(dir: string): Promise<SaveFile[]> {
 	const saves: SaveFile[] = [];
