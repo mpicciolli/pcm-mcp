@@ -42,14 +42,14 @@ test/                 # vitest specs (test/**/*.test.ts) — currently empty
 
 ## Tools
 
-| Tool | Purpose |
-| --- | --- |
-| `list_saves` | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**). |
-| `select_save` | Validate an absolute `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools. |
-| `get_save_info` | List all tables (id + name) in a save via `DB_STRUCTURE`. |
-| `get_table_info` | Inspect one table: columns (name, type, NOT NULL, PK) + row count. |
-| `get_player_info` | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`). |
-| `query_save` | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000). |
+| Tool              | Purpose                                                                                                                          |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `list_saves`      | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).                     |
+| `select_save`     | Validate an absolute `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools. |
+| `get_save_info`   | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                                        |
+| `get_table_info`  | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                               |
+| `get_player_info` | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                               |
+| `query_save`      | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).                     |
 
 ## Conventions
 
@@ -70,6 +70,15 @@ test/                 # vitest specs (test/**/*.test.ts) — currently empty
 - **Platform:** auto-discovery is Windows-only. On macOS/Linux (Wine/Proton),
   `list_saves`/`getPcmRoot` throw — pass an absolute `.cdb` path to `select_save`.
 - **Logging** must go to `stderr` (`console.error`); stdout is the MCP transport.
+
+## Collaboration And Release Conventions
+
+- Respect standard JavaScript library conventions for commits, pull requests, tags, and releases.
+- Prefer Conventional Commit style when proposing commit messages or PR titles, especially for changes that affect release notes or semantic versioning.
+- Keep pull requests focused, with a clear scope, user-visible impact, and explicit note when a change is breaking.
+- Treat versioning and release artifacts as semver-driven. Breaking API or packaging changes must be clearly identified so they can drive a major release.
+- Prefer annotated version tags that match the package release version format, such as `v0.1.0`, unless the repository documents another convention.
+- When preparing release-related changes, make sure changelog, package metadata, exports, and release notes stay coherent with the actual API and runtime compatibility.
 
 ## Commands
 
