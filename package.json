@@ -2,18 +2,24 @@
 	"name": "pcm-mcp",
 	"version": "1.0.0",
 	"description": "MCP server for querying Pro Cycling Manager game databases",
-	"main": "index.js",
+	"type": "module",
 	"bin": {
-		"pcm-mcp": "./build/index.js"
+		"pcm-mcp": "./dist/index.js"
 	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsup",
+		"dev": "tsup --watch",
 		"format": "biome format --write .",
+		"inspector": "npx @modelcontextprotocol/inspector",
 		"lint": "biome lint --write .",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"coverage": "vitest run --coverage",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"start": "node ./dist/index.js"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.13",

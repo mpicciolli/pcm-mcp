@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { registerTools } from "./tools/index.js";
+import { registerTools } from "./tools/index";
 
 const { version } = JSON.parse(
 	readFileSync(join(__dirname, "../package.json"), "utf-8"),
