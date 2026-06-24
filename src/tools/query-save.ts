@@ -1,10 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { errorResponse, validResponse } from "../helpers";
-import { validateSave } from "../saves";
-import { cdbToSql } from "cdb-converter";
-import initSqlJs from "sql.js";
-import { readFileSync } from "node:fs";
+import { withSaveDb } from "../save-db";
 
 const DEFAULT_LIMIT = 100;
 const MAX_LIMIT = 1000;
@@ -86,16 +82,10 @@ export function registerQuerySave(server: McpServer): void {
 			},
 			outputSchema,
 		},
-		async ({ savePath, query, limit }) => {
-			let db: ReturnType<typeof cdbToSql> | undefined;
-			try {
-				const save = await validateSave(savePath);
+		async ({ savePath, query, limit }) =>
+			withSaveDb(savePath, (db) => {
 				const safeQuery = assertReadOnlyQuery(query);
 				const effectiveLimit = Math.min(limit ?? DEFAULT_LIMIT, MAX_LIMIT);
-
-				const SQL = await initSqlJs();
-				const cdbBuffer = readFileSync(save.path);
-				db = cdbToSql(cdbBuffer, SQL);
 
 				// Fetch one extra row to detect truncation.
 				const stmt = db.prepare(safeQuery);
@@ -120,12 +110,7 @@ export function registerQuerySave(server: McpServer): void {
 					truncated,
 				};
 
-				return validResponse(output);
-			} catch (error) {
-				return errorResponse(String(error));
-			} finally {
-				db?.close();
-			}
-		},
+				return output;
+			}),
 	);
 }

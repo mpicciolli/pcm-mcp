@@ -1,10 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { errorResponse, validResponse } from "../helpers";
-import { validateSave } from "../saves";
-import { cdbToSql } from "cdb-converter";
-import initSqlJs from "sql.js";
-import { readFileSync } from "node:fs";
+import { withSaveDb } from "../save-db";
 
 const outputSchema = z.object({
 	name: z.string().describe("Table name"),
@@ -43,17 +39,8 @@ export function registerGetTableInfo(server: McpServer): void {
 			},
 			outputSchema,
 		},
-		async ({ savePath, tableName }) => {
-			let db: ReturnType<typeof cdbToSql> | undefined;
-			try {
-				const save = await validateSave(savePath);
-
-				const SQL = await initSqlJs();
-
-				const cdbBuffer = readFileSync(save.path);
-
-				db = cdbToSql(cdbBuffer, SQL);
-
+		async ({ savePath, tableName }) =>
+			withSaveDb(savePath, (db, save) => {
 				// Validate the table exists (and guard against SQL injection) by
 				// matching the name against DB_STRUCTURE before interpolating it.
 				// DB_STRUCTURE columns aren't named, so read by position: the table
@@ -89,12 +76,7 @@ export function registerGetTableInfo(server: McpServer): void {
 					columnCount: columns.length,
 				};
 
-				return validResponse(output);
-			} catch (error) {
-				return errorResponse(String(error));
-			} finally {
-				db?.close();
-			}
-		},
+				return output;
+			}),
 	);
 }

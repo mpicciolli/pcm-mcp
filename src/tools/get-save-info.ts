@@ -1,10 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { errorResponse, validResponse } from "../helpers";
-import { validateSave } from "../saves";
-import { cdbToSql } from "cdb-converter";
-import initSqlJs from "sql.js";
-import { readFileSync } from "node:fs";
+import { withSaveDb } from "../save-db";
 
 const outputSchema = z.object({
 	tables: z
@@ -29,41 +25,22 @@ export function registerGetSaveInfo(server: McpServer): void {
 			},
 			outputSchema,
 		},
-		async ({ savePath }) => {
-			let db: ReturnType<typeof cdbToSql> | undefined;
-			try {
-				const save = await validateSave(savePath);
-
-				const SQL = await initSqlJs();
-
-				const cdbBuffer = readFileSync(save.path);
-
-				db = cdbToSql(cdbBuffer, SQL);
-
+		async ({ savePath }) =>
+			withSaveDb(savePath, (db) => {
 				const results = db.exec("SELECT * FROM DB_STRUCTURE");
-
 				const rows = results[0]?.values ?? [];
-
-				console.error(rows);
 
 				const tables = rows.map((row) => ({
 					id: Number(row[1]),
 					name: String(row[0]),
 				}));
 
-				console.error(tables);
-
 				const output: z.infer<typeof outputSchema> = {
 					tables,
 					tableCount: tables.length,
 				};
 
-				return validResponse(output);
-			} catch (error) {
-				return errorResponse(String(error));
-			} finally {
-				db?.close();
-			}
-		},
+				return output;
+			}),
 	);
 }

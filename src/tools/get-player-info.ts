@@ -1,10 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { errorResponse, validResponse } from "../helpers";
-import { validateSave } from "../saves";
-import { cdbToSql } from "cdb-converter";
-import initSqlJs from "sql.js";
-import { readFileSync } from "node:fs";
+import { withSaveDb } from "../save-db";
 
 const outputSchema = z.object({
 	login: z.string().describe("Player login (game_sz_login)"),
@@ -17,7 +13,9 @@ const outputSchema = z.object({
 	evaluation: z
 		.number()
 		.describe("Team current evaluation (value_f_current_evaluation)"),
-	manager: z.string().describe("General manager name (gene_sz_manager_general)"),
+	manager: z
+		.string()
+		.describe("General manager name (gene_sz_manager_general)"),
 });
 
 export function registerGetPlayerInfo(server: McpServer): void {
@@ -32,17 +30,8 @@ export function registerGetPlayerInfo(server: McpServer): void {
 			},
 			outputSchema,
 		},
-		async ({ savePath }) => {
-			let db: ReturnType<typeof cdbToSql> | undefined;
-			try {
-				const save = await validateSave(savePath);
-
-				const SQL = await initSqlJs();
-
-				const cdbBuffer = readFileSync(save.path);
-
-				db = cdbToSql(cdbBuffer, SQL);
-
+		async ({ savePath }) =>
+			withSaveDb(savePath, (db, save) => {
 				const stmt = db.prepare(
 					`SELECT
 						u.game_sz_login AS login,
@@ -81,12 +70,7 @@ export function registerGetPlayerInfo(server: McpServer): void {
 					manager: String(row.manager),
 				};
 
-				return validResponse(output);
-			} catch (error) {
-				return errorResponse(String(error));
-			} finally {
-				db?.close();
-			}
-		},
+				return output;
+			}),
 	);
 }
