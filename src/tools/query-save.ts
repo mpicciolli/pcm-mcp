@@ -87,6 +87,7 @@ export function registerQuerySave(server: McpServer): void {
 			outputSchema,
 		},
 		async ({ savePath, query, limit }) => {
+			let db: ReturnType<typeof cdbToSql> | undefined;
 			try {
 				const save = await validateSave(savePath);
 				const safeQuery = assertReadOnlyQuery(query);
@@ -94,7 +95,7 @@ export function registerQuerySave(server: McpServer): void {
 
 				const SQL = await initSqlJs();
 				const cdbBuffer = readFileSync(save.path);
-				const db = cdbToSql(cdbBuffer, SQL);
+				db = cdbToSql(cdbBuffer, SQL);
 
 				// Fetch one extra row to detect truncation.
 				const stmt = db.prepare(safeQuery);
@@ -122,6 +123,8 @@ export function registerQuerySave(server: McpServer): void {
 				return validResponse(output);
 			} catch (error) {
 				return errorResponse(String(error));
+			} finally {
+				db?.close();
 			}
 		},
 	);

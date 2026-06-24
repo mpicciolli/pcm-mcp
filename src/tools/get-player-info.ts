@@ -33,6 +33,7 @@ export function registerGetPlayerInfo(server: McpServer): void {
 			outputSchema,
 		},
 		async ({ savePath }) => {
+			let db: ReturnType<typeof cdbToSql> | undefined;
 			try {
 				const save = await validateSave(savePath);
 
@@ -40,7 +41,7 @@ export function registerGetPlayerInfo(server: McpServer): void {
 
 				const cdbBuffer = readFileSync(save.path);
 
-				const db = cdbToSql(cdbBuffer, SQL);
+				db = cdbToSql(cdbBuffer, SQL);
 
 				const stmt = db.prepare(
 					`SELECT
@@ -83,6 +84,8 @@ export function registerGetPlayerInfo(server: McpServer): void {
 				return validResponse(output);
 			} catch (error) {
 				return errorResponse(String(error));
+			} finally {
+				db?.close();
 			}
 		},
 	);
