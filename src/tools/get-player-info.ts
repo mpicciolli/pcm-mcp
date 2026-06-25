@@ -9,9 +9,7 @@ const outputSchema = z.object({
 	teamShortName: z.string().describe("Team short name (gene_sz_shortname)"),
 	division: z
 		.string()
-		.describe(
-			"Current division name (STA_division.CONSTANT via fkIDdivision)",
-		),
+		.describe("Current division name (STA_division.CONSTANT via fkIDdivision)"),
 	nextDivision: z
 		.string()
 		.describe(
@@ -19,9 +17,7 @@ const outputSchema = z.object({
 		),
 	country: z
 		.string()
-		.describe(
-			"Country name (STA_country.gene_sz_flag via fkIDcountry)",
-		),
+		.describe("Country name (STA_country.gene_sz_flag via fkIDcountry)"),
 	evaluation: z
 		.number()
 		.describe("Team current evaluation (value_f_current_evaluation)"),
