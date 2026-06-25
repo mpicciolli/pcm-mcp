@@ -8,12 +8,16 @@ This server is strictly **read-only**. PCM stores careers as binary `.cdb` files
 
 ## Available Tools
 
-- **list_saves** : Discover PCM `.cdb` career save files on this machine by scanning the `Pro Cycling Manager <year>/Cloud` folders under `%APPDATA%` (Windows only). Returns each save's absolute path, file name, last modified date and size (newest first).
-- **select_save** : Validate that an absolute path points to an existing `.cdb` save file and return its metadata. Stateless — keep the returned path in conversation context to pass to later tools.
-- **get_save_schema** : List every table inside a `.cdb` save file, with its ID and name, plus the total table count.
-- **get_table_schema** : Inspect a single table by name. Returns its columns (name, SQL type, NOT NULL and primary key flags) and its row count.
-- **get_player_info** : Get the active human player and their team from a save file. Returns the player login plus team details (name, division, country, evaluation and manager).
-- **query_save** : Run a read-only SQL query (`SELECT` / `WITH … SELECT` only) against any table in a save file. Write/DDL statements are rejected. Results are capped (default 100, max 1000 rows).
+All tools are read-only and carry `readOnlyHint: true`, so clients like Claude Desktop can approve them automatically without a confirmation prompt.
+
+| Tool                     | Description                                                                                                                                                                                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **pcm_list_saves**       | Discover PCM `.cdb` career save files on this machine by scanning the `Pro Cycling Manager <year>/Cloud` folders under `%APPDATA%` (Windows only). Returns each save's absolute path, file name, last modified date and size (newest first). |
+| **pcm_select_save**      | Validate that an absolute path points to an existing `.cdb` save file and return its metadata. Stateless — keep the returned path in conversation context to pass to later tools.                                                            |
+| **pcm_get_save_schema**  | List every table inside a `.cdb` save file, with its ID and name, plus the total table count.                                                                                                                                                |
+| **pcm_get_table_schema** | Inspect a single table by name. Returns its columns (name, SQL type, NOT NULL and primary key flags) and its row count. Use `pcm_get_save_schema` first to discover available table names.                                                   |
+| **pcm_get_player_info**  | Get the active human player and their team from a save file. Returns the player login plus team details (name, resolved division name, resolved country name, evaluation and manager).                                                       |
+| **pcm_query_save**       | Run a read-only SQL query (`SELECT` / `WITH … SELECT` only) against any table in a save file. Write/DDL statements are rejected. Results are capped (default 100, max 1000 rows).                                                            |
 
 ## Installation
 

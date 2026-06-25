@@ -30,26 +30,28 @@ src/
   save-db.ts      # withSaveDb(): open .cdb in-memory, run fn, always close db
   helpers.ts      # validResponse / errorResponse → CallToolResult
   tools/
-    index.ts          # registerTools() — wires every tool onto the server
-    list-saves.ts     # list_saves
-    select-save.ts    # select_save
-    get-save-schema.ts # get_save_schema
-    get-table-schema.ts # get_table_schema
-    get-player-info.ts# get_player_info
-    query-save.ts     # query_save
+    index.ts              # registerTools() — wires every tool onto the server
+    list-saves.ts         # pcm_list_saves
+    select-save.ts        # pcm_select_save
+    get-save-schema.ts    # pcm_get_save_schema
+    get-table-schema.ts   # pcm_get_table_schema
+    get-player-info.ts    # pcm_get_player_info
+    query-save.ts         # pcm_query_save
 test/                 # vitest specs (test/**/*.test.ts)
 ```
 
 ## Tools
 
-| Tool               | Purpose                                                                                                                |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `list_saves`       | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).           |
-| `select_save`      | Validate a `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools. |
-| `get_save_schema`  | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                              |
-| `get_table_schema` | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                     |
-| `get_player_info`  | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                     |
-| `query_save`       | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).           |
+All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructiveHint: false` annotations so clients can auto-approve them.
+
+| Tool                   | Purpose                                                                                                                |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `pcm_list_saves`       | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).           |
+| `pcm_select_save`      | Validate a `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools. |
+| `pcm_get_save_schema`  | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                              |
+| `pcm_get_table_schema` | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                     |
+| `pcm_get_player_info`  | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                     |
+| `pcm_query_save`       | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).           |
 
 ## Conventions
 
@@ -67,9 +69,27 @@ test/                 # vitest specs (test/**/*.test.ts)
   names against `DB_STRUCTURE` before building queries (see `get_table_schema`).
 - **Tool responses** go through `validResponse` / `errorResponse`; declare both
   `inputSchema` and `outputSchema` with zod.
+- **Tool annotations** — every tool must include `readOnlyHint`, `destructiveHint`,
+  `idempotentHint`, and `openWorldHint`. All current tools are read-only
+  (`readOnlyHint: true`, `destructiveHint: false`).
+- **Tool naming** — all tools are prefixed with `pcm_` (e.g. `pcm_list_saves`) to
+  avoid conflicts when used alongside other MCP servers.
 - **Platform:** auto-discovery is Windows-only. On macOS/Linux (Wine/Proton),
-  `list_saves`/`getPcmRoot` throw — pass an absolute `.cdb` path to `select_save`.
+  `pcm_list_saves`/`getPcmRoot` throw — pass an absolute `.cdb` path to `pcm_select_save`.
 - **Logging** must go to `stderr` (`console.error`); stdout is the MCP transport.
+
+## README maintenance
+
+After any change that affects the public interface of this server, update `README.md`
+before considering the task done. This includes:
+
+- Adding, removing, or renaming a tool
+- Changing a tool's inputs, outputs, or description
+- Changing platform support or installation requirements
+- Changing the MCP transport or Claude Desktop configuration
+
+The tool table in `README.md` must always match the exact tool names registered in the
+source (currently prefixed with `pcm_`).
 
 ## Collaboration And Release Conventions
 

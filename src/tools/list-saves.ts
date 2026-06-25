@@ -22,12 +22,18 @@ const outputSchema = z.object({
 
 export function registerListSaves(server: McpServer): void {
 	server.registerTool(
-		"list_saves",
+		"pcm_list_saves",
 		{
 			title: "List PCM saves",
 			description:
 				"Discover Pro Cycling Manager `.cdb` career save files on this machine by scanning the `Pro Cycling Manager <year>/Cloud` folders under %APPDATA% (Windows only). Returns each save's absolute path, file name, last modified date and size (newest first).",
 			outputSchema,
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+				idempotentHint: true,
+				openWorldHint: false,
+			},
 		},
 		async () => {
 			try {

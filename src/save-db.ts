@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { cdbToSql } from "cdb-converter";
 import initSqlJs from "sql.js";
@@ -36,7 +36,7 @@ export async function withSaveDb<T extends Record<string, unknown>>(
 		const save = await validateSave(savePath);
 
 		const SQL = await initSqlJs();
-		const cdbBuffer = readFileSync(save.path);
+		const cdbBuffer = await readFile(save.path);
 		db = cdbToSql(cdbBuffer, SQL);
 
 		const output = await fn(db, save);

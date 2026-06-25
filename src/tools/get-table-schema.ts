@@ -24,20 +24,26 @@ const outputSchema = z.object({
 
 export function registerGetTableSchema(server: McpServer): void {
 	server.registerTool(
-		"get_table_schema",
+		"pcm_get_table_schema",
 		{
 			title: "Get PCM table schema",
 			description:
-				"Inspect a single table inside a Pro Cycling Manager `.cdb` save file by name. Returns the table's columns (name, SQL type, NOT NULL and primary key flags) and its row count. Use `get_save_schema` first to discover available table names.",
+				"Inspect a single table inside a Pro Cycling Manager `.cdb` save file by name. Returns the table's columns (name, SQL type, NOT NULL and primary key flags) and its row count. Use `pcm_get_save_schema` first to discover available table names.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				tableName: z
 					.string()
 					.describe(
-						"Name of the table to inspect, as listed by `get_save_schema`",
+						"Name of the table to inspect, as listed by `pcm_get_save_schema`",
 					),
 			},
 			outputSchema,
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+				idempotentHint: true,
+				openWorldHint: false,
+			},
 		},
 		async ({ savePath, tableName }) =>
 			withSaveDb(savePath, (db, save) => {
@@ -51,7 +57,7 @@ export function registerGetTableSchema(server: McpServer): void {
 				);
 				if (!knownTables.includes(tableName)) {
 					throw new Error(
-						`Table "${tableName}" not found in ${save.name}. Use get_save_schema to list available tables.`,
+						`Table "${tableName}" not found in ${save.name}. Use pcm_get_save_schema to list available tables.`,
 					);
 				}
 

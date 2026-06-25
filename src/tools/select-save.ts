@@ -16,15 +16,21 @@ const outputSchema = z.object({
 
 export function registerSelectSave(server: McpServer): void {
 	server.registerTool(
-		"select_save",
+		"pcm_select_save",
 		{
 			title: "Select PCM save",
 			description:
-				"Validate that a absolute path points to an existing Pro Cycling Manager `.cdb` save file and return its metadata. Stateless: nothing is stored — keep the returned path in conversation context to pass to later tools.",
+				"Validate that an absolute path points to an existing Pro Cycling Manager `.cdb` save file and return its metadata. Stateless: nothing is stored — keep the returned path in conversation context to pass to later tools.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 			},
 			outputSchema,
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+				idempotentHint: true,
+				openWorldHint: false,
+			},
 		},
 		async ({ savePath }) => {
 			try {

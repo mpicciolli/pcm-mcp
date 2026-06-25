@@ -43,6 +43,9 @@
 		"url": "https://github.com/mpicciolli/pcm-mcp/issues"
 	},
 	"homepage": "https://github.com/mpicciolli/pcm-mcp#readme",
+	"engines": {
+		"node": ">=22.0.0"
+	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.29.0",
 		"cdb-converter": "^0.1.2",

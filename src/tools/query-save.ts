@@ -19,11 +19,11 @@ const outputSchema = z.object({
 
 export function registerQuerySave(server: McpServer): void {
 	server.registerTool(
-		"query_save",
+		"pcm_query_save",
 		{
 			title: "Query PCM save (read-only)",
 			description:
-				"Run a read-only SQL query against any table in a Pro Cycling Manager `.cdb` save file. Only a single SELECT (or WITH … SELECT) statement is allowed; write/DDL statements are rejected and the save is never modified. Results are capped (default 100, max 1000 rows). Use `get_save_schema` to discover table names and `get_table_schema` to inspect their columns.",
+				"Run a read-only SQL query against any table in a Pro Cycling Manager `.cdb` save file. Only a single SELECT (or WITH … SELECT) statement is allowed; write/DDL statements are rejected and the save is never modified. Results are capped (default 100, max 1000 rows). Use `pcm_get_save_schema` to discover table names and `pcm_get_table_schema` to inspect their columns.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				query: z
@@ -42,6 +42,12 @@ export function registerQuerySave(server: McpServer): void {
 					),
 			},
 			outputSchema,
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+				idempotentHint: true,
+				openWorldHint: false,
+			},
 		},
 		async ({ savePath, query, limit }) =>
 			withSaveDb(savePath, (db) => {
@@ -92,14 +98,14 @@ function explainQueryError(error: unknown): Error {
 	const missingTable = /no such table:\s*(\S+)/i.exec(message);
 	if (missingTable) {
 		return new Error(
-			`Table "${missingTable[1]}" does not exist in this save — use get_save_schema to list available tables.`,
+			`Table "${missingTable[1]}" does not exist in this save — use pcm_get_save_schema to list available tables.`,
 		);
 	}
 
 	const missingColumn = /no such column:\s*(\S+)/i.exec(message);
 	if (missingColumn) {
 		return new Error(
-			`Column "${missingColumn[1]}" does not exist — use get_table_schema to inspect the table's columns.`,
+			`Column "${missingColumn[1]}" does not exist — use pcm_get_table_schema to inspect the table's columns.`,
 		);
 	}
 

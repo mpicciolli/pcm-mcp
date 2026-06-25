@@ -16,7 +16,7 @@ const outputSchema = z.object({
 
 export function registerGetSaveSchema(server: McpServer): void {
 	server.registerTool(
-		"get_save_schema",
+		"pcm_get_save_schema",
 		{
 			title: "Get PCM save schema",
 			description:
@@ -25,6 +25,12 @@ export function registerGetSaveSchema(server: McpServer): void {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 			},
 			outputSchema,
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+				idempotentHint: true,
+				openWorldHint: false,
+			},
 		},
 		async ({ savePath }) =>
 			withSaveDb(savePath, (db) => {
