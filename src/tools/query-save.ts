@@ -47,12 +47,14 @@ export function registerQuerySave(server: McpServer): void {
 			withSaveDb(savePath, (db) => {
 				const safeQuery = assertReadOnlyQuery(query);
 				const effectiveLimit = Math.min(limit ?? DEFAULT_LIMIT, MAX_LIMIT);
+
 				let stmt: ReturnType<typeof db.prepare>;
 				try {
 					stmt = db.prepare(safeQuery);
 				} catch (error) {
 					throw explainQueryError(error);
 				}
+
 				const columns = stmt.getColumnNames();
 				const rows: Record<string, unknown>[] = [];
 				let truncated = false;
