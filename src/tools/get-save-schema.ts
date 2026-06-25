@@ -19,7 +19,8 @@ export function registerGetSaveSchema(server: McpServer): void {
 		"get_save_schema",
 		{
 			title: "Get PCM save schema",
-			description: "",
+			description:
+				"List all tables in a Pro Cycling Manager `.cdb` save via DB_STRUCTURE (table id + name), plus the total table count.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 			},
