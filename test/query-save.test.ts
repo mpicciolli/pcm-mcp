@@ -88,9 +88,9 @@ describe("assertReadOnlyQuery", () => {
 
 	describe("multiple statements", () => {
 		it("rejects two SELECT statements separated by a semicolon", () => {
-			expect(() =>
-				assertReadOnlyQuery("SELECT 1; SELECT 2"),
-			).toThrowError("Only a single statement is allowed");
+			expect(() => assertReadOnlyQuery("SELECT 1; SELECT 2")).toThrowError(
+				"Only a single statement is allowed",
+			);
 		});
 
 		it("rejects SELECT followed by a write statement", () => {
@@ -108,21 +108,21 @@ describe("assertReadOnlyQuery", () => {
 		});
 
 		it("rejects UPDATE", () => {
-			expect(() =>
-				assertReadOnlyQuery("UPDATE foo SET bar = 1"),
-			).toThrowError("Only read-only SELECT");
+			expect(() => assertReadOnlyQuery("UPDATE foo SET bar = 1")).toThrowError(
+				"Only read-only SELECT",
+			);
 		});
 
 		it("rejects DELETE", () => {
-			expect(() =>
-				assertReadOnlyQuery("DELETE FROM foo"),
-			).toThrowError("Only read-only SELECT");
+			expect(() => assertReadOnlyQuery("DELETE FROM foo")).toThrowError(
+				"Only read-only SELECT",
+			);
 		});
 
 		it("rejects DROP TABLE", () => {
-			expect(() =>
-				assertReadOnlyQuery("DROP TABLE foo"),
-			).toThrowError("Only read-only SELECT");
+			expect(() => assertReadOnlyQuery("DROP TABLE foo")).toThrowError(
+				"Only read-only SELECT",
+			);
 		});
 
 		it("rejects CREATE TABLE", () => {
@@ -132,25 +132,23 @@ describe("assertReadOnlyQuery", () => {
 		});
 
 		it("rejects PRAGMA", () => {
-			expect(() =>
-				assertReadOnlyQuery("PRAGMA table_info(foo)"),
-			).toThrowError("Only read-only SELECT");
+			expect(() => assertReadOnlyQuery("PRAGMA table_info(foo)")).toThrowError(
+				"Only read-only SELECT",
+			);
 		});
 	});
 
 	describe("forbidden keywords inside a SELECT", () => {
 		it("rejects SELECT with inline INSERT via INSERT INTO (subquery trick)", () => {
 			expect(() =>
-				assertReadOnlyQuery(
-					"SELECT * FROM (INSERT INTO foo VALUES (1)) AS t",
-				),
+				assertReadOnlyQuery("SELECT * FROM (INSERT INTO foo VALUES (1)) AS t"),
 			).toThrowError('Write/DDL keyword "INSERT" is not allowed');
 		});
 
 		it("rejects SELECT containing DROP keyword", () => {
-			expect(() =>
-				assertReadOnlyQuery("SELECT DROP FROM foo"),
-			).toThrowError('Write/DDL keyword "DROP" is not allowed');
+			expect(() => assertReadOnlyQuery("SELECT DROP FROM foo")).toThrowError(
+				'Write/DDL keyword "DROP" is not allowed',
+			);
 		});
 
 		it("rejects SELECT containing ATTACH", () => {
@@ -166,9 +164,9 @@ describe("assertReadOnlyQuery", () => {
 		});
 
 		it("rejects VACUUM", () => {
-			expect(() =>
-				assertReadOnlyQuery("SELECT 1 WHERE VACUUM"),
-			).toThrowError('Write/DDL keyword "VACUUM" is not allowed');
+			expect(() => assertReadOnlyQuery("SELECT 1 WHERE VACUUM")).toThrowError(
+				'Write/DDL keyword "VACUUM" is not allowed',
+			);
 		});
 
 		it("rejects ALTER", () => {
