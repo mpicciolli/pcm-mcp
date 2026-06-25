@@ -93,7 +93,7 @@ export function registerQuerySave(server: McpServer): void {
  * point the caller at the schema-discovery tools. Other errors pass through.
  */
 function explainQueryError(error: unknown): Error {
-	const message = String(error);
+	const message = error instanceof Error ? error.message : String(error);
 
 	const missingTable = /no such table:\s*(\S+)/i.exec(message);
 	if (missingTable) {

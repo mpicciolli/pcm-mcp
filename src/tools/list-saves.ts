@@ -45,7 +45,9 @@ export function registerListSaves(server: McpServer): void {
 
 				return validResponse(output);
 			} catch (error) {
-				return errorResponse(String(error));
+				return errorResponse(
+					error instanceof Error ? error.message : String(error),
+				);
 			}
 		},
 	);

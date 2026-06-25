@@ -43,7 +43,9 @@ export async function withSaveDb<T extends Record<string, unknown>>(
 
 		return validResponse(output);
 	} catch (error) {
-		return errorResponse(String(error));
+		return errorResponse(
+			error instanceof Error ? error.message : String(error),
+		);
 	} finally {
 		db?.close();
 	}
