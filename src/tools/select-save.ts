@@ -20,7 +20,7 @@ export function registerSelectSave(server: McpServer): void {
 		{
 			title: "Select PCM save",
 			description:
-				"Validate that an absolute path points to an existing Pro Cycling Manager `.cdb` save file and return its metadata. Stateless: nothing is stored — keep the returned path in conversation context to pass to later tools.",
+				"Validate that a absolute path points to an existing Pro Cycling Manager `.cdb` save file and return its metadata. Stateless: nothing is stored — keep the returned path in conversation context to pass to later tools.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 			},

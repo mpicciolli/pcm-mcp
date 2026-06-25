@@ -14,7 +14,7 @@ read-only guarantee.
 
 ## Stack
 
-- **Runtime/lang:** Node.js (ESM, `Node16` module resolution), TypeScript (strict).
+- **Runtime/lang:** Node.js (ESM, `bundler` module resolution), TypeScript (strict).
 - **MCP:** `@modelcontextprotocol/sdk` — `McpServer` + `StdioServerTransport`.
 - **Save parsing:** `cdb-converter` (`cdbToSql`) + `sql.js` (in-memory SQLite).
 - **Schemas:** `zod` for tool input/output schemas.
@@ -37,19 +37,19 @@ src/
     get-table-schema.ts # get_table_schema
     get-player-info.ts# get_player_info
     query-save.ts     # query_save
-test/                 # vitest specs (test/**/*.test.ts) — currently empty
+test/                 # vitest specs (test/**/*.test.ts)
 ```
 
 ## Tools
 
-| Tool              | Purpose                                                                                                                          |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `list_saves`      | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).                     |
-| `select_save`     | Validate an absolute `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools. |
-| `get_save_schema` | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                                        |
-| `get_table_schema` | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                              |
-| `get_player_info` | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                               |
-| `query_save`      | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).                     |
+| Tool               | Purpose                                                                                                                |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `list_saves`       | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).           |
+| `select_save`      | Validate a `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools. |
+| `get_save_schema`  | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                              |
+| `get_table_schema` | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                     |
+| `get_player_info`  | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                     |
+| `query_save`       | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).           |
 
 ## Conventions
 
