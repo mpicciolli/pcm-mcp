@@ -55,7 +55,9 @@ export function registerGetTableSchema(server: McpServer): void {
 					);
 				}
 
-				const columnInfo = db.exec(`PRAGMA table_info("${tableName}")`);
+				const safeTableName = tableName.replaceAll('"', '""');
+
+				const columnInfo = db.exec(`PRAGMA table_info("${safeTableName}")`);
 				const columnRows = columnInfo[0]?.values ?? [];
 
 				// PRAGMA table_info columns: cid, name, type, notnull, dflt_value, pk
@@ -66,7 +68,7 @@ export function registerGetTableSchema(server: McpServer): void {
 					primaryKey: Number(row[5]) > 0,
 				}));
 
-				const countResult = db.exec(`SELECT COUNT(*) FROM "${tableName}"`);
+				const countResult = db.exec(`SELECT COUNT(*) FROM "${safeTableName}"`);
 				const rowCount = Number(countResult[0]?.values?.[0]?.[0] ?? 0);
 
 				const output: z.infer<typeof outputSchema> = {
