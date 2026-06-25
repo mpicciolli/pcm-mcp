@@ -33,8 +33,8 @@ src/
     index.ts          # registerTools() — wires every tool onto the server
     list-saves.ts     # list_saves
     select-save.ts    # select_save
-    get-save-info.ts  # get_save_info
-    get-table-info.ts # get_table_info
+    get-save-schema.ts # get_save_schema
+    get-table-schema.ts # get_table_schema
     get-player-info.ts# get_player_info
     query-save.ts     # query_save
 test/                 # vitest specs (test/**/*.test.ts) — currently empty
@@ -46,8 +46,8 @@ test/                 # vitest specs (test/**/*.test.ts) — currently empty
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `list_saves`      | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).                     |
 | `select_save`     | Validate an absolute `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools. |
-| `get_save_info`   | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                                        |
-| `get_table_info`  | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                               |
+| `get_save_schema` | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                                        |
+| `get_table_schema` | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                              |
 | `get_player_info` | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                               |
 | `query_save`      | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).                     |
 
@@ -57,14 +57,14 @@ test/                 # vitest specs (test/**/*.test.ts) — currently empty
   save-reading tool takes an absolute `savePath` and re-validates it via
   `validateSave`. There is no "current save".
 - **Use `withSaveDb` for new save-reading tools.** It centralises validate →
-  read → convert → run → always-close. Some existing tools (`get_save_info`,
+  read → convert → run → always-close. Some existing tools (`get_save_schema`,
   `get_player_info`, `query_save`) still inline this boilerplate; prefer
   `withSaveDb` and consider migrating them when touched.
 - **Read-only is enforced defensively** even though the DB is in-memory — see
   `assertReadOnlyQuery` in `query-save.ts` (single statement, SELECT/WITH only,
   forbidden-keyword guard).
 - **Guard against SQL injection** when interpolating identifiers: validate table
-  names against `DB_STRUCTURE` before building queries (see `get_table_info`).
+  names against `DB_STRUCTURE` before building queries (see `get_table_schema`).
 - **Tool responses** go through `validResponse` / `errorResponse`; declare both
   `inputSchema` and `outputSchema` with zod.
 - **Platform:** auto-discovery is Windows-only. On macOS/Linux (Wine/Proton),

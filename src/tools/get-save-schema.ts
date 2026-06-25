@@ -14,11 +14,11 @@ const outputSchema = z.object({
 	tableCount: z.number().describe("Number of tables in the .cdb save file"),
 });
 
-export function registerGetSaveInfo(server: McpServer): void {
+export function registerGetSaveSchema(server: McpServer): void {
 	server.registerTool(
-		"get_save_info",
+		"get_save_schema",
 		{
-			title: "Get PCM save info",
+			title: "Get PCM save schema",
 			description: "",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),

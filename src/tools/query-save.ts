@@ -62,7 +62,7 @@ export function registerQuerySave(server: McpServer): void {
 		{
 			title: "Query PCM save (read-only)",
 			description:
-				"Run a read-only SQL query against any table in a Pro Cycling Manager `.cdb` save file. Only a single SELECT (or WITH … SELECT) statement is allowed; write/DDL statements are rejected and the save is never modified. Results are capped (default 100, max 1000 rows). Use `get_save_info` to discover table names and `get_table_info` to inspect their columns.",
+				"Run a read-only SQL query against any table in a Pro Cycling Manager `.cdb` save file. Only a single SELECT (or WITH … SELECT) statement is allowed; write/DDL statements are rejected and the save is never modified. Results are capped (default 100, max 1000 rows). Use `get_save_schema` to discover table names and `get_table_schema` to inspect their columns.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				query: z

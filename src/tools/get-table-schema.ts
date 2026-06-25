@@ -22,19 +22,19 @@ const outputSchema = z.object({
 	columnCount: z.number().describe("Number of columns in the table"),
 });
 
-export function registerGetTableInfo(server: McpServer): void {
+export function registerGetTableSchema(server: McpServer): void {
 	server.registerTool(
-		"get_table_info",
+		"get_table_schema",
 		{
-			title: "Get PCM table info",
+			title: "Get PCM table schema",
 			description:
-				"Inspect a single table inside a Pro Cycling Manager `.cdb` save file by name. Returns the table's columns (name, SQL type, NOT NULL and primary key flags) and its row count. Use `get_save_info` first to discover available table names.",
+				"Inspect a single table inside a Pro Cycling Manager `.cdb` save file by name. Returns the table's columns (name, SQL type, NOT NULL and primary key flags) and its row count. Use `get_save_schema` first to discover available table names.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				tableName: z
 					.string()
 					.describe(
-						"Name of the table to inspect, as listed by `get_save_info`",
+						"Name of the table to inspect, as listed by `get_save_schema`",
 					),
 			},
 			outputSchema,
@@ -44,14 +44,14 @@ export function registerGetTableInfo(server: McpServer): void {
 				// Validate the table exists (and guard against SQL injection) by
 				// matching the name against DB_STRUCTURE before interpolating it.
 				// DB_STRUCTURE columns aren't named, so read by position: the table
-				// name is the first column (see get_save_info).
+				// name is the first column (see get_save_schema).
 				const structure = db.exec("SELECT * FROM DB_STRUCTURE");
 				const knownTables = (structure[0]?.values ?? []).map((row) =>
 					String(row[0]),
 				);
 				if (!knownTables.includes(tableName)) {
 					throw new Error(
-						`Table "${tableName}" not found in ${save.name}. Use get_save_info to list available tables.`,
+						`Table "${tableName}" not found in ${save.name}. Use get_save_schema to list available tables.`,
 					);
 				}
 
