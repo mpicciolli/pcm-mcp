@@ -65,15 +65,17 @@ export function registerGetPlayerInfo(server: McpServer): void {
 					WHERE u.game_i_active = 1`,
 				);
 
-				if (!stmt.step()) {
+				let row: Record<string, unknown>;
+				try {
+					if (!stmt.step()) {
+						throw new Error(
+							`No active player (game_i_active = 1) found in ${save.name}.`,
+						);
+					}
+					row = stmt.getAsObject();
+				} finally {
 					stmt.free();
-					throw new Error(
-						`No active player (game_i_active = 1) found in ${save.name}.`,
-					);
 				}
-
-				const row = stmt.getAsObject();
-				stmt.free();
 
 				const output: z.infer<typeof outputSchema> = {
 					login: String(row.login),

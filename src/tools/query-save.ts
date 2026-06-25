@@ -117,7 +117,7 @@ function explainQueryError(error: unknown): Error {
  * The save is loaded into an in-memory sql.js database (changes are never
  * written back to disk), but we still enforce read-only intent defensively.
  */
-function assertReadOnlyQuery(rawQuery: string): string {
+export function assertReadOnlyQuery(rawQuery: string): string {
 	// Strip a single trailing semicolon, then reject any further statement
 	// separators to prevent stacked statements.
 	const query = rawQuery.trim().replace(/;\s*$/, "");
