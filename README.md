@@ -29,7 +29,7 @@ npm install
 npm run build
 ```
 
-Bundles `src/` to `dist/` with tsup (ESM + CJS, with `.d.ts` type definitions).
+Bundles `src/` to `dist/` with tsup (ESM output; `.d.ts` generation is currently disabled).
 
 ### Test
 
@@ -70,7 +70,7 @@ Add the following configuration to your `claude_desktop_config.json`:
   "mcpServers": {
     "pcm-mcp": {
       "command": "node",
-      "args": ["/absolute/path/to/pcm-mcp/dist/index.mjs"]
+      "args": ["/absolute/path/to/pcm-mcp/dist/index.js"]
     }
   }
 }

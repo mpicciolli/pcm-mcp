@@ -18,7 +18,7 @@ read-only guarantee.
 - **MCP:** `@modelcontextprotocol/sdk` — `McpServer` + `StdioServerTransport`.
 - **Save parsing:** `cdb-converter` (`cdbToSql`) + `sql.js` (in-memory SQLite).
 - **Schemas:** `zod` for tool input/output schemas.
-- **Build:** `tsup` → `dist/` (ESM + CJS + `.d.ts`). **Test:** `vitest`.
+- **Build:** `tsup` → `dist/` (ESM output; `.d.ts` currently disabled). **Test:** `vitest`.
   **Lint/format:** `biome`.
 
 ## Layout
@@ -83,7 +83,7 @@ test/                 # vitest specs (test/**/*.test.ts) — currently empty
 ## Commands
 
 ```bash
-npm run build        # bundle src/ -> dist/ with tsup (ESM + CJS, .d.ts)
+npm run build        # bundle src/ -> dist/ with tsup (ESM output; `.d.ts` currently disabled)
 npm test             # run the vitest suite once
 npm run test:watch   # vitest in watch mode
 npm run coverage     # vitest with v8 coverage (text + html + lcov)
