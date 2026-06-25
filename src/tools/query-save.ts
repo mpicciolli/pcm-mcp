@@ -48,26 +48,27 @@ export function registerQuerySave(server: McpServer): void {
 				const safeQuery = assertReadOnlyQuery(query);
 				const effectiveLimit = Math.min(limit ?? DEFAULT_LIMIT, MAX_LIMIT);
 
-				let stmt: ReturnType<typeof db.prepare>;
-				try {
-					stmt = db.prepare(safeQuery);
-				} catch (error) {
-					throw explainQueryError(error);
-				}
-
-				const columns = stmt.getColumnNames();
+				let stmt: ReturnType<typeof db.prepare> | undefined;
+				let columns: string[] = [];
 				const rows: Record<string, unknown>[] = [];
 				let truncated = false;
 
-				while (stmt.step()) {
-					if (rows.length >= effectiveLimit) {
-						truncated = true;
-						break;
-					}
-					rows.push(stmt.getAsObject());
-				}
-				stmt.free();
+				try {
+					stmt = db.prepare(safeQuery);
+					columns = stmt.getColumnNames();
 
+					while (stmt.step()) {
+						if (rows.length >= effectiveLimit) {
+							truncated = true;
+							break;
+						}
+						rows.push(stmt.getAsObject());
+					}
+				} catch (error) {
+					throw explainQueryError(error);
+				} finally {
+					stmt?.free();
+				}
 				const output: z.infer<typeof outputSchema> = {
 					columns,
 					rows,
