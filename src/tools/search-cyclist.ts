@@ -116,9 +116,15 @@ export function registerSearchCyclist(server: McpServer): void {
 
 				const cyclists: z.infer<typeof cyclistSchema>[] = [];
 				try {
+					const first = firstName.trim();
+					const last = lastName.trim();
+					if (first.length === 0 && last.length === 0) {
+						throw new Error("Provide at least one of firstName or lastName.");
+					}
+
 					stmt.bind({
-						":lastName": `%${lastName}%`,
-						":firstName": `%${firstName}%`,
+						":lastName": `%${last}%`,
+						":firstName": `%${first}%`,
 					});
 
 					while (stmt.step()) {
