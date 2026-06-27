@@ -3,7 +3,7 @@
   "name": "pcm-mcp-server",
   "version": "0.0.0",
   "description": "MCP server for querying Pro Cycling Manager game databases",
-  "long_description": "MCP server for querying Pro Cycling Manager game databases",
+  "long_description": "MCP server for querying Pro Cycling Manager game databases. This server provides tools to discover and inspect PCM career save files via the MCP protocol, allowing AI assistants to explore your saves in a structured way. This server is strictly read-only",
   "author": {
     "name": "mpicciolli"
   },
