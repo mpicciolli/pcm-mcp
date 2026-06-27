@@ -43,7 +43,6 @@ const cyclistSchema = z.object({
 
 const outputSchema = z.object({
 	cyclists: z.array(cyclistSchema).describe("Matching cyclists"),
-	resultCount: z.number().describe("Number of results returned (max 10)"),
 });
 
 export function registerSearchCyclist(server: McpServer): void {
@@ -157,7 +156,10 @@ export function registerSearchCyclist(server: McpServer): void {
 					stmt.free();
 				}
 
-				return { cyclists, resultCount: cyclists.length };
+				const output: z.infer<typeof outputSchema> = {
+					cyclists,
+				};
+				return output;
 			}),
 	);
 }
