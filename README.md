@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/icon.png" alt="PCM MCP" width="150" />
+</p>
+
 # Pro Cycling Manager MCP Server
 
 A Model Context Protocol (MCP) server for querying Pro Cycling Manager (PCM) game databases. This server provides tools to discover and inspect PCM career save files via the MCP protocol, allowing AI assistants to explore your saves in a structured way.
@@ -44,7 +48,7 @@ Add the following to your ChatGPT MCP configuration file:
 
 ### Gemini
 
-Add the following to your Gemini CLI settings file
+Add the following to your Gemini CLI settings file:
 
 ```json
 {

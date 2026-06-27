@@ -1,4 +1,4 @@
 {
-  "*.json": ["biome check --write"],
-  "*.ts": ["biome check --write"]
+	"*.json": ["biome check --write"],
+	"*.ts": ["biome check --write"]
 }
