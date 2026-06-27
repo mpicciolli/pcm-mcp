@@ -38,7 +38,7 @@
 		"type": "git",
 		"url": "git+https://github.com/mpicciolli/pcm-mcp.git"
 	},
-	"author": "",
+	"author": "mpicciolli",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/mpicciolli/pcm-mcp/issues"
