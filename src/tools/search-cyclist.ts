@@ -1,5 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { mapRatings, ratingsColumns, ratingsSchema } from "../schemas/cyclist";
 import { withSaveDb } from "../save-db";
 
 const cyclistSchema = z.object({
@@ -10,29 +11,7 @@ const cyclistSchema = z.object({
 		.string()
 		.nullable()
 		.describe("Country name (STA_country.CONSTANT)"),
-	plain: z.number().describe("Plain rating (charac_i_plain)"),
-	mountain: z.number().describe("Mountain rating (charac_i_mountain)"),
-	mediumMountain: z
-		.number()
-		.nullable()
-		.describe(
-			"Medium mountain rating (charac_i_medium_mountain) — null on saves that pre-date this column",
-		),
-	downhilling: z.number().describe("Downhilling rating (charac_i_downhilling)"),
-	cobble: z.number().describe("Cobblestone rating (charac_i_cobble)"),
-	timeTrial: z.number().describe("Time trial rating (charac_i_timetrial)"),
-	prologue: z.number().describe("Prologue rating (charac_i_prologue)"),
-	sprint: z.number().describe("Sprint rating (charac_i_sprint)"),
-	acceleration: z
-		.number()
-		.describe("Acceleration rating (charac_i_acceleration)"),
-	endurance: z.number().describe("Endurance rating (charac_i_endurance)"),
-	resistance: z.number().describe("Resistance rating (charac_i_resistance)"),
-	recuperation: z
-		.number()
-		.describe("Recuperation rating (charac_i_recuperation)"),
-	hill: z.number().describe("Hill rating (charac_i_hill)"),
-	baroudeur: z.number().describe("Baroudeur rating (charac_i_baroudeur)"),
+	...ratingsSchema.shape,
 	currentAbility: z
 		.number()
 		.nullable()
@@ -89,20 +68,7 @@ export function registerSearchCyclist(server: McpServer): void {
 						c.IDcyclist,
 						c.gene_sz_firstname,
 						c.gene_sz_lastname,
-						c.charac_i_plain           AS plain,
-						c.charac_i_mountain        AS mountain,
-						${hasMediumMountain ? "c.charac_i_medium_mountain" : "NULL"} AS mediumMountain,
-						c.charac_i_downhilling     AS downhilling,
-						c.charac_i_cobble          AS cobble,
-						c.charac_i_timetrial       AS timeTrial,
-						c.charac_i_prologue        AS prologue,
-						c.charac_i_sprint          AS sprint,
-						c.charac_i_acceleration    AS acceleration,
-						c.charac_i_endurance       AS endurance,
-						c.charac_i_resistance      AS resistance,
-						c.charac_i_recuperation    AS recuperation,
-						c.charac_i_hill            AS hill,
-						c.charac_i_baroudeur       AS baroudeur,
+						${ratingsColumns(hasMediumMountain)},
 						${hasCurrentAbility ? "c.value_f_current_ability" : "NULL"} AS currentAbility,
 						co.CONSTANT                AS country
 					FROM DYN_cyclist c
@@ -133,21 +99,7 @@ export function registerSearchCyclist(server: McpServer): void {
 							firstName: String(row.gene_sz_firstname),
 							lastName: String(row.gene_sz_lastname),
 							country: row.country != null ? String(row.country) : null,
-							plain: Number(row.plain),
-							mountain: Number(row.mountain),
-							mediumMountain:
-								row.mediumMountain != null ? Number(row.mediumMountain) : null,
-							downhilling: Number(row.downhilling),
-							cobble: Number(row.cobble),
-							timeTrial: Number(row.timeTrial),
-							prologue: Number(row.prologue),
-							sprint: Number(row.sprint),
-							acceleration: Number(row.acceleration),
-							endurance: Number(row.endurance),
-							resistance: Number(row.resistance),
-							recuperation: Number(row.recuperation),
-							hill: Number(row.hill),
-							baroudeur: Number(row.baroudeur),
+							...mapRatings(row),
 							currentAbility:
 								row.currentAbility != null ? Number(row.currentAbility) : null,
 						});
