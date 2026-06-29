@@ -29,3 +29,13 @@ export function errorResponse(error: string): CallToolResult {
 		isError: true,
 	};
 }
+
+/** Compute age in whole years from two YYYYMMDD integers (e.g. 20030503). */
+export function ageFromYmd(currentYmd: number, birthYmd: number): number {
+	let age = Math.floor(currentYmd / 10000) - Math.floor(birthYmd / 10000);
+	// Decrement if this year's birthday (MMDD) has not occurred yet.
+	if (currentYmd % 10000 < birthYmd % 10000) {
+		age--;
+	}
+	return age;
+}
