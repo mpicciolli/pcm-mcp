@@ -1,11 +1,17 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { withSaveDb } from "../save-db";
+import { mapRatings, ratingsColumns, ratingsSchema } from "../schemas/cyclist";
+import { ageFromYmd } from "../helpers";
+import { getGameDate, withSaveDb } from "../save-db";
 
-const riderSchema = z.object({
+const cyclistSchema = z.object({
 	id: z.number().describe("Cyclist ID (IDcyclist)"),
 	firstName: z.string().describe("First name (gene_sz_firstname)"),
 	lastName: z.string().describe("Last name (gene_sz_lastname)"),
+	country: z
+		.string()
+		.nullable()
+		.describe("Country name (STA_country.CONSTANT)"),
 	age: z
 		.number()
 		.nullable()
@@ -42,25 +48,15 @@ const riderSchema = z.object({
 		.describe(
 			"Market value / valeur (value_f_capital) — null on saves that pre-date this column.",
 		),
+	...ratingsSchema.shape,
 });
 
 const outputSchema = z.object({
 	teamId: z.number().describe("Team ID the roster belongs to (IDteam)"),
-	count: z.number().describe("Number of cyclists in the roster"),
-	riders: z
-		.array(riderSchema)
+	cyclists: z
+		.array(cyclistSchema)
 		.describe("Roster cyclists, ordered by overall ability (highest first)"),
 });
-
-/** Compute age in whole years from two YYYYMMDD integers (e.g. 20030503). */
-function ageFromYmd(currentYmd: number, birthYmd: number): number {
-	let age = Math.floor(currentYmd / 10000) - Math.floor(birthYmd / 10000);
-	// Decrement if this year's birthday (MMDD) has not occurred yet.
-	if (currentYmd % 10000 < birthYmd % 10000) {
-		age--;
-	}
-	return age;
-}
 
 export function registerGetTeamRoster(server: McpServer): void {
 	server.registerTool(
@@ -68,7 +64,7 @@ export function registerGetTeamRoster(server: McpServer): void {
 		{
 			title: "Get PCM team roster",
 			description:
-				"List the roster of a team in a Pro Cycling Manager `.cdb` save file. Defaults to the active human player's team (GAM_user.game_i_active = 1) when `teamId` is omitted. Joins DYN_cyclist with its active DYN_contract_cyclist and STA_type_rider, and for each rider returns name, age, rider type, overall ability (note globale), contract end year, wage and market value. Ordered by overall ability, highest first.",
+				"List the roster of a team in a Pro Cycling Manager `.cdb` save file. Defaults to the active human player's team (GAM_user.game_i_active = 1) when `teamId` is omitted. Joins DYN_cyclist with its active DYN_contract_cyclist and STA_type_rider, and for each rider returns name, country, age, rider type, overall ability (note globale), contract end year, wage, market value and all per-terrain ability ratings (plain, mountain, medium mountain, downhilling, cobble, time trial, prologue, sprint, acceleration, endurance, resistance, recuperation, hill, baroudeur). Ordered by overall ability, highest first.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				teamId: z
@@ -104,13 +100,22 @@ export function registerGetTeamRoster(server: McpServer): void {
 					resolvedTeamId = Number(value);
 				}
 
-				// The current in-game date (YYYYMMDD) is the reference point for age.
-				const dateResult = db.exec(
-					"SELECT gene_i_date FROM GAM_config LIMIT 1",
+				const teamStmt = db.prepare(
+					"SELECT 1 FROM DYN_team WHERE IDteam = :teamId LIMIT 1",
 				);
-				const currentYmdRaw = dateResult[0]?.values?.[0]?.[0];
-				const currentYmd =
-					currentYmdRaw != null ? Number(currentYmdRaw) : null;
+				try {
+					teamStmt.bind({ ":teamId": resolvedTeamId });
+					if (!teamStmt.step()) {
+						throw new Error(
+							`Team ${resolvedTeamId} not found in ${save.name}.`,
+						);
+					}
+				} finally {
+					teamStmt.free();
+				}
+
+				// The current in-game date (YYYYMMDD) is the reference point for age.
+				const currentYmd = getGameDate(db);
 
 				// Some columns are absent on saves that pre-date them — detect them so
 				// the query stays valid across PCM versions.
@@ -120,6 +125,7 @@ export function registerGetTeamRoster(server: McpServer): void {
 				);
 				const hasCurrentAbility = columnNames.has("value_f_current_ability");
 				const hasCapital = columnNames.has("value_f_capital");
+				const hasMediumMountain = columnNames.has("charac_i_medium_mountain");
 
 				const stmt = db.prepare(
 					`SELECT
@@ -131,26 +137,31 @@ export function registerGetTeamRoster(server: McpServer): void {
 						${hasCapital ? "c.value_f_capital" : "NULL"} AS value,
 						tr.CONSTANT                AS type,
 						ct.iYearEnd                AS contractEndYear,
-						ct.finan_i_period_wage     AS wage
+						ct.finan_i_period_wage     AS wage,
+						co.CONSTANT                AS country,
+						${ratingsColumns(hasMediumMountain)}
 					FROM DYN_cyclist c
 					LEFT JOIN STA_type_rider tr ON c.fkIDtype_rider = tr.IDtype_rider
+					LEFT JOIN STA_region r    ON c.fkIDregion = r.IDregion
+					LEFT JOIN STA_country co  ON r.fkIDcountry = co.IDcountry
 					LEFT JOIN DYN_contract_cyclist ct
 						ON ct.fkIDcyclist = c.IDcyclist AND ct.gene_b_active_contract = 1
 					WHERE c.fkIDteam = :teamId
 					ORDER BY overall DESC, c.gene_sz_lastname ASC`,
 				);
 
-				const riders: z.infer<typeof riderSchema>[] = [];
+				const cyclists: z.infer<typeof cyclistSchema>[] = [];
 				try {
 					stmt.bind({ ":teamId": resolvedTeamId });
 					while (stmt.step()) {
 						const row = stmt.getAsObject();
 						const birthdate =
 							row.birthdate != null ? Number(row.birthdate) : null;
-						riders.push({
+						cyclists.push({
 							id: Number(row.id),
 							firstName: String(row.firstName),
 							lastName: String(row.lastName),
+							country: row.country != null ? String(row.country) : null,
 							age:
 								currentYmd != null && birthdate != null
 									? ageFromYmd(currentYmd, birthdate)
@@ -163,6 +174,7 @@ export function registerGetTeamRoster(server: McpServer): void {
 									: null,
 							wage: row.wage != null ? Number(row.wage) : null,
 							value: row.value != null ? Number(row.value) : null,
+							...mapRatings(row),
 						});
 					}
 				} finally {
@@ -171,8 +183,7 @@ export function registerGetTeamRoster(server: McpServer): void {
 
 				const output: z.infer<typeof outputSchema> = {
 					teamId: resolvedTeamId,
-					count: riders.length,
-					riders,
+					cyclists,
 				};
 				return output;
 			}),

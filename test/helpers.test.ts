@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { errorResponse, validResponse } from "../src/helpers";
+import { ageFromYmd, errorResponse, validResponse } from "../src/helpers";
 
 describe("validResponse", () => {
 	it("wraps structured content as pretty-printed JSON text", () => {
@@ -20,6 +20,28 @@ describe("validResponse", () => {
 
 		expect(result.structuredContent).toBeUndefined();
 		expect(result.content).toEqual([{ type: "text", text: "" }]);
+	});
+});
+
+describe("ageFromYmd", () => {
+	it("computes age when this year's birthday has already passed", () => {
+		// born 2003-05-03, current 2026-06-05 → 23rd birthday already passed
+		expect(ageFromYmd(20260605, 20030503)).toBe(23);
+	});
+
+	it("subtracts a year when this year's birthday has not occurred yet", () => {
+		// born 2003-07-20, current 2026-06-05 → still 22 until July
+		expect(ageFromYmd(20260605, 20030720)).toBe(22);
+	});
+
+	it("counts the birthday itself as a full year", () => {
+		// born 2003-06-05, current 2026-06-05 → exactly 23 on the day
+		expect(ageFromYmd(20260605, 20030605)).toBe(23);
+	});
+
+	it("treats the day before the birthday as the younger age", () => {
+		// born 2003-06-05, current 2026-06-04 → still 22, one day short
+		expect(ageFromYmd(20260604, 20030605)).toBe(22);
 	});
 });
 

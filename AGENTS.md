@@ -27,8 +27,10 @@ read-only guarantee.
 src/
   index.ts        # entrypoint: builds McpServer, registers tools, connects stdio
   saves.ts        # save discovery + validation (listSaves, validateSave, getPcmRoot)
-  save-db.ts      # withSaveDb(): open .cdb in-memory, run fn, always close db
-  helpers.ts      # validResponse / errorResponse → CallToolResult
+  save-db.ts      # withSaveDb(): open .cdb in-memory, run fn, always close db; getGameDate()
+  helpers.ts      # validResponse / errorResponse → CallToolResult; ageFromYmd()
+  schemas/
+    cyclist.ts          # shared cyclist ratings: ratingsSchema / ratingsColumns() / mapRatings()
   tools/
     index.ts              # registerTools() — wires every tool onto the server
     list-saves.ts         # pcm_list_saves
@@ -36,6 +38,7 @@ src/
     get-save-schema.ts    # pcm_get_save_schema
     get-table-schema.ts   # pcm_get_table_schema
     get-player-info.ts    # pcm_get_player_info
+    get-team-roster.ts    # pcm_get_team_roster
     search-cyclist.ts     # pcm_search_cyclist
     query-save.ts         # pcm_query_save
 test/                 # vitest specs (test/**/*.test.ts)
@@ -52,6 +55,7 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 | `pcm_get_save_schema`  | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                              |
 | `pcm_get_table_schema` | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                     |
 | `pcm_get_player_info`  | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                     |
+| `pcm_get_team_roster`  | Team roster (defaults to active player's team). Joins `DYN_cyclist` with active `DYN_contract_cyclist` + `STA_type_rider`: name, country, age, type, overall, contract end, wage, value, plus per-terrain ratings (flat). Errors on unknown `teamId`. |
 | `pcm_search_cyclist`   | Search cyclist by first/last name (partial, case-insensitive).                                                         |
 | `pcm_query_save`       | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).           |
 

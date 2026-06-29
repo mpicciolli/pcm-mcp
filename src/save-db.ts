@@ -6,7 +6,21 @@ import { errorResponse, validResponse } from "./helpers";
 import { type SaveFile, validateSave } from "./saves";
 
 /** An in-memory sql.js database produced from a `.cdb` save by `cdbToSql`. */
-type SaveDb = ReturnType<typeof cdbToSql>;
+export type SaveDb = ReturnType<typeof cdbToSql>;
+
+/**
+ * Read the current in-game date from a save as a `YYYYMMDD` integer
+ * (e.g. `20260605`), or `null` when it can't be found.
+ *
+ * PCM stores the career's current date in `GAM_config.gene_i_date`. It is the
+ * reference point for any age- or season-relative computation, since the
+ * on-disk save advances as the career is played.
+ */
+export function getGameDate(db: SaveDb): number | null {
+	const result = db.exec("SELECT gene_i_date FROM GAM_config LIMIT 1");
+	const raw = result[0]?.values?.[0]?.[0];
+	return raw != null ? Number(raw) : null;
+}
 
 /**
  * Open a Pro Cycling Manager `.cdb` save as an in-memory SQL database, run
