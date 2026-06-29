@@ -3,16 +3,6 @@ import { z } from "zod";
 import { buildStartlistXml } from "../helpers";
 import { withSaveDb } from "../save-db";
 
-/**
- * Resolve the startlist file name for a race from its `STA_race` row.
- *
- * PCM stores the base name in `STA_race.gene_sz_filename` (e.g. `c0_almeria`);
- * the startlist file is that base name with a `.xml` extension.
- */
-export function resolveStartlistFileName(filenameBase: string): string {
-	return filenameBase.endsWith(".xml") ? filenameBase : `${filenameBase}.xml`;
-}
-
 const outputSchema = z.object({
 	fileName: z
 		.string()
@@ -90,4 +80,14 @@ export function registerGenerateStartlistXml(server: McpServer): void {
 				return output;
 			}),
 	);
+}
+
+/**
+ * Resolve the startlist file name for a race from its `STA_race` row.
+ *
+ * PCM stores the base name in `STA_race.gene_sz_filename` (e.g. `c0_almeria`);
+ * the startlist file is that base name with a `.xml` extension.
+ */
+export function resolveStartlistFileName(filenameBase: string): string {
+	return filenameBase.endsWith(".xml") ? filenameBase : `${filenameBase}.xml`;
 }
