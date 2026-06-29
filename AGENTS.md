@@ -37,6 +37,7 @@ src/
     get-table-schema.ts   # pcm_get_table_schema
     get-player-info.ts    # pcm_get_player_info
     search-cyclist.ts     # pcm_search_cyclist
+    search-team.ts        # pcm_search_team
     query-save.ts         # pcm_query_save
 test/                 # vitest specs (test/**/*.test.ts)
 ```
@@ -53,6 +54,7 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 | `pcm_get_table_schema` | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                     |
 | `pcm_get_player_info`  | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                     |
 | `pcm_search_cyclist`   | Search cyclist by first/last name (partial, case-insensitive).                                                         |
+| `pcm_search_team`      | Search team by name (partial, case-insensitive; matches full name and short name).                                    |
 | `pcm_query_save`       | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).           |
 
 ## Conventions
