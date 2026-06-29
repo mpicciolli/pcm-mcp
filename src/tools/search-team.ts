@@ -37,7 +37,9 @@ export function registerSearchTeam(server: McpServer): void {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				name: z
 					.string()
-					.describe("Team name to search for (partial match, case-insensitive)"),
+					.describe(
+						"Team name to search for (partial match, case-insensitive)",
+					),
 			},
 			outputSchema,
 			annotations: {
