@@ -7,6 +7,7 @@ import { registerGetPlayerInfo } from "./get-player-info";
 import { registerGetTeamRoster } from "./get-team-roster";
 import { registerQuerySave } from "./query-save";
 import { registerSearchCyclist } from "./search-cyclist";
+import { registerSearchTeam } from "./search-team";
 
 export function registerTools(server: McpServer): void {
 	registerListSaves(server);
@@ -17,4 +18,5 @@ export function registerTools(server: McpServer): void {
 	registerGetTeamRoster(server);
 	registerQuerySave(server);
 	registerSearchCyclist(server);
+	registerSearchTeam(server);
 }

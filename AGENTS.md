@@ -40,6 +40,7 @@ src/
     get-player-info.ts    # pcm_get_player_info
     get-team-roster.ts    # pcm_get_team_roster
     search-cyclist.ts     # pcm_search_cyclist
+    search-team.ts        # pcm_search_team
     query-save.ts         # pcm_query_save
 test/                 # vitest specs (test/**/*.test.ts)
 ```
@@ -57,6 +58,7 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 | `pcm_get_player_info`  | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                     |
 | `pcm_get_team_roster`  | Team roster (defaults to active player's team). Joins `DYN_cyclist` with active `DYN_contract_cyclist` + `STA_type_rider`: name, country, age, type, overall, contract end, wage, value, plus per-terrain ratings (flat). Errors on unknown `teamId`. |
 | `pcm_search_cyclist`   | Search cyclist by first/last name (partial, case-insensitive).                                                         |
+| `pcm_search_team`      | Search team by name (partial, case-insensitive; matches full name and short name).                                    |
 | `pcm_query_save`       | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).           |
 
 ## Conventions
