@@ -6,6 +6,7 @@ import { registerGetTableSchema } from "./get-table-schema";
 import { registerGetPlayerInfo } from "./get-player-info";
 import { registerQuerySave } from "./query-save";
 import { registerSearchCyclist } from "./search-cyclist";
+import { registerSearchTeam } from "./search-team";
 
 export function registerTools(server: McpServer): void {
 	registerListSaves(server);
@@ -15,4 +16,5 @@ export function registerTools(server: McpServer): void {
 	registerGetPlayerInfo(server);
 	registerQuerySave(server);
 	registerSearchCyclist(server);
+	registerSearchTeam(server);
 }
