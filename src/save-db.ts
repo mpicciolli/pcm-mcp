@@ -17,9 +17,13 @@ export type SaveDb = ReturnType<typeof cdbToSql>;
  * on-disk save advances as the career is played.
  */
 export function getGameDate(db: SaveDb): number | null {
-	const result = db.exec("SELECT gene_i_date FROM GAM_config LIMIT 1");
-	const raw = result[0]?.values?.[0]?.[0];
-	return raw != null ? Number(raw) : null;
+	try {
+		const result = db.exec("SELECT gene_i_date FROM GAM_config LIMIT 1");
+		const raw = result[0]?.values?.[0]?.[0];
+		return raw != null ? Number(raw) : null;
+	} catch {
+		return null;
+	}
 }
 
 /**
