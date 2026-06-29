@@ -28,7 +28,7 @@ src/
   index.ts        # entrypoint: builds McpServer, registers tools, connects stdio
   saves.ts        # save discovery + validation (listSaves, validateSave, getPcmRoot)
   save-db.ts      # withSaveDb(): open .cdb in-memory, run fn, always close db
-  helpers.ts      # validResponse / errorResponse → CallToolResult
+  helpers.ts      # validResponse / errorResponse → CallToolResult; buildStartlistXml
   tools/
     index.ts              # registerTools() — wires every tool onto the server
     list-saves.ts         # pcm_list_saves
@@ -38,6 +38,7 @@ src/
     get-player-info.ts    # pcm_get_player_info
     search-cyclist.ts     # pcm_search_cyclist
     query-save.ts         # pcm_query_save
+    generate-startlist-xml.ts  # pcm_generate_startlist_xml
 test/                 # vitest specs (test/**/*.test.ts)
 ```
 
@@ -54,6 +55,7 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 | `pcm_get_player_info`  | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                     |
 | `pcm_search_cyclist`   | Search cyclist by first/last name (partial, case-insensitive).                                                         |
 | `pcm_query_save`       | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).           |
+| `pcm_generate_startlist_xml` | Build a PCM startlist XML from teams + rosters; derives the file name from `STA_race.gene_sz_filename` for the given `IDrace`. |
 
 ## Conventions
 

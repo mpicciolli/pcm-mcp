@@ -84,6 +84,7 @@ All tools are read-only and carry `readOnlyHint: true`, so clients like Claude D
 | **pcm_get_player_info**  | Get the active human player and their team from a save file. Returns the player login plus team details (name, resolved division name, resolved country name, evaluation and manager).                                                       |
 | **pcm_search_cyclist**   | Search for a cyclist by first name and/or last name (case-insensitive partial match). Returns up to 10 matches with all ratings (plain, mountain, medium mountain, downhilling, cobble, time trial, prologue, sprint, acceleration, endurance, resistance, recuperation, hill, baroudeur, current ability) and the resolved country name. `mediumMountain` and `currentAbility` are `null` on saves that pre-date those columns. |
 | **pcm_query_save**       | Run a read-only SQL query (`SELECT` / `WITH … SELECT` only) against any table in a save file. Write/DDL statements are rejected. Results are capped (default 100, max 1000 rows).                                                            |
+| **pcm_generate_startlist_xml** | Generate a PCM startlist XML document from a list of teams and their cyclist rosters. Looks up the race by `IDrace` in the save to derive the output file name from `STA_race.gene_sz_filename` (e.g. `c0_almeria.xml`), and returns both the file name and the XML as text. Team and cyclist IDs map to `DYN_team.IDteam` / `DYN_cyclist.IDcyclist` (look them up with `pcm_search_cyclist` or `pcm_query_save`). |
 
 ## Development
 
