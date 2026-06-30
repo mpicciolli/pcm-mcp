@@ -4,10 +4,14 @@ description: >-
   Build a Pro Cycling Manager (PCM) race startlist and export it as the .xml
   file PCM imports. Use when the user wants to create, compose, or generate a
   startlist for a PCM race — picking which teams take part and which riders
-  each team brings. Orchestrates the read-only PCM MCP tools (pcm_query_save,
-  pcm_search_cyclist) to gather data and pcm_generate_startlist_xml to produce
-  the file. Triggers on phrases like "startlist", "liste de départ",
-  "engagés pour la course", "génère le fichier xml de la course X".
+  each team brings. Orchestrates the read-only PCM MCP tools (pcm_search_team,
+  pcm_get_team_roster, pcm_get_player_info, pcm_search_cyclist, pcm_query_save)
+  to gather data and pcm_generate_startlist_xml to produce the file. Use this
+  whenever the user wants to decide who lines up for a PCM race, even if they
+  never say the word "startlist" — e.g. "who's racing tomorrow's stage",
+  "compose the field for race X", "entries for Paris-Roubaix". Triggers on
+  phrases like "startlist", "start list", "field", "line-up", "entries for the
+  race", "generate the xml file for race X".
 ---
 
 # PCM startlist builder
@@ -32,6 +36,11 @@ riders); the deterministic serialization is delegated to the
 name is `STA_race.gene_sz_filename` + `.xml` (e.g. `c0_almeria.xml`) and is
 returned by the tool — don't invent it.
 
+The DB columns and the tool parameters use slightly different names; they map
+one-to-one: `pcm_generate_startlist_xml`'s `raceId` is the `IDrace` value, each
+team's `id` is its `IDteam`, and the entries in `cyclists` are `IDcyclist`
+values. Resolve every name to one of these IDs before calling the tool.
+
 ## Workflow
 
 ### 1. Get a save path
@@ -54,32 +63,44 @@ the `gene_sz_filename` so the user knows the output file name up front.
 
 ### 3. Decide which teams take part
 Either the user supplies the teams, or you propose them. Resolve names to
-`IDteam`:
+`IDteam` with `pcm_search_team` (case-insensitive partial match on full and short
+name; returns the resolved division, country, evaluation and general manager —
+handy for proposing a coherent field):
 
-```sql
-SELECT IDteam, gene_sz_name, gene_sz_shortname FROM DYN_team
-WHERE gene_sz_name LIKE '%ineos%';
 ```
+pcm_search_team(savePath, query: "ineos")
+```
+
+If the user means "my team", get it from `pcm_get_player_info`, which returns the
+active human player's team. For raw control you can still query `DYN_team`
+directly via `pcm_query_save`.
 
 A typical startlist has ~18–25 teams. If the user just says "the usual teams",
 ask which division/tier or list candidates rather than guessing.
 
 ### 4. Pick riders per team
 A team's full squad is the candidate pool — a startlist usually brings **7** of
-them (the count is free; the example pack mixes 6 and 7). Get a team's roster:
+them (the count is free; the example pack mixes 6 and 7). Prefer
+`pcm_get_team_roster`, which returns each rider's name, country, age, rider type,
+overall ability, contract details and all per-terrain ratings in one call
+(defaults to the active player's team when `teamId` is omitted):
 
-```sql
-SELECT IDcyclist, gene_sz_firstname, gene_sz_lastname
-FROM DYN_cyclist
-WHERE fkIDteam = 34;
+```
+pcm_get_team_roster(savePath, teamId: 34)
 ```
 
-To pick riders that fit the race profile, pull the ratings too (the
-`charac_i_*` columns — see `pcm_search_cyclist`, which already surfaces them) and
-favour the relevant specialty: sprinters/`charac_i_sprint` for flat finishes,
-`charac_i_mountain` for climbs, `charac_i_cobble` for cobbled classics, etc. If
-the user has preferences (leaders, exclusions), apply them. Confirm the selection
-before generating when there's any ambiguity.
+Use those ratings to pick riders that fit the race profile — favour the relevant
+specialty: sprinters for flat finishes, climbers for mountain stages, cobble
+specialists for the classics, etc. For ad-hoc lookups across teams use
+`pcm_search_cyclist` (same ratings, searched by name); for full control fall back
+to `pcm_query_save`. If the user has preferences (leaders, exclusions), apply
+them. Confirm the selection before generating when there's any ambiguity.
+
+On a big field, one `pcm_get_team_roster` call per team adds up to a lot of
+round-trips. To narrow down a large field quickly, pull every candidate in a single
+`pcm_query_save` over `DYN_cyclist WHERE fkIDteam IN (...)` (add the `charac_i_*`
+rating columns you care about), then reserve the richer `pcm_get_team_roster`
+for the teams you actually keep.
 
 ### 5. Generate the file
 Call `pcm_generate_startlist_xml` with `savePath`, `raceId`, and `teams`:
@@ -107,3 +128,6 @@ server is read-only and does not write files, so saving is done outside it.
 - All PCM MCP tools are read-only; this workflow never modifies the save.
 - IDs, not names, go into the XML — always resolve names to `IDteam`/`IDcyclist`
   via the queries above before calling the tool.
+- Each `IDcyclist` must belong to the team it's listed under, and no rider should
+  appear twice. The roster you pulled in step 4 is the source of truth for who is
+  eligible under a given `IDteam` — don't mix riders across teams.
