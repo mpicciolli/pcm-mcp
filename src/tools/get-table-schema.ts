@@ -2,15 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { withSaveDb } from "../save-db";
 
-export const getTableSchemaToolInputSchema = z.object({
-	savePath: z.string().describe("Absolute path to the .cdb save file"),
-	tableName: z
-		.string()
-		.describe(
-			"Name of the table to inspect, as listed by `pcm_get_save_schema`",
-		),
-});
-
 const outputSchema = z.object({
 	name: z.string().describe("Table name"),
 	rowCount: z.number().describe("Number of rows in the table"),
@@ -38,7 +29,14 @@ export function registerGetTableSchema(server: McpServer): void {
 			title: "Get PCM table schema",
 			description:
 				"Inspect a single table inside a Pro Cycling Manager `.cdb` save file by name. Returns the table's columns (name, SQL type, NOT NULL and primary key flags) and its row count. Use `pcm_get_save_schema` first to discover available table names.",
-			inputSchema: getTableSchemaToolInputSchema,
+			inputSchema: {
+				savePath: z.string().describe("Absolute path to the .cdb save file"),
+				tableName: z
+					.string()
+					.describe(
+						"Name of the table to inspect, as listed by `pcm_get_save_schema`",
+					),
+			},
 			outputSchema,
 			annotations: {
 				readOnlyHint: true,
@@ -47,10 +45,7 @@ export function registerGetTableSchema(server: McpServer): void {
 				openWorldHint: false,
 			},
 		},
-		async ({
-			savePath,
-			tableName,
-		}: z.infer<typeof getTableSchemaToolInputSchema>) =>
+		async ({ savePath, tableName }) =>
 			withSaveDb(savePath, (db, save) => {
 				// Validate the table exists (and guard against SQL injection) by
 				// matching the name against DB_STRUCTURE before interpolating it.

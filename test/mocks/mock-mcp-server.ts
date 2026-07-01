@@ -68,7 +68,7 @@ export function createMockMcpServer(): MockMcpServer {
 			);
 		}
 		// The second arg is the RequestHandlerExtra, unused by these tools.
-		return tool.callback(args as any, {} as any);
+		return tool.callback(args as never, {} as any);
 	};
 
 	return { server, registerTool, tools, getTool, callTool };
