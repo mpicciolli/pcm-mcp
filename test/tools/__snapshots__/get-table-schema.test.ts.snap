@@ -1,5 +1,153 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`getTableSchema > returns STA_race table schema for Pro cycling manager 2018 1`] = `
+{
+  "columnCount": 23,
+  "columns": [
+    {
+      "name": "IDrace",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 499717",
+    },
+    {
+      "name": "gene_sz_race_name",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 499730",
+    },
+    {
+      "name": "gene_sz_abbreviation",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 499762",
+    },
+    {
+      "name": "gene_sz_filename",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 499778",
+    },
+    {
+      "name": "fkIDcountry",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 499797",
+    },
+    {
+      "name": "fkIDUCI_class",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 499812",
+    },
+    {
+      "name": "fkIDfirst_stage",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 499845",
+    },
+    {
+      "name": "fkIDlast_stage",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 499861",
+    },
+    {
+      "name": "gene_f_popularity",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "REAL 499873",
+    },
+    {
+      "name": "gene_i_number_stages",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 499892",
+    },
+    {
+      "name": "gene_sz_mailOrganisateur",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 499922",
+    },
+    {
+      "name": "gene_ilist_fkIDteam",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 499947",
+    },
+    {
+      "name": "gene_ilist_objectif_info",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 500107",
+    },
+    {
+      "name": "fkIDLastRaceLeader",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 499957",
+    },
+    {
+      "name": "CONSTANT",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 499970",
+    },
+    {
+      "name": "gene_sz_classification_xml",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 500002",
+    },
+    {
+      "name": "gene_f_organisateur_coeff",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "REAL 500017",
+    },
+    {
+      "name": "fkIDtype_tour",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 500036",
+    },
+    {
+      "name": "gene_b_ForceProtourInvitation",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "NUMERIC 500051",
+    },
+    {
+      "name": "gene_b_aso",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "NUMERIC 500067",
+    },
+    {
+      "name": "gene_sz_currentvariant",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "TEXT 500082",
+    },
+    {
+      "name": "value_i_prime",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "INTEGER 500112",
+    },
+    {
+      "name": "gene_b_selected",
+      "notNull": false,
+      "primaryKey": false,
+      "type": "NUMERIC 500131",
+    },
+  ],
+  "name": "STA_race",
+  "rowCount": 254,
+}
+`;
+
 exports[`getTableSchema > returns STA_race table schema for Pro cycling manager 2019 1`] = `
 {
   "columnCount": 23,

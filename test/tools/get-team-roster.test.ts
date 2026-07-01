@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { registerGetTeamRoster } from "../../src/tools/get-team-roster";
 import { saveFixtures } from "../fixtures/save.fixture";
-import { createMockMcpServer } from "../helpers/mock-mcp-server";
-import type { MockMcpServer } from "../helpers/mock-mcp-server";
+import { createMockMcpServer } from "../mocks/mock-mcp-server";
+import type { MockMcpServer } from "../mocks/mock-mcp-server";
 
 describe("getTeamRoster", () => {
 	let mcp: MockMcpServer;
@@ -17,18 +17,17 @@ describe("getTeamRoster", () => {
 		expect(mcp.registerTool).toHaveBeenCalledOnce();
 	});
 
-	it.each(saveFixtures)(
-		"returns the roster for a given team for %s",
-		async (name, path) => {
-			const result = await mcp.callTool("pcm_get_team_roster", {
-				savePath: path,
-				teamId: 1,
-			});
+	it.each(
+		saveFixtures,
+	)("returns the roster for a given team for %s", async (name, path) => {
+		const result = await mcp.callTool("pcm_get_team_roster", {
+			savePath: path,
+			teamId: 1,
+		});
 
-			expect(result.structuredContent).toBeDefined();
-			expect(result.structuredContent).toMatchSnapshot();
-		},
-	);
+		expect(result.structuredContent).toBeDefined();
+		expect(result.structuredContent).toMatchSnapshot();
+	});
 
 	it("returns an error for an unknown team", async () => {
 		const result = await mcp.callTool("pcm_get_team_roster", {

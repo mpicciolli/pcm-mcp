@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { registerSearchTeam } from "../../src/tools/search-team";
 import { saveFixtures } from "../fixtures/save.fixture";
-import { createMockMcpServer } from "../helpers/mock-mcp-server";
-import type { MockMcpServer } from "../helpers/mock-mcp-server";
+import { createMockMcpServer } from "../mocks/mock-mcp-server";
+import type { MockMcpServer } from "../mocks/mock-mcp-server";
 
 describe("searchTeam", () => {
 	let mcp: MockMcpServer;

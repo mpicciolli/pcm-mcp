@@ -18,7 +18,7 @@ import { withSaveDb } from "../src/save-db";
 vi.mock("cdb-converter", () => ({ cdbToSql: vi.fn() }));
 vi.mock("sql.js", () => ({ default: vi.fn(() => ({})) }));
 
-const cdbToSqlMock = cdbToSql as unknown as Mock;
+const cdbToSqlMock = cdbToSql as Mock;
 
 let dir: string;
 let savePath: string;
@@ -48,7 +48,9 @@ describe("withSaveDb", () => {
 	});
 
 	it("passes the open database and save metadata to the callback", async () => {
-		const fn = vi.fn(() => ({ ok: true }));
+		const fn = vi.fn((_db: unknown, _save: { name: string; path: string }) => ({
+			ok: true,
+		}));
 
 		await withSaveDb(savePath, fn);
 
@@ -76,7 +78,7 @@ describe("withSaveDb", () => {
 		});
 
 		expect(result.isError).toBe(true);
-		expect(result.content[0].text).toContain("boom");
+		expect((result.content[0] as { text: string }).text).toContain("boom");
 		expect(fakeDb.close).toHaveBeenCalledTimes(1);
 	});
 

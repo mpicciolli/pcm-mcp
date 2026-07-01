@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { registerSearchCyclist } from "../../src/tools/search-cyclist";
 import { saveFixtures } from "../fixtures/save.fixture";
-import { createMockMcpServer } from "../helpers/mock-mcp-server";
-import type { MockMcpServer } from "../helpers/mock-mcp-server";
+import { createMockMcpServer } from "../mocks/mock-mcp-server";
+import type { MockMcpServer } from "../mocks/mock-mcp-server";
 
 describe("searchCyclist", () => {
 	let mcp: MockMcpServer;
@@ -17,18 +17,17 @@ describe("searchCyclist", () => {
 		expect(mcp.registerTool).toHaveBeenCalledOnce();
 	});
 
-	it.each(saveFixtures)(
-		"finds cyclists by last name for %s",
-		async (name, path) => {
-			const result = await mcp.callTool("pcm_search_cyclist", {
-				savePath: path,
-				lastName: "van der",
-			});
+	it.each(
+		saveFixtures,
+	)("finds cyclists by last name for %s", async (name, path) => {
+		const result = await mcp.callTool("pcm_search_cyclist", {
+			savePath: path,
+			lastName: "van der",
+		});
 
-			expect(result.structuredContent).toBeDefined();
-			expect(result.structuredContent).toMatchSnapshot();
-		},
-	);
+		expect(result.structuredContent).toBeDefined();
+		expect(result.structuredContent).toMatchSnapshot();
+	});
 
 	it("returns an error when neither name is provided", async () => {
 		const result = await mcp.callTool("pcm_search_cyclist", {
