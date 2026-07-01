@@ -1,0 +1,2449 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getSaveSchema > returns save schema for Pro cycling manager 2018 1`] = `
+{
+  "tableCount": 150,
+  "tables": [
+    {
+      "id": 2,
+      "name": "DYN_carac_evolution",
+    },
+    {
+      "id": 3,
+      "name": "DYN_chrono_team_time_trial",
+    },
+    {
+      "id": 4,
+      "name": "DYN_chrono_time_trial",
+    },
+    {
+      "id": 5,
+      "name": "DYN_classification_race",
+    },
+    {
+      "id": 6,
+      "name": "DYN_classification_stage",
+    },
+    {
+      "id": 7,
+      "name": "DYN_classification_track",
+    },
+    {
+      "id": 8,
+      "name": "DYN_coach",
+    },
+    {
+      "id": 9,
+      "name": "DYN_contract_cyclist",
+    },
+    {
+      "id": 10,
+      "name": "DYN_contract_cyclist_offer",
+    },
+    {
+      "id": 11,
+      "name": "DYN_cyclist",
+    },
+    {
+      "id": 12,
+      "name": "DYN_cyclist_season",
+    },
+    {
+      "id": 14,
+      "name": "DYN_equipment_selection",
+    },
+    {
+      "id": 16,
+      "name": "DYN_finance",
+    },
+    {
+      "id": 17,
+      "name": "DYN_injury",
+    },
+    {
+      "id": 18,
+      "name": "DYN_invitation_cyclist",
+    },
+    {
+      "id": 19,
+      "name": "DYN_journalist_vote",
+    },
+    {
+      "id": 20,
+      "name": "DYN_leader_program",
+    },
+    {
+      "id": 22,
+      "name": "DYN_national_team",
+    },
+    {
+      "id": 23,
+      "name": "DYN_news",
+    },
+    {
+      "id": 24,
+      "name": "DYN_news_tag",
+    },
+    {
+      "id": 25,
+      "name": "DYN_objectif",
+    },
+    {
+      "id": 26,
+      "name": "DYN_palmares",
+    },
+    {
+      "id": 27,
+      "name": "DYN_palmares_cyclist",
+    },
+    {
+      "id": 28,
+      "name": "DYN_palmares_sponsor",
+    },
+    {
+      "id": 29,
+      "name": "DYN_palmares_team",
+    },
+    {
+      "id": 30,
+      "name": "DYN_physician",
+    },
+    {
+      "id": 31,
+      "name": "DYN_race_status",
+    },
+    {
+      "id": 35,
+      "name": "DYN_ranking",
+    },
+    {
+      "id": 36,
+      "name": "DYN_scout",
+    },
+    {
+      "id": 37,
+      "name": "DYN_scout_efficiency",
+    },
+    {
+      "id": 38,
+      "name": "DYN_scout_mission",
+    },
+    {
+      "id": 39,
+      "name": "DYN_simu_feedback",
+    },
+    {
+      "id": 40,
+      "name": "DYN_sponsor",
+    },
+    {
+      "id": 41,
+      "name": "DYN_sponsor_regions",
+    },
+    {
+      "id": 42,
+      "name": "DYN_sponsor_research",
+    },
+    {
+      "id": 43,
+      "name": "DYN_sponsor_results",
+    },
+    {
+      "id": 44,
+      "name": "DYN_team",
+    },
+    {
+      "id": 45,
+      "name": "DYN_team_race",
+    },
+    {
+      "id": 46,
+      "name": "DYN_track_cyclist",
+    },
+    {
+      "id": 47,
+      "name": "DYN_track_heat",
+    },
+    {
+      "id": 48,
+      "name": "DYN_track_round",
+    },
+    {
+      "id": 49,
+      "name": "DYN_track_series",
+    },
+    {
+      "id": 50,
+      "name": "DYN_training_stage_TTT",
+    },
+    {
+      "id": 51,
+      "name": "DYN_training_stage_bonus",
+    },
+    {
+      "id": 52,
+      "name": "DYN_training_stage_booking",
+    },
+    {
+      "id": 53,
+      "name": "DYN_training_stage_charac",
+    },
+    {
+      "id": 54,
+      "name": "DYN_training_stage_recon",
+    },
+    {
+      "id": 55,
+      "name": "DYN_transfer",
+    },
+    {
+      "id": 59,
+      "name": "GAM_config",
+    },
+    {
+      "id": 65,
+      "name": "GAM_user",
+    },
+    {
+      "id": 77,
+      "name": "STA_UCI_class",
+    },
+    {
+      "id": 78,
+      "name": "STA_bonus_UCI",
+    },
+    {
+      "id": 79,
+      "name": "STA_bonus_superprestige",
+    },
+    {
+      "id": 80,
+      "name": "STA_calendar",
+    },
+    {
+      "id": 81,
+      "name": "STA_classification_source",
+    },
+    {
+      "id": 82,
+      "name": "STA_classification_state",
+    },
+    {
+      "id": 83,
+      "name": "STA_classification_type",
+    },
+    {
+      "id": 84,
+      "name": "STA_climat",
+    },
+    {
+      "id": 85,
+      "name": "STA_condition_type",
+    },
+    {
+      "id": 86,
+      "name": "STA_contract_state",
+    },
+    {
+      "id": 87,
+      "name": "STA_country",
+    },
+    {
+      "id": 90,
+      "name": "STA_cyclist_future",
+    },
+    {
+      "id": 91,
+      "name": "STA_cyclist_progression",
+    },
+    {
+      "id": 92,
+      "name": "STA_cyclist_state",
+    },
+    {
+      "id": 93,
+      "name": "STA_cyclist_statut",
+    },
+    {
+      "id": 94,
+      "name": "STA_division",
+    },
+    {
+      "id": 98,
+      "name": "STA_fame",
+    },
+    {
+      "id": 99,
+      "name": "STA_filter_comparator_list",
+    },
+    {
+      "id": 100,
+      "name": "STA_filter_field",
+    },
+    {
+      "id": 101,
+      "name": "STA_filter_field_type",
+    },
+    {
+      "id": 102,
+      "name": "STA_fitness_interval",
+    },
+    {
+      "id": 103,
+      "name": "STA_fitness_program",
+    },
+    {
+      "id": 104,
+      "name": "STA_fitness_program_week",
+    },
+    {
+      "id": 107,
+      "name": "STA_handicap",
+    },
+    {
+      "id": 108,
+      "name": "STA_injury",
+    },
+    {
+      "id": 109,
+      "name": "STA_injury_label",
+    },
+    {
+      "id": 110,
+      "name": "STA_invitation_state",
+    },
+    {
+      "id": 111,
+      "name": "STA_jersey_colors",
+    },
+    {
+      "id": 112,
+      "name": "STA_journal_title",
+    },
+    {
+      "id": 113,
+      "name": "STA_journalist",
+    },
+    {
+      "id": 117,
+      "name": "STA_news_type",
+    },
+    {
+      "id": 118,
+      "name": "STA_objectif_type",
+    },
+    {
+      "id": 119,
+      "name": "STA_palmares_type",
+    },
+    {
+      "id": 120,
+      "name": "STA_program",
+    },
+    {
+      "id": 121,
+      "name": "STA_program_info",
+    },
+    {
+      "id": 122,
+      "name": "STA_race",
+    },
+    {
+      "id": 124,
+      "name": "STA_race_rules",
+    },
+    {
+      "id": 125,
+      "name": "STA_racefavorite_list",
+    },
+    {
+      "id": 126,
+      "name": "STA_ranking_item",
+    },
+    {
+      "id": 127,
+      "name": "STA_ranking_type",
+    },
+    {
+      "id": 128,
+      "name": "STA_record_type",
+    },
+    {
+      "id": 129,
+      "name": "STA_records",
+    },
+    {
+      "id": 131,
+      "name": "STA_region",
+    },
+    {
+      "id": 132,
+      "name": "STA_roster_listraces",
+    },
+    {
+      "id": 133,
+      "name": "STA_roster_type_leader",
+    },
+    {
+      "id": 134,
+      "name": "STA_simulate_order",
+    },
+    {
+      "id": 135,
+      "name": "STA_simulate_status",
+    },
+    {
+      "id": 136,
+      "name": "STA_simulate_tactic",
+    },
+    {
+      "id": 137,
+      "name": "STA_stage",
+    },
+    {
+      "id": 138,
+      "name": "STA_temperatures",
+    },
+    {
+      "id": 142,
+      "name": "STA_training_exercise",
+    },
+    {
+      "id": 143,
+      "name": "STA_training_stages",
+    },
+    {
+      "id": 144,
+      "name": "STA_training_stages_massifs",
+    },
+    {
+      "id": 145,
+      "name": "STA_training_stages_state",
+    },
+    {
+      "id": 146,
+      "name": "STA_training_stages_type",
+    },
+    {
+      "id": 147,
+      "name": "STA_trophy_prepoints",
+    },
+    {
+      "id": 149,
+      "name": "STA_type_injury_origin",
+    },
+    {
+      "id": 150,
+      "name": "STA_type_leader",
+    },
+    {
+      "id": 151,
+      "name": "STA_type_leader_specialisation",
+    },
+    {
+      "id": 152,
+      "name": "STA_type_rider",
+    },
+    {
+      "id": 153,
+      "name": "STA_type_sprint",
+    },
+    {
+      "id": 154,
+      "name": "STA_type_tour",
+    },
+    {
+      "id": 155,
+      "name": "STA_user_state",
+    },
+    {
+      "id": 156,
+      "name": "STA_utils",
+    },
+    {
+      "id": 159,
+      "name": "SoundEvents",
+    },
+    {
+      "id": 160,
+      "name": "TMP_listform",
+    },
+    {
+      "id": 164,
+      "name": "DYN_cyclist_fitness",
+    },
+    {
+      "id": 166,
+      "name": "DYN_cyclist_objective",
+    },
+    {
+      "id": 168,
+      "name": "DYN_cyclist_satisfaction",
+    },
+    {
+      "id": 169,
+      "name": "DYN_cyclist_fitness_data",
+    },
+    {
+      "id": 170,
+      "name": "GAM_career_data",
+    },
+    {
+      "id": 172,
+      "name": "STA_brand",
+    },
+    {
+      "id": 173,
+      "name": "STA_brand_type",
+    },
+    {
+      "id": 174,
+      "name": "STA_track_equipment",
+    },
+    {
+      "id": 175,
+      "name": "STA_equipment_model",
+    },
+    {
+      "id": 177,
+      "name": "DYN_equipment_techno",
+    },
+    {
+      "id": 179,
+      "name": "DYN_brand_contract",
+    },
+    {
+      "id": 180,
+      "name": "STA_equipment_template",
+    },
+    {
+      "id": 181,
+      "name": "DYN_brand_offer",
+    },
+    {
+      "id": 185,
+      "name": "DYN_coach_relation",
+    },
+    {
+      "id": 186,
+      "name": "DYN_cyclist_progression",
+    },
+    {
+      "id": 192,
+      "name": "DYN_u23_link",
+    },
+    {
+      "id": 193,
+      "name": "DYN_scout_report",
+    },
+    {
+      "id": 198,
+      "name": "STA_race_group",
+    },
+    {
+      "id": 199,
+      "name": "DYN_cyclist_planning",
+    },
+    {
+      "id": 200,
+      "name": "DYN_cyclist_peak_detail",
+    },
+    {
+      "id": 201,
+      "name": "DYN_cyclist_training_plan",
+    },
+    {
+      "id": 202,
+      "name": "DYN_fitness_recorded_data",
+    },
+    {
+      "id": 203,
+      "name": "GAM_procyclist_data",
+    },
+    {
+      "id": 204,
+      "name": "GAM_rewards_data",
+    },
+    {
+      "id": 205,
+      "name": "INF_contract_preference_preset",
+    },
+    {
+      "id": 206,
+      "name": "STA_race_pack",
+    },
+    {
+      "id": 207,
+      "name": "DYN_transfer_available_cyclist",
+    },
+    {
+      "id": 208,
+      "name": "DYN_transfer_team_wish",
+    },
+    {
+      "id": 209,
+      "name": "STA_team_ridertype_distrib",
+    },
+    {
+      "id": 210,
+      "name": "STA_team_ridertype_distrib_to_type_rider",
+    },
+    {
+      "id": 211,
+      "name": "STA_team_ridertype_distrib_cat",
+    },
+    {
+      "id": 212,
+      "name": "STA_regen_lastnameV2",
+    },
+    {
+      "id": 213,
+      "name": "DYN_ui_planner_cyclist_sort",
+    },
+    {
+      "id": 214,
+      "name": "DYN_cyclist_progression_dated",
+    },
+  ],
+}
+`;
+
+exports[`getSaveSchema > returns save schema for Pro cycling manager 2019 1`] = `
+{
+  "tableCount": 158,
+  "tables": [
+    {
+      "id": 2,
+      "name": "DYN_carac_evolution",
+    },
+    {
+      "id": 3,
+      "name": "DYN_chrono_team_time_trial",
+    },
+    {
+      "id": 4,
+      "name": "DYN_chrono_time_trial",
+    },
+    {
+      "id": 5,
+      "name": "DYN_classification_race",
+    },
+    {
+      "id": 6,
+      "name": "DYN_classification_stage",
+    },
+    {
+      "id": 7,
+      "name": "DYN_classification_track",
+    },
+    {
+      "id": 8,
+      "name": "DYN_coach",
+    },
+    {
+      "id": 9,
+      "name": "DYN_contract_cyclist",
+    },
+    {
+      "id": 10,
+      "name": "DYN_contract_cyclist_offer",
+    },
+    {
+      "id": 11,
+      "name": "DYN_cyclist",
+    },
+    {
+      "id": 12,
+      "name": "DYN_cyclist_season",
+    },
+    {
+      "id": 14,
+      "name": "DYN_equipment_selection",
+    },
+    {
+      "id": 16,
+      "name": "DYN_finance",
+    },
+    {
+      "id": 17,
+      "name": "DYN_injury",
+    },
+    {
+      "id": 18,
+      "name": "DYN_invitation_cyclist",
+    },
+    {
+      "id": 19,
+      "name": "DYN_journalist_vote",
+    },
+    {
+      "id": 20,
+      "name": "DYN_leader_program",
+    },
+    {
+      "id": 22,
+      "name": "DYN_national_team",
+    },
+    {
+      "id": 23,
+      "name": "DYN_news",
+    },
+    {
+      "id": 24,
+      "name": "DYN_news_tag",
+    },
+    {
+      "id": 25,
+      "name": "DYN_objectif",
+    },
+    {
+      "id": 26,
+      "name": "DYN_palmares",
+    },
+    {
+      "id": 27,
+      "name": "DYN_palmares_cyclist",
+    },
+    {
+      "id": 28,
+      "name": "DYN_palmares_sponsor",
+    },
+    {
+      "id": 29,
+      "name": "DYN_palmares_team",
+    },
+    {
+      "id": 30,
+      "name": "DYN_physician",
+    },
+    {
+      "id": 31,
+      "name": "DYN_race_status",
+    },
+    {
+      "id": 35,
+      "name": "DYN_ranking",
+    },
+    {
+      "id": 36,
+      "name": "DYN_scout",
+    },
+    {
+      "id": 37,
+      "name": "DYN_scout_efficiency",
+    },
+    {
+      "id": 38,
+      "name": "DYN_scout_mission",
+    },
+    {
+      "id": 39,
+      "name": "DYN_simu_feedback",
+    },
+    {
+      "id": 40,
+      "name": "DYN_sponsor",
+    },
+    {
+      "id": 41,
+      "name": "DYN_sponsor_regions",
+    },
+    {
+      "id": 42,
+      "name": "DYN_sponsor_research",
+    },
+    {
+      "id": 43,
+      "name": "DYN_sponsor_results",
+    },
+    {
+      "id": 44,
+      "name": "DYN_team",
+    },
+    {
+      "id": 45,
+      "name": "DYN_team_race",
+    },
+    {
+      "id": 46,
+      "name": "DYN_track_cyclist",
+    },
+    {
+      "id": 47,
+      "name": "DYN_track_heat",
+    },
+    {
+      "id": 48,
+      "name": "DYN_track_round",
+    },
+    {
+      "id": 49,
+      "name": "DYN_track_series",
+    },
+    {
+      "id": 50,
+      "name": "DYN_training_stage_TTT",
+    },
+    {
+      "id": 51,
+      "name": "DYN_training_stage_bonus",
+    },
+    {
+      "id": 52,
+      "name": "DYN_training_stage_booking",
+    },
+    {
+      "id": 53,
+      "name": "DYN_training_stage_charac",
+    },
+    {
+      "id": 54,
+      "name": "DYN_training_stage_recon",
+    },
+    {
+      "id": 55,
+      "name": "DYN_transfer",
+    },
+    {
+      "id": 59,
+      "name": "GAM_config",
+    },
+    {
+      "id": 65,
+      "name": "GAM_user",
+    },
+    {
+      "id": 77,
+      "name": "STA_UCI_class",
+    },
+    {
+      "id": 78,
+      "name": "STA_bonus_UCI",
+    },
+    {
+      "id": 79,
+      "name": "STA_bonus_superprestige",
+    },
+    {
+      "id": 80,
+      "name": "STA_calendar",
+    },
+    {
+      "id": 81,
+      "name": "STA_classification_source",
+    },
+    {
+      "id": 82,
+      "name": "STA_classification_state",
+    },
+    {
+      "id": 83,
+      "name": "STA_classification_type",
+    },
+    {
+      "id": 84,
+      "name": "STA_climat",
+    },
+    {
+      "id": 85,
+      "name": "STA_condition_type",
+    },
+    {
+      "id": 86,
+      "name": "STA_contract_state",
+    },
+    {
+      "id": 87,
+      "name": "STA_country",
+    },
+    {
+      "id": 90,
+      "name": "STA_cyclist_future",
+    },
+    {
+      "id": 91,
+      "name": "STA_cyclist_progression",
+    },
+    {
+      "id": 92,
+      "name": "STA_cyclist_state",
+    },
+    {
+      "id": 93,
+      "name": "STA_cyclist_statut",
+    },
+    {
+      "id": 94,
+      "name": "STA_division",
+    },
+    {
+      "id": 98,
+      "name": "STA_fame",
+    },
+    {
+      "id": 99,
+      "name": "STA_filter_comparator_list",
+    },
+    {
+      "id": 100,
+      "name": "STA_filter_field",
+    },
+    {
+      "id": 101,
+      "name": "STA_filter_field_type",
+    },
+    {
+      "id": 102,
+      "name": "STA_fitness_interval",
+    },
+    {
+      "id": 103,
+      "name": "STA_fitness_program",
+    },
+    {
+      "id": 104,
+      "name": "STA_fitness_program_week",
+    },
+    {
+      "id": 107,
+      "name": "STA_handicap",
+    },
+    {
+      "id": 108,
+      "name": "STA_injury",
+    },
+    {
+      "id": 109,
+      "name": "STA_injury_label",
+    },
+    {
+      "id": 110,
+      "name": "STA_invitation_state",
+    },
+    {
+      "id": 111,
+      "name": "STA_jersey_colors",
+    },
+    {
+      "id": 112,
+      "name": "STA_journal_title",
+    },
+    {
+      "id": 113,
+      "name": "STA_journalist",
+    },
+    {
+      "id": 117,
+      "name": "STA_news_type",
+    },
+    {
+      "id": 118,
+      "name": "STA_objectif_type",
+    },
+    {
+      "id": 119,
+      "name": "STA_palmares_type",
+    },
+    {
+      "id": 120,
+      "name": "STA_program",
+    },
+    {
+      "id": 121,
+      "name": "STA_program_info",
+    },
+    {
+      "id": 122,
+      "name": "STA_race",
+    },
+    {
+      "id": 124,
+      "name": "STA_race_rules",
+    },
+    {
+      "id": 125,
+      "name": "STA_racefavorite_list",
+    },
+    {
+      "id": 126,
+      "name": "STA_ranking_item",
+    },
+    {
+      "id": 127,
+      "name": "STA_ranking_type",
+    },
+    {
+      "id": 128,
+      "name": "STA_record_type",
+    },
+    {
+      "id": 129,
+      "name": "STA_records",
+    },
+    {
+      "id": 131,
+      "name": "STA_region",
+    },
+    {
+      "id": 132,
+      "name": "STA_roster_listraces",
+    },
+    {
+      "id": 133,
+      "name": "STA_roster_type_leader",
+    },
+    {
+      "id": 134,
+      "name": "STA_simulate_order",
+    },
+    {
+      "id": 135,
+      "name": "STA_simulate_status",
+    },
+    {
+      "id": 136,
+      "name": "STA_simulate_tactic",
+    },
+    {
+      "id": 137,
+      "name": "STA_stage",
+    },
+    {
+      "id": 138,
+      "name": "STA_temperatures",
+    },
+    {
+      "id": 142,
+      "name": "STA_training_exercise",
+    },
+    {
+      "id": 143,
+      "name": "STA_training_stages",
+    },
+    {
+      "id": 144,
+      "name": "STA_training_stages_massifs",
+    },
+    {
+      "id": 145,
+      "name": "STA_training_stages_state",
+    },
+    {
+      "id": 146,
+      "name": "STA_training_stages_type",
+    },
+    {
+      "id": 147,
+      "name": "STA_trophy_prepoints",
+    },
+    {
+      "id": 149,
+      "name": "STA_type_injury_origin",
+    },
+    {
+      "id": 150,
+      "name": "STA_type_leader",
+    },
+    {
+      "id": 151,
+      "name": "STA_type_leader_specialisation",
+    },
+    {
+      "id": 152,
+      "name": "STA_type_rider",
+    },
+    {
+      "id": 153,
+      "name": "STA_type_sprint",
+    },
+    {
+      "id": 154,
+      "name": "STA_type_tour",
+    },
+    {
+      "id": 155,
+      "name": "STA_user_state",
+    },
+    {
+      "id": 156,
+      "name": "STA_utils",
+    },
+    {
+      "id": 159,
+      "name": "SoundEvents",
+    },
+    {
+      "id": 160,
+      "name": "TMP_listform",
+    },
+    {
+      "id": 164,
+      "name": "DYN_cyclist_fitness",
+    },
+    {
+      "id": 166,
+      "name": "DYN_cyclist_objective",
+    },
+    {
+      "id": 168,
+      "name": "DYN_cyclist_satisfaction",
+    },
+    {
+      "id": 169,
+      "name": "DYN_cyclist_fitness_data",
+    },
+    {
+      "id": 170,
+      "name": "GAM_career_data",
+    },
+    {
+      "id": 172,
+      "name": "STA_brand",
+    },
+    {
+      "id": 173,
+      "name": "STA_brand_type",
+    },
+    {
+      "id": 174,
+      "name": "STA_track_equipment",
+    },
+    {
+      "id": 175,
+      "name": "STA_equipment_model",
+    },
+    {
+      "id": 177,
+      "name": "DYN_equipment_techno",
+    },
+    {
+      "id": 179,
+      "name": "DYN_brand_contract",
+    },
+    {
+      "id": 180,
+      "name": "STA_equipment_template",
+    },
+    {
+      "id": 181,
+      "name": "DYN_brand_offer",
+    },
+    {
+      "id": 185,
+      "name": "DYN_coach_relation",
+    },
+    {
+      "id": 186,
+      "name": "DYN_cyclist_progression",
+    },
+    {
+      "id": 192,
+      "name": "DYN_u23_link",
+    },
+    {
+      "id": 193,
+      "name": "DYN_scout_report",
+    },
+    {
+      "id": 198,
+      "name": "STA_race_group",
+    },
+    {
+      "id": 199,
+      "name": "DYN_cyclist_planning",
+    },
+    {
+      "id": 200,
+      "name": "DYN_cyclist_peak_detail",
+    },
+    {
+      "id": 201,
+      "name": "DYN_cyclist_training_plan",
+    },
+    {
+      "id": 202,
+      "name": "DYN_fitness_recorded_data",
+    },
+    {
+      "id": 203,
+      "name": "GAM_procyclist_data",
+    },
+    {
+      "id": 204,
+      "name": "GAM_rewards_data",
+    },
+    {
+      "id": 205,
+      "name": "INF_contract_preference_preset",
+    },
+    {
+      "id": 206,
+      "name": "STA_race_pack",
+    },
+    {
+      "id": 207,
+      "name": "DYN_transfer_available_cyclist",
+    },
+    {
+      "id": 208,
+      "name": "DYN_transfer_team_wish",
+    },
+    {
+      "id": 209,
+      "name": "STA_team_ridertype_distrib",
+    },
+    {
+      "id": 210,
+      "name": "STA_team_ridertype_distrib_to_type_rider",
+    },
+    {
+      "id": 211,
+      "name": "STA_team_ridertype_distrib_cat",
+    },
+    {
+      "id": 212,
+      "name": "STA_regen_lastnameV2",
+    },
+    {
+      "id": 213,
+      "name": "DYN_ui_planner_cyclist_sort",
+    },
+    {
+      "id": 214,
+      "name": "DYN_cyclist_progression_dated",
+    },
+    {
+      "id": 215,
+      "name": "DYN_procyclist_skilltree",
+    },
+    {
+      "id": 217,
+      "name": "STA_skilltree_branch",
+    },
+    {
+      "id": 218,
+      "name": "DYN_procyclist",
+    },
+    {
+      "id": 220,
+      "name": "DYN_procyclist_charac_history",
+    },
+    {
+      "id": 221,
+      "name": "DYN_procyclist_contract_offer",
+    },
+    {
+      "id": 223,
+      "name": "DYN_cyclist_fitpeak_history",
+    },
+    {
+      "id": 224,
+      "name": "DYN_career_precontract_cyclist",
+    },
+    {
+      "id": 225,
+      "name": "DYN_career_precontract_news",
+    },
+  ],
+}
+`;
+
+exports[`getSaveSchema > returns save schema for Pro cycling manager 2021 1`] = `
+{
+  "tableCount": 147,
+  "tables": [
+    {
+      "id": 2,
+      "name": "DYN_carac_evolution",
+    },
+    {
+      "id": 3,
+      "name": "DYN_chrono_team_time_trial",
+    },
+    {
+      "id": 4,
+      "name": "DYN_chrono_time_trial",
+    },
+    {
+      "id": 5,
+      "name": "DYN_classification_race",
+    },
+    {
+      "id": 6,
+      "name": "DYN_classification_stage",
+    },
+    {
+      "id": 7,
+      "name": "DYN_classification_track",
+    },
+    {
+      "id": 8,
+      "name": "DYN_coach",
+    },
+    {
+      "id": 9,
+      "name": "DYN_contract_cyclist",
+    },
+    {
+      "id": 10,
+      "name": "DYN_contract_cyclist_offer",
+    },
+    {
+      "id": 11,
+      "name": "DYN_cyclist",
+    },
+    {
+      "id": 12,
+      "name": "DYN_cyclist_season",
+    },
+    {
+      "id": 14,
+      "name": "DYN_equipment_selection",
+    },
+    {
+      "id": 16,
+      "name": "DYN_finance",
+    },
+    {
+      "id": 17,
+      "name": "DYN_injury",
+    },
+    {
+      "id": 18,
+      "name": "DYN_invitation_cyclist",
+    },
+    {
+      "id": 19,
+      "name": "DYN_journalist_vote",
+    },
+    {
+      "id": 22,
+      "name": "DYN_national_team",
+    },
+    {
+      "id": 23,
+      "name": "DYN_news",
+    },
+    {
+      "id": 24,
+      "name": "DYN_news_tag",
+    },
+    {
+      "id": 25,
+      "name": "DYN_objectif",
+    },
+    {
+      "id": 26,
+      "name": "DYN_palmares",
+    },
+    {
+      "id": 27,
+      "name": "DYN_palmares_cyclist",
+    },
+    {
+      "id": 28,
+      "name": "DYN_palmares_sponsor",
+    },
+    {
+      "id": 29,
+      "name": "DYN_palmares_team",
+    },
+    {
+      "id": 30,
+      "name": "DYN_physician",
+    },
+    {
+      "id": 31,
+      "name": "DYN_race_status",
+    },
+    {
+      "id": 35,
+      "name": "DYN_ranking",
+    },
+    {
+      "id": 36,
+      "name": "DYN_scout",
+    },
+    {
+      "id": 39,
+      "name": "DYN_simu_feedback",
+    },
+    {
+      "id": 40,
+      "name": "DYN_sponsor",
+    },
+    {
+      "id": 41,
+      "name": "DYN_sponsor_regions",
+    },
+    {
+      "id": 42,
+      "name": "DYN_sponsor_research",
+    },
+    {
+      "id": 43,
+      "name": "DYN_sponsor_results",
+    },
+    {
+      "id": 44,
+      "name": "DYN_team",
+    },
+    {
+      "id": 45,
+      "name": "DYN_team_race",
+    },
+    {
+      "id": 46,
+      "name": "DYN_track_cyclist",
+    },
+    {
+      "id": 47,
+      "name": "DYN_track_heat",
+    },
+    {
+      "id": 48,
+      "name": "DYN_track_round",
+    },
+    {
+      "id": 49,
+      "name": "DYN_track_series",
+    },
+    {
+      "id": 50,
+      "name": "DYN_training_stage_TTT",
+    },
+    {
+      "id": 51,
+      "name": "DYN_training_stage_bonus",
+    },
+    {
+      "id": 52,
+      "name": "DYN_training_stage_booking",
+    },
+    {
+      "id": 53,
+      "name": "DYN_training_stage_charac",
+    },
+    {
+      "id": 54,
+      "name": "DYN_training_stage_recon",
+    },
+    {
+      "id": 55,
+      "name": "DYN_transfer",
+    },
+    {
+      "id": 59,
+      "name": "GAM_config",
+    },
+    {
+      "id": 65,
+      "name": "GAM_user",
+    },
+    {
+      "id": 77,
+      "name": "STA_UCI_class",
+    },
+    {
+      "id": 78,
+      "name": "STA_bonus_UCI",
+    },
+    {
+      "id": 79,
+      "name": "STA_bonus_superprestige",
+    },
+    {
+      "id": 80,
+      "name": "STA_calendar",
+    },
+    {
+      "id": 81,
+      "name": "STA_classification_source",
+    },
+    {
+      "id": 82,
+      "name": "STA_classification_state",
+    },
+    {
+      "id": 83,
+      "name": "STA_classification_type",
+    },
+    {
+      "id": 84,
+      "name": "STA_climat",
+    },
+    {
+      "id": 85,
+      "name": "STA_condition_type",
+    },
+    {
+      "id": 86,
+      "name": "STA_contract_state",
+    },
+    {
+      "id": 87,
+      "name": "STA_country",
+    },
+    {
+      "id": 92,
+      "name": "STA_cyclist_state",
+    },
+    {
+      "id": 93,
+      "name": "STA_cyclist_statut",
+    },
+    {
+      "id": 94,
+      "name": "STA_division",
+    },
+    {
+      "id": 98,
+      "name": "STA_fame",
+    },
+    {
+      "id": 99,
+      "name": "STA_filter_comparator_list",
+    },
+    {
+      "id": 100,
+      "name": "STA_filter_field",
+    },
+    {
+      "id": 101,
+      "name": "STA_filter_field_type",
+    },
+    {
+      "id": 107,
+      "name": "STA_handicap",
+    },
+    {
+      "id": 108,
+      "name": "STA_injury",
+    },
+    {
+      "id": 109,
+      "name": "STA_injury_label",
+    },
+    {
+      "id": 110,
+      "name": "STA_invitation_state",
+    },
+    {
+      "id": 111,
+      "name": "STA_jersey_colors",
+    },
+    {
+      "id": 112,
+      "name": "STA_journal_title",
+    },
+    {
+      "id": 113,
+      "name": "STA_journalist",
+    },
+    {
+      "id": 117,
+      "name": "STA_news_type",
+    },
+    {
+      "id": 118,
+      "name": "STA_objectif_type",
+    },
+    {
+      "id": 119,
+      "name": "STA_palmares_type",
+    },
+    {
+      "id": 122,
+      "name": "STA_race",
+    },
+    {
+      "id": 124,
+      "name": "STA_race_rules",
+    },
+    {
+      "id": 125,
+      "name": "STA_racefavorite_list",
+    },
+    {
+      "id": 126,
+      "name": "STA_ranking_item",
+    },
+    {
+      "id": 127,
+      "name": "STA_ranking_type",
+    },
+    {
+      "id": 128,
+      "name": "STA_record_type",
+    },
+    {
+      "id": 129,
+      "name": "STA_records",
+    },
+    {
+      "id": 131,
+      "name": "STA_region",
+    },
+    {
+      "id": 132,
+      "name": "STA_roster_listraces",
+    },
+    {
+      "id": 134,
+      "name": "STA_simulate_order",
+    },
+    {
+      "id": 135,
+      "name": "STA_simulate_status",
+    },
+    {
+      "id": 136,
+      "name": "STA_simulate_tactic",
+    },
+    {
+      "id": 137,
+      "name": "STA_stage",
+    },
+    {
+      "id": 142,
+      "name": "STA_training_exercise",
+    },
+    {
+      "id": 143,
+      "name": "STA_training_stages",
+    },
+    {
+      "id": 144,
+      "name": "STA_training_stages_massifs",
+    },
+    {
+      "id": 145,
+      "name": "STA_training_stages_state",
+    },
+    {
+      "id": 146,
+      "name": "STA_training_stages_type",
+    },
+    {
+      "id": 147,
+      "name": "STA_trophy_prepoints",
+    },
+    {
+      "id": 149,
+      "name": "STA_type_injury_origin",
+    },
+    {
+      "id": 152,
+      "name": "STA_type_rider",
+    },
+    {
+      "id": 153,
+      "name": "STA_type_sprint",
+    },
+    {
+      "id": 155,
+      "name": "STA_user_state",
+    },
+    {
+      "id": 159,
+      "name": "SoundEvents",
+    },
+    {
+      "id": 164,
+      "name": "DYN_cyclist_fitness",
+    },
+    {
+      "id": 166,
+      "name": "DYN_cyclist_objective",
+    },
+    {
+      "id": 168,
+      "name": "DYN_cyclist_satisfaction",
+    },
+    {
+      "id": 169,
+      "name": "DYN_cyclist_fitness_data",
+    },
+    {
+      "id": 170,
+      "name": "GAM_career_data",
+    },
+    {
+      "id": 172,
+      "name": "STA_brand",
+    },
+    {
+      "id": 173,
+      "name": "STA_brand_type",
+    },
+    {
+      "id": 174,
+      "name": "STA_track_equipment",
+    },
+    {
+      "id": 175,
+      "name": "STA_equipment_model",
+    },
+    {
+      "id": 177,
+      "name": "DYN_equipment_techno",
+    },
+    {
+      "id": 179,
+      "name": "DYN_brand_contract",
+    },
+    {
+      "id": 180,
+      "name": "STA_equipment_template",
+    },
+    {
+      "id": 181,
+      "name": "DYN_brand_offer",
+    },
+    {
+      "id": 185,
+      "name": "DYN_coach_relation",
+    },
+    {
+      "id": 186,
+      "name": "DYN_cyclist_progression",
+    },
+    {
+      "id": 192,
+      "name": "DYN_u23_link",
+    },
+    {
+      "id": 193,
+      "name": "DYN_scout_report",
+    },
+    {
+      "id": 200,
+      "name": "DYN_cyclist_peak_detail",
+    },
+    {
+      "id": 201,
+      "name": "DYN_cyclist_training_plan",
+    },
+    {
+      "id": 202,
+      "name": "DYN_fitness_recorded_data",
+    },
+    {
+      "id": 203,
+      "name": "GAM_procyclist_data",
+    },
+    {
+      "id": 204,
+      "name": "GAM_rewards_data",
+    },
+    {
+      "id": 205,
+      "name": "INF_contract_preference_preset",
+    },
+    {
+      "id": 206,
+      "name": "STA_race_pack",
+    },
+    {
+      "id": 207,
+      "name": "DYN_transfer_available_cyclist",
+    },
+    {
+      "id": 208,
+      "name": "DYN_transfer_team_wish",
+    },
+    {
+      "id": 209,
+      "name": "STA_team_ridertype_distrib",
+    },
+    {
+      "id": 210,
+      "name": "STA_team_ridertype_distrib_to_type_rider",
+    },
+    {
+      "id": 211,
+      "name": "STA_team_ridertype_distrib_cat",
+    },
+    {
+      "id": 213,
+      "name": "DYN_ui_planner_cyclist_sort",
+    },
+    {
+      "id": 215,
+      "name": "DYN_procyclist_skilltree",
+    },
+    {
+      "id": 217,
+      "name": "STA_skilltree_branch",
+    },
+    {
+      "id": 218,
+      "name": "DYN_procyclist",
+    },
+    {
+      "id": 220,
+      "name": "DYN_procyclist_charac_history",
+    },
+    {
+      "id": 221,
+      "name": "DYN_procyclist_contract_offer",
+    },
+    {
+      "id": 223,
+      "name": "DYN_cyclist_fitpeak_history",
+    },
+    {
+      "id": 224,
+      "name": "DYN_career_precontract_cyclist",
+    },
+    {
+      "id": 225,
+      "name": "DYN_career_precontract_news",
+    },
+    {
+      "id": 228,
+      "name": "STA_impact_moral",
+    },
+    {
+      "id": 229,
+      "name": "DYN_cyclist_impact_moral",
+    },
+    {
+      "id": 230,
+      "name": "STA_trigger_impact_moral",
+    },
+    {
+      "id": 231,
+      "name": "STA_trigger_moral",
+    },
+    {
+      "id": 236,
+      "name": "STA_continent",
+    },
+    {
+      "id": 240,
+      "name": "DYN_result_season",
+    },
+    {
+      "id": 241,
+      "name": "DYN_cyclist_national_selection",
+    },
+    {
+      "id": 242,
+      "name": "STA_national_team_invitation_state",
+    },
+    {
+      "id": 244,
+      "name": "DYN_team_history",
+    },
+    {
+      "id": 245,
+      "name": "STA_race_type",
+    },
+  ],
+}
+`;
+
+exports[`getSaveSchema > returns save schema for Pro cycling manager 2025 1`] = `
+{
+  "tableCount": 149,
+  "tables": [
+    {
+      "id": 3,
+      "name": "DYN_chrono_team_time_trial",
+    },
+    {
+      "id": 4,
+      "name": "DYN_chrono_time_trial",
+    },
+    {
+      "id": 8,
+      "name": "DYN_coach",
+    },
+    {
+      "id": 9,
+      "name": "DYN_contract_cyclist",
+    },
+    {
+      "id": 10,
+      "name": "DYN_contract_cyclist_offer",
+    },
+    {
+      "id": 11,
+      "name": "DYN_cyclist",
+    },
+    {
+      "id": 12,
+      "name": "DYN_cyclist_season",
+    },
+    {
+      "id": 14,
+      "name": "DYN_equipment_selection",
+    },
+    {
+      "id": 16,
+      "name": "DYN_finance",
+    },
+    {
+      "id": 17,
+      "name": "DYN_injury",
+    },
+    {
+      "id": 18,
+      "name": "DYN_invitation_cyclist",
+    },
+    {
+      "id": 19,
+      "name": "DYN_journalist_vote",
+    },
+    {
+      "id": 22,
+      "name": "DYN_national_team",
+    },
+    {
+      "id": 23,
+      "name": "DYN_news",
+    },
+    {
+      "id": 24,
+      "name": "DYN_news_tag",
+    },
+    {
+      "id": 25,
+      "name": "DYN_objectif",
+    },
+    {
+      "id": 26,
+      "name": "DYN_palmares",
+    },
+    {
+      "id": 27,
+      "name": "DYN_palmares_cyclist",
+    },
+    {
+      "id": 28,
+      "name": "DYN_palmares_sponsor",
+    },
+    {
+      "id": 29,
+      "name": "DYN_palmares_team",
+    },
+    {
+      "id": 30,
+      "name": "DYN_physician",
+    },
+    {
+      "id": 31,
+      "name": "DYN_race_status",
+    },
+    {
+      "id": 35,
+      "name": "DYN_ranking",
+    },
+    {
+      "id": 36,
+      "name": "DYN_scout",
+    },
+    {
+      "id": 39,
+      "name": "DYN_simu_feedback",
+    },
+    {
+      "id": 40,
+      "name": "DYN_sponsor",
+    },
+    {
+      "id": 41,
+      "name": "DYN_sponsor_regions",
+    },
+    {
+      "id": 44,
+      "name": "DYN_team",
+    },
+    {
+      "id": 45,
+      "name": "DYN_team_race",
+    },
+    {
+      "id": 50,
+      "name": "DYN_training_stage_TTT",
+    },
+    {
+      "id": 51,
+      "name": "DYN_training_stage_bonus",
+    },
+    {
+      "id": 52,
+      "name": "DYN_training_stage_booking",
+    },
+    {
+      "id": 53,
+      "name": "DYN_training_stage_charac",
+    },
+    {
+      "id": 54,
+      "name": "DYN_training_stage_recon",
+    },
+    {
+      "id": 55,
+      "name": "DYN_transfer",
+    },
+    {
+      "id": 59,
+      "name": "GAM_config",
+    },
+    {
+      "id": 65,
+      "name": "GAM_user",
+    },
+    {
+      "id": 80,
+      "name": "STA_calendar",
+    },
+    {
+      "id": 81,
+      "name": "STA_classification_source",
+    },
+    {
+      "id": 83,
+      "name": "STA_classification_type",
+    },
+    {
+      "id": 84,
+      "name": "STA_climat",
+    },
+    {
+      "id": 85,
+      "name": "STA_condition_type",
+    },
+    {
+      "id": 86,
+      "name": "STA_contract_state",
+    },
+    {
+      "id": 87,
+      "name": "STA_country",
+    },
+    {
+      "id": 92,
+      "name": "STA_cyclist_state",
+    },
+    {
+      "id": 93,
+      "name": "STA_cyclist_statut",
+    },
+    {
+      "id": 94,
+      "name": "STA_division",
+    },
+    {
+      "id": 98,
+      "name": "STA_fame",
+    },
+    {
+      "id": 99,
+      "name": "STA_filter_comparator_list",
+    },
+    {
+      "id": 100,
+      "name": "STA_filter_field",
+    },
+    {
+      "id": 101,
+      "name": "STA_filter_field_type",
+    },
+    {
+      "id": 107,
+      "name": "STA_handicap",
+    },
+    {
+      "id": 108,
+      "name": "STA_injury",
+    },
+    {
+      "id": 109,
+      "name": "STA_injury_label",
+    },
+    {
+      "id": 110,
+      "name": "STA_invitation_state",
+    },
+    {
+      "id": 111,
+      "name": "STA_jersey_colors",
+    },
+    {
+      "id": 113,
+      "name": "STA_journalist",
+    },
+    {
+      "id": 117,
+      "name": "STA_news_type",
+    },
+    {
+      "id": 118,
+      "name": "STA_objectif_type",
+    },
+    {
+      "id": 119,
+      "name": "STA_palmares_type",
+    },
+    {
+      "id": 122,
+      "name": "STA_race",
+    },
+    {
+      "id": 124,
+      "name": "STA_race_rules",
+    },
+    {
+      "id": 125,
+      "name": "STA_racefavorite_list",
+    },
+    {
+      "id": 126,
+      "name": "STA_ranking_item",
+    },
+    {
+      "id": 127,
+      "name": "STA_ranking_type",
+    },
+    {
+      "id": 128,
+      "name": "STA_record_type",
+    },
+    {
+      "id": 129,
+      "name": "STA_records",
+    },
+    {
+      "id": 131,
+      "name": "STA_region",
+    },
+    {
+      "id": 132,
+      "name": "STA_roster_listraces",
+    },
+    {
+      "id": 134,
+      "name": "STA_simulate_order",
+    },
+    {
+      "id": 135,
+      "name": "STA_simulate_status",
+    },
+    {
+      "id": 136,
+      "name": "STA_simulate_tactic",
+    },
+    {
+      "id": 137,
+      "name": "STA_stage",
+    },
+    {
+      "id": 142,
+      "name": "STA_training_exercise",
+    },
+    {
+      "id": 143,
+      "name": "STA_training_stages",
+    },
+    {
+      "id": 144,
+      "name": "STA_training_stages_massifs",
+    },
+    {
+      "id": 145,
+      "name": "STA_training_stages_state",
+    },
+    {
+      "id": 146,
+      "name": "STA_training_stages_type",
+    },
+    {
+      "id": 147,
+      "name": "STA_trophy_prepoints",
+    },
+    {
+      "id": 149,
+      "name": "STA_type_injury_origin",
+    },
+    {
+      "id": 152,
+      "name": "STA_type_rider",
+    },
+    {
+      "id": 153,
+      "name": "STA_type_sprint",
+    },
+    {
+      "id": 155,
+      "name": "STA_user_state",
+    },
+    {
+      "id": 159,
+      "name": "SoundEvents",
+    },
+    {
+      "id": 164,
+      "name": "DYN_cyclist_fitness",
+    },
+    {
+      "id": 166,
+      "name": "DYN_cyclist_objective",
+    },
+    {
+      "id": 168,
+      "name": "DYN_cyclist_satisfaction",
+    },
+    {
+      "id": 170,
+      "name": "GAM_career_data",
+    },
+    {
+      "id": 172,
+      "name": "STA_brand",
+    },
+    {
+      "id": 173,
+      "name": "STA_brand_type",
+    },
+    {
+      "id": 175,
+      "name": "STA_equipment_model",
+    },
+    {
+      "id": 177,
+      "name": "DYN_equipment_techno",
+    },
+    {
+      "id": 179,
+      "name": "DYN_brand_contract",
+    },
+    {
+      "id": 180,
+      "name": "STA_equipment_template",
+    },
+    {
+      "id": 181,
+      "name": "DYN_brand_offer",
+    },
+    {
+      "id": 185,
+      "name": "DYN_coach_relation",
+    },
+    {
+      "id": 186,
+      "name": "DYN_cyclist_progression",
+    },
+    {
+      "id": 192,
+      "name": "DYN_u23_link",
+    },
+    {
+      "id": 193,
+      "name": "DYN_scout_report",
+    },
+    {
+      "id": 200,
+      "name": "DYN_cyclist_peak_detail",
+    },
+    {
+      "id": 202,
+      "name": "DYN_fitness_recorded_data",
+    },
+    {
+      "id": 203,
+      "name": "GAM_procyclist_data",
+    },
+    {
+      "id": 204,
+      "name": "GAM_rewards_data",
+    },
+    {
+      "id": 205,
+      "name": "INF_contract_preference_preset",
+    },
+    {
+      "id": 206,
+      "name": "STA_race_pack",
+    },
+    {
+      "id": 207,
+      "name": "DYN_transfer_available_cyclist",
+    },
+    {
+      "id": 208,
+      "name": "DYN_transfer_team_wish",
+    },
+    {
+      "id": 209,
+      "name": "STA_team_ridertype_distrib",
+    },
+    {
+      "id": 210,
+      "name": "STA_team_ridertype_distrib_to_type_rider",
+    },
+    {
+      "id": 211,
+      "name": "STA_team_ridertype_distrib_cat",
+    },
+    {
+      "id": 213,
+      "name": "DYN_ui_planner_cyclist_sort",
+    },
+    {
+      "id": 215,
+      "name": "DYN_procyclist_skilltree",
+    },
+    {
+      "id": 217,
+      "name": "STA_skilltree_branch",
+    },
+    {
+      "id": 218,
+      "name": "DYN_procyclist",
+    },
+    {
+      "id": 220,
+      "name": "DYN_procyclist_charac_history",
+    },
+    {
+      "id": 221,
+      "name": "DYN_procyclist_contract_offer",
+    },
+    {
+      "id": 223,
+      "name": "DYN_cyclist_fitpeak_history",
+    },
+    {
+      "id": 224,
+      "name": "DYN_career_precontract_cyclist",
+    },
+    {
+      "id": 225,
+      "name": "DYN_career_precontract_news",
+    },
+    {
+      "id": 228,
+      "name": "STA_impact_moral",
+    },
+    {
+      "id": 229,
+      "name": "DYN_cyclist_impact_moral",
+    },
+    {
+      "id": 230,
+      "name": "STA_trigger_impact_moral",
+    },
+    {
+      "id": 231,
+      "name": "STA_trigger_moral",
+    },
+    {
+      "id": 236,
+      "name": "STA_continent",
+    },
+    {
+      "id": 240,
+      "name": "DYN_result_season",
+    },
+    {
+      "id": 241,
+      "name": "DYN_cyclist_national_selection",
+    },
+    {
+      "id": 242,
+      "name": "STA_national_team_invitation_state",
+    },
+    {
+      "id": 244,
+      "name": "DYN_team_history",
+    },
+    {
+      "id": 245,
+      "name": "STA_race_type",
+    },
+    {
+      "id": 246,
+      "name": "DYN_procyclist_teammate",
+    },
+    {
+      "id": 249,
+      "name": "STA_territory",
+    },
+    {
+      "id": 250,
+      "name": "DYN_cyclist_history",
+    },
+    {
+      "id": 251,
+      "name": "DYN_championship_history",
+    },
+    {
+      "id": 252,
+      "name": "STA_race_class",
+    },
+    {
+      "id": 253,
+      "name": "DYN_ranking_race_points",
+    },
+    {
+      "id": 254,
+      "name": "STA_race_bonus",
+    },
+    {
+      "id": 255,
+      "name": "DYN_interruption",
+    },
+    {
+      "id": 256,
+      "name": "STA_interruption_type",
+    },
+    {
+      "id": 257,
+      "name": "DYN_ranking_history",
+    },
+    {
+      "id": 258,
+      "name": "DYN_result_season_team",
+    },
+    {
+      "id": 259,
+      "name": "DYN_result_season_stage",
+    },
+    {
+      "id": 263,
+      "name": "DYN_investment_cyclist",
+    },
+    {
+      "id": 264,
+      "name": "STA_investment_cyclist",
+    },
+    {
+      "id": 265,
+      "name": "STA_investment_cyclist_type",
+    },
+    {
+      "id": 266,
+      "name": "DYN_team_sponsor",
+    },
+    {
+      "id": 268,
+      "name": "STA_business_line",
+    },
+    {
+      "id": 270,
+      "name": "STA_world_range",
+    },
+    {
+      "id": 273,
+      "name": "GAM_calendar_event",
+    },
+    {
+      "id": 274,
+      "name": "DYN_sponsor_offer",
+    },
+  ],
+}
+`;

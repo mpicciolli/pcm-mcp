@@ -1,0 +1,65 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`searchTeam > finds teams by name for Pro cycling manager 2018 1`] = `
+{
+  "teams": [
+    {
+      "country": "Spain",
+      "division": "GS1",
+      "evaluation": 0,
+      "id": 1,
+      "manager": "Eusebio Unzue",
+      "name": "Movistar Team",
+      "shortName": "Movistar",
+    },
+  ],
+}
+`;
+
+exports[`searchTeam > finds teams by name for Pro cycling manager 2019 1`] = `
+{
+  "teams": [
+    {
+      "country": "Spain",
+      "division": "GS1",
+      "evaluation": 0,
+      "id": 1,
+      "manager": "Eusebio Unzue",
+      "name": "Movistar Team",
+      "shortName": "Movistar",
+    },
+  ],
+}
+`;
+
+exports[`searchTeam > finds teams by name for Pro cycling manager 2021 1`] = `
+{
+  "teams": [
+    {
+      "country": "Spain",
+      "division": "GS1",
+      "evaluation": 0,
+      "id": 1,
+      "manager": "Eusebio Unzue",
+      "name": "Movistar Team",
+      "shortName": "Movistar",
+    },
+  ],
+}
+`;
+
+exports[`searchTeam > finds teams by name for Pro cycling manager 2025 1`] = `
+{
+  "teams": [
+    {
+      "country": "Spain",
+      "division": "GS1",
+      "evaluation": 0,
+      "id": 1,
+      "manager": "Eusebio Unzue",
+      "name": "Movistar Team",
+      "shortName": "Movistar",
+    },
+  ],
+}
+`;

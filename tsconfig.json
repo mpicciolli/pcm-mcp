@@ -4,7 +4,6 @@
 		"module": "preserve",
 		"moduleResolution": "bundler",
 		"noEmit": true,
-		"rootDir": "./src",
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
