@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { registerGetTableSchema } from "../../src/tools/get-table-schema";
-import { createMockMcpServer } from "../helpers/mock-mcp-server";
-import type { MockMcpServer } from "../helpers/mock-mcp-server";
+import { createMockMcpServer } from "../mocks/mock-mcp-server";
+import type { MockMcpServer } from "../mocks/mock-mcp-server";
 import { saveFixtures } from "../fixtures/save.fixture";
 
 describe("getTableSchema", () => {

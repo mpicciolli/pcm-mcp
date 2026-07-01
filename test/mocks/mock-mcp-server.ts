@@ -1,8 +1,9 @@
+import type { MockInstance } from "vitest";
 import { vi } from "vitest";
-import type {
+import {
 	McpServer,
-	ToolCallback,
-} from "@modelcontextprotocol/sdk/server/mcp";
+	type ToolCallback,
+} from "@modelcontextprotocol/sdk/server/mcp.js";
 
 interface RegisteredTool {
 	name: string;
@@ -13,8 +14,8 @@ interface RegisteredTool {
 export interface MockMcpServer {
 	/** The object to pass where an `McpServer` is expected. */
 	server: McpServer;
-	/** Vitest mock fn behind `server.registerTool`, for call assertions. */
-	registerTool: ReturnType<typeof vi.fn>;
+	/** Vitest spy behind `server.registerTool`, for call assertions. */
+	registerTool: MockInstance<McpServer["registerTool"]>;
 	/** Every tool registered so far, in registration order. */
 	tools: RegisteredTool[];
 	/** Look up a registered tool by its name. */
@@ -39,11 +40,21 @@ export interface MockMcpServer {
 export function createMockMcpServer(): MockMcpServer {
 	const tools: RegisteredTool[] = [];
 
-	const registerTool = vi.fn(
-		(name: string, config: any, callback: ToolCallback<any>) => {
-			tools.push({ name, config, callback });
-		},
-	);
+	// A real `McpServer`, so no cast is needed to satisfy the tool
+	// registration functions. Only `registerTool` is exercised; spying on it
+	// records each registration and suppresses the real side effects.
+	const server = new McpServer({ name: "mock", version: "0.0.0" });
+
+	const registerTool = vi
+		.spyOn(server, "registerTool")
+		.mockImplementation((name, config, callback) => {
+			tools.push({
+				name,
+				config,
+				callback: callback as ToolCallback<any>,
+			});
+			return {} as ReturnType<McpServer["registerTool"]>;
+		});
 
 	const getTool = (name: string) => tools.find((t) => t.name === name);
 
@@ -59,8 +70,6 @@ export function createMockMcpServer(): MockMcpServer {
 		// The second arg is the RequestHandlerExtra, unused by these tools.
 		return tool.callback(args as any, {} as any);
 	};
-
-	const server = { registerTool } as unknown as McpServer;
 
 	return { server, registerTool, tools, getTool, callTool };
 }
