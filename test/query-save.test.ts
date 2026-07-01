@@ -46,12 +46,14 @@ describe("assertReadOnlyQuery", () => {
 			expect(assertReadOnlyQuery(q)).toBe(q);
 		});
 
-		it("rejects SELECT with a forbidden keyword inside a LIKE string (known false-positive: \\b matches across %)", () => {
-			// '\bcreate\b' matches 'create' in '%create%' because '%' is a non-word char.
-			// This is a known limitation of the regex-based guard.
-			expect(() =>
-				assertReadOnlyQuery("SELECT * FROM foo WHERE name LIKE '%create%'"),
-			).toThrowError('Write/DDL keyword "CREATE" is not allowed');
+		it("accepts a SELECT whose string literal contains a keyword like 'create'", () => {
+			const q = "SELECT * FROM foo WHERE name LIKE '%create%'";
+			expect(assertReadOnlyQuery(q)).toBe(q);
+		});
+
+		it("accepts a SELECT using the read-only REPLACE() function", () => {
+			const q = "SELECT REPLACE(name,'a','b') FROM foo";
+			expect(assertReadOnlyQuery(q)).toBe(q);
 		});
 
 		it("accepts SELECT with ORDER BY, LIMIT, GROUP BY", () => {
@@ -138,20 +140,11 @@ describe("assertReadOnlyQuery", () => {
 		});
 	});
 
-	describe("forbidden keywords inside a SELECT", () => {
-		it("rejects SELECT with inline INSERT via INSERT INTO (subquery trick)", () => {
-			expect(() =>
-				assertReadOnlyQuery("SELECT * FROM (INSERT INTO foo VALUES (1)) AS t"),
-			).toThrowError('Write/DDL keyword "INSERT" is not allowed');
-		});
-
-		it("rejects SELECT containing DROP keyword", () => {
-			expect(() => assertReadOnlyQuery("SELECT DROP FROM foo")).toThrowError(
-				'Write/DDL keyword "DROP" is not allowed',
-			);
-		});
-
-		it("rejects SELECT containing ATTACH", () => {
+	describe("ATTACH / DETACH", () => {
+		// ATTACH and DETACH can only appear as their own top-level statement, so the
+		// opener + single-statement checks already shut them out — no keyword scan
+		// needed.
+		it("rejects ATTACH stacked after a SELECT", () => {
 			expect(() =>
 				assertReadOnlyQuery("SELECT * FROM foo; ATTACH DATABASE 'x' AS y"),
 			).toThrowError("Only a single statement is allowed");
@@ -163,28 +156,27 @@ describe("assertReadOnlyQuery", () => {
 			).toThrowError("Only read-only SELECT");
 		});
 
-		it("rejects VACUUM", () => {
-			expect(() => assertReadOnlyQuery("SELECT 1 WHERE VACUUM")).toThrowError(
-				'Write/DDL keyword "VACUUM" is not allowed',
+		it("rejects DETACH as a standalone statement opener", () => {
+			expect(() => assertReadOnlyQuery("DETACH DATABASE e")).toThrowError(
+				"Only read-only SELECT",
 			);
 		});
+	});
 
-		it("rejects ALTER", () => {
-			expect(() =>
-				assertReadOnlyQuery("SELECT * FROM foo ALTER TABLE bar"),
-			).toThrowError('Write/DDL keyword "ALTER" is not allowed');
+	describe("write enforcement delegated to the engine", () => {
+		// The static guard intentionally does NOT reject write keywords that appear
+		// inside an otherwise-SELECT/WITH statement; PRAGMA query_only makes SQLite
+		// reject them at execution time. These document that the guard lets them
+		// through so it doesn't produce false positives on legitimate reads.
+		it("passes a WITH … DELETE CTE through the static guard", () => {
+			// Opens with WITH, so the guard accepts it; the engine blocks the write.
+			const q = "WITH x AS (SELECT 1) DELETE FROM foo";
+			expect(assertReadOnlyQuery(q)).toBe(q);
 		});
 
-		it("rejects REPLACE", () => {
-			expect(() =>
-				assertReadOnlyQuery("SELECT REPLACE(name,'a','b') FROM foo"),
-			).toThrowError('Write/DDL keyword "REPLACE" is not allowed');
-		});
-
-		it("rejects TRUNCATE", () => {
-			expect(() =>
-				assertReadOnlyQuery("SELECT * FROM foo TRUNCATE"),
-			).toThrowError('Write/DDL keyword "TRUNCATE" is not allowed');
+		it("passes a SELECT mentioning a write keyword through the static guard", () => {
+			const q = "SELECT * FROM foo WHERE note = 'please update'";
+			expect(assertReadOnlyQuery(q)).toBe(q);
 		});
 	});
 });

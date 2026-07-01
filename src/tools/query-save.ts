@@ -109,13 +109,28 @@ function explainQueryError(error: unknown): Error {
 		);
 	}
 
+	// Raised by `PRAGMA query_only = ON` when a statement tries to write.
+	if (/readonly database|not authorized/i.test(message)) {
+		return new Error(
+			"This tool is read-only — the query attempted to modify the save, which is not allowed.",
+		);
+	}
+
 	return error instanceof Error ? error : new Error(message);
 }
 
 /**
- * Reject anything that isn't a single read-only `SELECT`/`WITH` statement.
- * The save is loaded into an in-memory sql.js database (changes are never
- * written back to disk), but we still enforce read-only intent defensively.
+ * Enforce that a query is a single statement that opens as a read `SELECT`/`WITH`.
+ *
+ * Actual write protection is delegated to the SQLite engine via
+ * `PRAGMA query_only = ON` (see {@link withSaveDb}), which reliably rejects any
+ * mutating statement — including tricks a text scan would miss, such as a
+ * `WITH … DELETE` CTE. These static checks only cover what the engine can't:
+ *  - blocking stacked statements (SQLite prepares just the first one anyway, so
+ *    the extra semicolon check keeps intent explicit and errors clear), which
+ *    also shuts out `ATTACH`/`DETACH` since those can only appear as their own
+ *    statement, and
+ *  - giving a fast, friendly error for an obviously non-read opener.
  */
 export function assertReadOnlyQuery(rawQuery: string): string {
 	// Strip a single trailing semicolon, then reject any further statement
@@ -135,16 +150,6 @@ export function assertReadOnlyQuery(rawQuery: string): string {
 	if (!/^(select|with)\b/i.test(query)) {
 		throw new Error(
 			"Only read-only SELECT (or WITH … SELECT) queries are allowed.",
-		);
-	}
-
-	// Defense in depth: reject statements that could mutate or attach data.
-	const forbidden =
-		/\b(insert|update|delete|drop|create|alter|replace|attach|detach|reindex|vacuum|pragma|truncate)\b/i;
-	const match = forbidden.exec(query);
-	if (match) {
-		throw new Error(
-			`Write/DDL keyword "${match[0].toUpperCase()}" is not allowed — this tool is read-only.`,
 		);
 	}
 
