@@ -141,9 +141,6 @@ describe("assertReadOnlyQuery", () => {
 	});
 
 	describe("ATTACH / DETACH", () => {
-		// ATTACH and DETACH can only appear as their own top-level statement, so the
-		// opener + single-statement checks already shut them out — no keyword scan
-		// needed.
 		it("rejects ATTACH stacked after a SELECT", () => {
 			expect(() =>
 				assertReadOnlyQuery("SELECT * FROM foo; ATTACH DATABASE 'x' AS y"),
@@ -164,12 +161,7 @@ describe("assertReadOnlyQuery", () => {
 	});
 
 	describe("write enforcement delegated to the engine", () => {
-		// The static guard intentionally does NOT reject write keywords that appear
-		// inside an otherwise-SELECT/WITH statement; PRAGMA query_only makes SQLite
-		// reject them at execution time. These document that the guard lets them
-		// through so it doesn't produce false positives on legitimate reads.
 		it("passes a WITH … DELETE CTE through the static guard", () => {
-			// Opens with WITH, so the guard accepts it; the engine blocks the write.
 			const q = "WITH x AS (SELECT 1) DELETE FROM foo";
 			expect(assertReadOnlyQuery(q)).toBe(q);
 		});
