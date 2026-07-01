@@ -155,8 +155,12 @@ export function registerGetTeamRoster(server: McpServer): void {
 					stmt.bind({ ":teamId": resolvedTeamId });
 					while (stmt.step()) {
 						const row = stmt.getAsObject();
-						const birthdate =
+						const rawBirthdate =
 							row.birthdate != null ? Number(row.birthdate) : null;
+						const birthdate =
+							rawBirthdate != null && rawBirthdate >= 10000000
+								? rawBirthdate
+								: null;
 						cyclists.push({
 							id: Number(row.id),
 							firstName: String(row.firstName),

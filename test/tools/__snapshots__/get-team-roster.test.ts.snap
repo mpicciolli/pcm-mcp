@@ -5,7 +5,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
   "cyclists": [
     {
       "acceleration": 73,
-      "age": -1987,
+      "age": null,
       "baroudeur": 78,
       "cobble": 72,
       "contractEndYear": null,
@@ -31,7 +31,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1989,
+      "age": null,
       "baroudeur": 70,
       "cobble": 53,
       "contractEndYear": null,
@@ -57,7 +57,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 63,
-      "age": -1993,
+      "age": null,
       "baroudeur": 64,
       "cobble": 61,
       "contractEndYear": null,
@@ -83,7 +83,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 76,
-      "age": -1992,
+      "age": null,
       "baroudeur": 67,
       "cobble": 61,
       "contractEndYear": null,
@@ -109,7 +109,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 75,
-      "age": -1981,
+      "age": null,
       "baroudeur": 67,
       "cobble": 71,
       "contractEndYear": null,
@@ -135,7 +135,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 76,
-      "age": -1990,
+      "age": null,
       "baroudeur": 70,
       "cobble": 58,
       "contractEndYear": null,
@@ -161,7 +161,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 62,
-      "age": -1995,
+      "age": null,
       "baroudeur": 69,
       "cobble": 55,
       "contractEndYear": null,
@@ -187,7 +187,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 67,
-      "age": -1994,
+      "age": null,
       "baroudeur": 66,
       "cobble": 57,
       "contractEndYear": null,
@@ -213,7 +213,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 63,
-      "age": -1996,
+      "age": null,
       "baroudeur": 64,
       "cobble": 62,
       "contractEndYear": null,
@@ -239,7 +239,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 58,
-      "age": -1997,
+      "age": null,
       "baroudeur": 64,
       "cobble": 62,
       "contractEndYear": 2019,
@@ -265,7 +265,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1987,
+      "age": null,
       "baroudeur": 68,
       "cobble": 57,
       "contractEndYear": null,
@@ -291,7 +291,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 64,
-      "age": -1984,
+      "age": null,
       "baroudeur": 81,
       "cobble": 75,
       "contractEndYear": null,
@@ -317,7 +317,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 67,
-      "age": -1992,
+      "age": null,
       "baroudeur": 65,
       "cobble": 55,
       "contractEndYear": null,
@@ -343,7 +343,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 75,
-      "age": -1990,
+      "age": null,
       "baroudeur": 71,
       "cobble": 61,
       "contractEndYear": 2019,
@@ -369,7 +369,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 65,
-      "age": -1990,
+      "age": null,
       "baroudeur": 73,
       "cobble": 73,
       "contractEndYear": null,
@@ -395,7 +395,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 61,
-      "age": -1992,
+      "age": null,
       "baroudeur": 63,
       "cobble": 54,
       "contractEndYear": null,
@@ -421,7 +421,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 77,
-      "age": -1991,
+      "age": null,
       "baroudeur": 65,
       "cobble": 63,
       "contractEndYear": 2019,
@@ -447,7 +447,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 68,
-      "age": -1993,
+      "age": null,
       "baroudeur": 69,
       "cobble": 63,
       "contractEndYear": null,
@@ -473,7 +473,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 78,
-      "age": -1986,
+      "age": null,
       "baroudeur": 59,
       "cobble": 67,
       "contractEndYear": null,
@@ -499,7 +499,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 68,
-      "age": -1994,
+      "age": null,
       "baroudeur": 70,
       "cobble": 61,
       "contractEndYear": 2019,
@@ -525,7 +525,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1992,
+      "age": null,
       "baroudeur": 69,
       "cobble": 59,
       "contractEndYear": 2019,
@@ -551,7 +551,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 66,
-      "age": -1994,
+      "age": null,
       "baroudeur": 73,
       "cobble": 65,
       "contractEndYear": 2019,
@@ -577,7 +577,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 64,
-      "age": -1993,
+      "age": null,
       "baroudeur": 71,
       "cobble": 70,
       "contractEndYear": null,
@@ -603,7 +603,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 70,
-      "age": -1988,
+      "age": null,
       "baroudeur": 67,
       "cobble": 54,
       "contractEndYear": 2018,
@@ -629,7 +629,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 78,
-      "age": -1981,
+      "age": null,
       "baroudeur": 70,
       "cobble": 68,
       "contractEndYear": 2019,
@@ -663,7 +663,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
   "cyclists": [
     {
       "acceleration": 73,
-      "age": -1987,
+      "age": null,
       "baroudeur": 78,
       "cobble": 72,
       "contractEndYear": 2019,
@@ -689,7 +689,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 70,
-      "age": -1989,
+      "age": null,
       "baroudeur": 70,
       "cobble": 57,
       "contractEndYear": 2019,
@@ -715,7 +715,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 67,
-      "age": -1993,
+      "age": null,
       "baroudeur": 64,
       "cobble": 62,
       "contractEndYear": 2019,
@@ -741,7 +741,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 76,
-      "age": -1992,
+      "age": null,
       "baroudeur": 67,
       "cobble": 62,
       "contractEndYear": 2019,
@@ -767,7 +767,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 71,
-      "age": -1981,
+      "age": null,
       "baroudeur": 67,
       "cobble": 71,
       "contractEndYear": 2019,
@@ -793,7 +793,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 76,
-      "age": -1990,
+      "age": null,
       "baroudeur": 70,
       "cobble": 60,
       "contractEndYear": 2019,
@@ -819,7 +819,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 67,
-      "age": -1994,
+      "age": null,
       "baroudeur": 69,
       "cobble": 59,
       "contractEndYear": 2019,
@@ -845,7 +845,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 65,
-      "age": -1996,
+      "age": null,
       "baroudeur": 64,
       "cobble": 60,
       "contractEndYear": 2019,
@@ -871,7 +871,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 58,
-      "age": -1997,
+      "age": null,
       "baroudeur": 64,
       "cobble": 61,
       "contractEndYear": 2019,
@@ -897,7 +897,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 64,
-      "age": -1984,
+      "age": null,
       "baroudeur": 81,
       "cobble": 74,
       "contractEndYear": 2019,
@@ -923,7 +923,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 67,
-      "age": -1992,
+      "age": null,
       "baroudeur": 65,
       "cobble": 58,
       "contractEndYear": 2019,
@@ -949,7 +949,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 74,
-      "age": -1990,
+      "age": null,
       "baroudeur": 75,
       "cobble": 69,
       "contractEndYear": 2019,
@@ -975,7 +975,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1990,
+      "age": null,
       "baroudeur": 82,
       "cobble": 61,
       "contractEndYear": 2019,
@@ -1001,7 +1001,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 65,
-      "age": -1990,
+      "age": null,
       "baroudeur": 73,
       "cobble": 73,
       "contractEndYear": 2019,
@@ -1027,7 +1027,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 62,
-      "age": -1992,
+      "age": null,
       "baroudeur": 63,
       "cobble": 57,
       "contractEndYear": 2019,
@@ -1053,7 +1053,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 76,
-      "age": -1988,
+      "age": null,
       "baroudeur": 69,
       "cobble": 63,
       "contractEndYear": 2019,
@@ -1079,7 +1079,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 75,
-      "age": -1991,
+      "age": null,
       "baroudeur": 68,
       "cobble": 69,
       "contractEndYear": 2019,
@@ -1105,7 +1105,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 75,
-      "age": -1986,
+      "age": null,
       "baroudeur": 71,
       "cobble": 78,
       "contractEndYear": 2019,
@@ -1131,7 +1131,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 76,
-      "age": -1986,
+      "age": null,
       "baroudeur": 59,
       "cobble": 68,
       "contractEndYear": 2019,
@@ -1157,7 +1157,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1992,
+      "age": null,
       "baroudeur": 69,
       "cobble": 60,
       "contractEndYear": 2019,
@@ -1183,7 +1183,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 66,
-      "age": -1994,
+      "age": null,
       "baroudeur": 73,
       "cobble": 65,
       "contractEndYear": 2021,
@@ -1209,7 +1209,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 64,
-      "age": -1993,
+      "age": null,
       "baroudeur": 71,
       "cobble": 73,
       "contractEndYear": 2019,
@@ -1235,7 +1235,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 70,
-      "age": -1988,
+      "age": null,
       "baroudeur": 67,
       "cobble": 57,
       "contractEndYear": 2019,
@@ -1261,7 +1261,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 78,
-      "age": -1981,
+      "age": null,
       "baroudeur": 70,
       "cobble": 72,
       "contractEndYear": 2019,
@@ -1287,7 +1287,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1993,
+      "age": null,
       "baroudeur": 73,
       "cobble": 58,
       "contractEndYear": 2020,
@@ -1321,7 +1321,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
   "cyclists": [
     {
       "acceleration": 58,
-      "age": -1998,
+      "age": null,
       "baroudeur": 60,
       "cobble": 58,
       "contractEndYear": 2021,
@@ -1347,7 +1347,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 67,
-      "age": -1993,
+      "age": null,
       "baroudeur": 64,
       "cobble": 67,
       "contractEndYear": 2021,
@@ -1373,7 +1373,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 65,
-      "age": -1996,
+      "age": null,
       "baroudeur": 72,
       "cobble": 60,
       "contractEndYear": 2021,
@@ -1399,7 +1399,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 63,
-      "age": -1986,
+      "age": null,
       "baroudeur": 66,
       "cobble": 60,
       "contractEndYear": 2021,
@@ -1425,7 +1425,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 72,
-      "age": -1997,
+      "age": null,
       "baroudeur": 71,
       "cobble": 65,
       "contractEndYear": 2021,
@@ -1451,7 +1451,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 61,
-      "age": -1999,
+      "age": null,
       "baroudeur": 69,
       "cobble": 64,
       "contractEndYear": 2022,
@@ -1477,7 +1477,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 64,
-      "age": -1984,
+      "age": null,
       "baroudeur": 81,
       "cobble": 72,
       "contractEndYear": 2021,
@@ -1503,7 +1503,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 75,
-      "age": -1996,
+      "age": null,
       "baroudeur": 71,
       "cobble": 75,
       "contractEndYear": 2023,
@@ -1529,7 +1529,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 61,
-      "age": -2001,
+      "age": null,
       "baroudeur": 68,
       "cobble": 56,
       "contractEndYear": 2023,
@@ -1555,7 +1555,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 58,
-      "age": -2000,
+      "age": null,
       "baroudeur": 60,
       "cobble": 66,
       "contractEndYear": 2021,
@@ -1581,7 +1581,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 64,
-      "age": -1998,
+      "age": null,
       "baroudeur": 70,
       "cobble": 73,
       "contractEndYear": 2023,
@@ -1607,7 +1607,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 65,
-      "age": -2000,
+      "age": null,
       "baroudeur": 65,
       "cobble": 67,
       "contractEndYear": 2023,
@@ -1633,7 +1633,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 70,
-      "age": -1995,
+      "age": null,
       "baroudeur": 67,
       "cobble": 60,
       "contractEndYear": 2021,
@@ -1659,7 +1659,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 71,
-      "age": -1996,
+      "age": null,
       "baroudeur": 71,
       "cobble": 59,
       "contractEndYear": 2022,
@@ -1685,7 +1685,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1990,
+      "age": null,
       "baroudeur": 80,
       "cobble": 61,
       "contractEndYear": 2021,
@@ -1711,7 +1711,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 65,
-      "age": -1989,
+      "age": null,
       "baroudeur": 62,
       "cobble": 65,
       "contractEndYear": 2021,
@@ -1737,7 +1737,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 70,
-      "age": -1995,
+      "age": null,
       "baroudeur": 72,
       "cobble": 65,
       "contractEndYear": 2023,
@@ -1763,7 +1763,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 60,
-      "age": -1998,
+      "age": null,
       "baroudeur": 65,
       "cobble": 62,
       "contractEndYear": 2021,
@@ -1789,7 +1789,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 65,
-      "age": -1990,
+      "age": null,
       "baroudeur": 70,
       "cobble": 72,
       "contractEndYear": 2021,
@@ -1815,7 +1815,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 66,
-      "age": -1992,
+      "age": null,
       "baroudeur": 63,
       "cobble": 57,
       "contractEndYear": 2021,
@@ -1841,7 +1841,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 72,
-      "age": -1986,
+      "age": null,
       "baroudeur": 59,
       "cobble": 68,
       "contractEndYear": 2021,
@@ -1867,7 +1867,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 63,
-      "age": -1999,
+      "age": null,
       "baroudeur": 67,
       "cobble": 59,
       "contractEndYear": 2021,
@@ -1893,7 +1893,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 63,
-      "age": -1996,
+      "age": null,
       "baroudeur": 67,
       "cobble": 62,
       "contractEndYear": 2021,
@@ -1919,7 +1919,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 76,
-      "age": -1995,
+      "age": null,
       "baroudeur": 75,
       "cobble": 71,
       "contractEndYear": 2022,
@@ -1945,7 +1945,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 66,
-      "age": -1994,
+      "age": null,
       "baroudeur": 74,
       "cobble": 65,
       "contractEndYear": 2021,
@@ -1971,7 +1971,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1991,
+      "age": null,
       "baroudeur": 61,
       "cobble": 64,
       "contractEndYear": 2021,
@@ -1997,7 +1997,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 72,
-      "age": -1981,
+      "age": null,
       "baroudeur": 70,
       "cobble": 70,
       "contractEndYear": 2021,
@@ -2023,7 +2023,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1993,
+      "age": null,
       "baroudeur": 73,
       "cobble": 58,
       "contractEndYear": 2021,
@@ -2049,7 +2049,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 70,
-      "age": -1992,
+      "age": null,
       "baroudeur": 73,
       "cobble": 59,
       "contractEndYear": 2021,
@@ -2083,7 +2083,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
   "cyclists": [
     {
       "acceleration": 62,
-      "age": -1993,
+      "age": null,
       "baroudeur": 64,
       "cobble": 67,
       "contractEndYear": 2025,
@@ -2109,7 +2109,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 75,
-      "age": -1997,
+      "age": null,
       "baroudeur": 62,
       "cobble": 66,
       "contractEndYear": 2026,
@@ -2135,7 +2135,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 71,
-      "age": -2001,
+      "age": null,
       "baroudeur": 74,
       "cobble": 65,
       "contractEndYear": 2027,
@@ -2161,7 +2161,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 67,
-      "age": -1997,
+      "age": null,
       "baroudeur": 72,
       "cobble": 65,
       "contractEndYear": 2025,
@@ -2187,7 +2187,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 73,
-      "age": -2002,
+      "age": null,
       "baroudeur": 71,
       "cobble": 70,
       "contractEndYear": 2027,
@@ -2213,7 +2213,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 68,
-      "age": -2002,
+      "age": null,
       "baroudeur": 74,
       "cobble": 69,
       "contractEndYear": 2027,
@@ -2239,7 +2239,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 68,
-      "age": -1997,
+      "age": null,
       "baroudeur": 72,
       "cobble": 60,
       "contractEndYear": 2026,
@@ -2265,7 +2265,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 74,
-      "age": -1990,
+      "age": null,
       "baroudeur": 66,
       "cobble": 67,
       "contractEndYear": 2025,
@@ -2291,7 +2291,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1993,
+      "age": null,
       "baroudeur": 72,
       "cobble": 67,
       "contractEndYear": 2026,
@@ -2317,7 +2317,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 72,
-      "age": -1996,
+      "age": null,
       "baroudeur": 71,
       "cobble": 75,
       "contractEndYear": 2026,
@@ -2343,7 +2343,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 75,
-      "age": -1995,
+      "age": null,
       "baroudeur": 64,
       "cobble": 70,
       "contractEndYear": 2025,
@@ -2369,7 +2369,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 72,
-      "age": -1995,
+      "age": null,
       "baroudeur": 75,
       "cobble": 63,
       "contractEndYear": 2025,
@@ -2395,7 +2395,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 60,
-      "age": -2002,
+      "age": null,
       "baroudeur": 64,
       "cobble": 62,
       "contractEndYear": 2026,
@@ -2421,7 +2421,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 72,
-      "age": -1996,
+      "age": null,
       "baroudeur": 74,
       "cobble": 64,
       "contractEndYear": 2025,
@@ -2447,7 +2447,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 68,
-      "age": -2003,
+      "age": null,
       "baroudeur": 59,
       "cobble": 66,
       "contractEndYear": 2026,
@@ -2473,7 +2473,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 62,
-      "age": -2003,
+      "age": null,
       "baroudeur": 68,
       "cobble": 65,
       "contractEndYear": 2026,
@@ -2499,7 +2499,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 70,
-      "age": -1995,
+      "age": null,
       "baroudeur": 73,
       "cobble": 65,
       "contractEndYear": 2025,
@@ -2525,7 +2525,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 60,
-      "age": -1998,
+      "age": null,
       "baroudeur": 70,
       "cobble": 72,
       "contractEndYear": 2026,
@@ -2551,7 +2551,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 65,
-      "age": -1990,
+      "age": null,
       "baroudeur": 70,
       "cobble": 72,
       "contractEndYear": 2025,
@@ -2577,7 +2577,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 64,
-      "age": -1992,
+      "age": null,
       "baroudeur": 63,
       "cobble": 57,
       "contractEndYear": 2025,
@@ -2603,7 +2603,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 54,
-      "age": -2005,
+      "age": null,
       "baroudeur": 59,
       "cobble": 52,
       "contractEndYear": 2027,
@@ -2629,7 +2629,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 68,
-      "age": -1991,
+      "age": null,
       "baroudeur": 68,
       "cobble": 67,
       "contractEndYear": 2025,
@@ -2655,7 +2655,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 63,
-      "age": -2004,
+      "age": null,
       "baroudeur": 74,
       "cobble": 65,
       "contractEndYear": 2027,
@@ -2681,7 +2681,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 66,
-      "age": -2000,
+      "age": null,
       "baroudeur": 70,
       "cobble": 65,
       "contractEndYear": 2027,
@@ -2707,7 +2707,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 72,
-      "age": -1999,
+      "age": null,
       "baroudeur": 73,
       "cobble": 59,
       "contractEndYear": 2026,
@@ -2733,7 +2733,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 72,
-      "age": -1995,
+      "age": null,
       "baroudeur": 75,
       "cobble": 71,
       "contractEndYear": 2026,
@@ -2759,7 +2759,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 71,
-      "age": -2001,
+      "age": null,
       "baroudeur": 61,
       "cobble": 61,
       "contractEndYear": 2027,
@@ -2785,7 +2785,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 70,
-      "age": -2000,
+      "age": null,
       "baroudeur": 71,
       "cobble": 60,
       "contractEndYear": 2026,
@@ -2811,7 +2811,7 @@ exports[`getTeamRoster > returns the roster for a given team for Pro cycling man
     },
     {
       "acceleration": 69,
-      "age": -1991,
+      "age": null,
       "baroudeur": 61,
       "cobble": 64,
       "contractEndYear": null,
