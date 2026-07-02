@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { identify } from "sql-query-identifier";
 import { z } from "zod";
+import { explainQueryError } from "../helpers";
 import { withSaveDb } from "../save-db";
 
 const DEFAULT_LIMIT = 100;
@@ -90,38 +91,7 @@ export function registerQuerySave(server: McpServer): void {
 }
 
 /**
- * Translate sql.js "no such table/column" errors into actionable messages that
- * point the caller at the schema-discovery tools. Other errors pass through.
- */
-function explainQueryError(error: unknown): Error {
-	const message = error instanceof Error ? error.message : String(error);
-
-	const missingTable = /no such table:\s*(\S+)/i.exec(message);
-	if (missingTable) {
-		return new Error(
-			`Table "${missingTable[1]}" does not exist in this save — use pcm_get_save_schema to list available tables.`,
-		);
-	}
-
-	const missingColumn = /no such column:\s*(\S+)/i.exec(message);
-	if (missingColumn) {
-		return new Error(
-			`Column "${missingColumn[1]}" does not exist — use pcm_get_table_schema to inspect the table's columns.`,
-		);
-	}
-
-	// Raised by `PRAGMA query_only = ON` when a statement tries to write.
-	if (/readonly database|not authorized/i.test(message)) {
-		return new Error(
-			"This tool is read-only — the query attempted to modify the save, which is not allowed.",
-		);
-	}
-
-	return error instanceof Error ? error : new Error(message);
-}
-
-/**
- * Enforce that a query is a single read-only statement.
+ * Enforce that a query is a single statement that opens as a read `SELECT`/`WITH`.
  *
  * Parsing is delegated to `sql-query-identifier`, which tokenizes SQL properly:
  * a `;` inside a string literal, comment or quoted identifier is not mistaken

@@ -60,6 +60,39 @@ export function buildStartlistXml(teams: StartlistTeam[]): string {
 	return `${lines.join("\n")}\n`;
 }
 
+/**
+ * Translate sql.js "no such table/column" errors into actionable messages that
+ * point the caller at the schema-discovery tools. Other errors pass through.
+ *
+ * Shared by the read (`pcm_query_save`) and write (`pcm_update_save`) tools.
+ */
+export function explainQueryError(error: unknown): Error {
+	const message = error instanceof Error ? error.message : String(error);
+
+	const missingTable = /no such table:\s*(\S+)/i.exec(message);
+	if (missingTable) {
+		return new Error(
+			`Table "${missingTable[1]}" does not exist in this save — use pcm_get_save_schema to list available tables.`,
+		);
+	}
+
+	const missingColumn = /no such column:\s*(\S+)/i.exec(message);
+	if (missingColumn) {
+		return new Error(
+			`Column "${missingColumn[1]}" does not exist — use pcm_get_table_schema to inspect the table's columns.`,
+		);
+	}
+
+	// Raised by `PRAGMA query_only = ON` when a statement tries to write.
+	if (/readonly database|not authorized/i.test(message)) {
+		return new Error(
+			"This tool is read-only — the query attempted to modify the save, which is not allowed.",
+		);
+	}
+
+	return error instanceof Error ? error : new Error(message);
+}
+
 /** Compute age in whole years from two YYYYMMDD integers (e.g. 20030503). */
 export function ageFromYmd(currentYmd: number, birthYmd: number): number {
 	let age = Math.floor(currentYmd / 10000) - Math.floor(birthYmd / 10000);

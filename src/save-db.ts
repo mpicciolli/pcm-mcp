@@ -1,6 +1,7 @@
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { cdbToSql } from "cdb-converter";
+import { cdbToSql, sqlToCdb } from "cdb-converter";
 import initSqlJs from "sql.js";
 import { errorResponse, validResponse } from "./helpers";
 import { type SaveFile, validateSave } from "./saves";
@@ -48,7 +49,10 @@ export function getGameDate(db: SaveDb): number | null {
  *  - turns thrown errors into an {@link errorResponse} and the returned value
  *    into a {@link validResponse}.
  *
- * The save is loaded into memory only; changes are never written back to disk.
+ * `withSaveDb` itself never writes to `savePath`: the on-disk source save is
+ * only ever read. A write-capable tool can pass `{ queryOnly: false }`, mutate
+ * the in-memory database in `fn`, and serialize the result to a *separate*
+ * output file via {@link writeSaveDb} — the source is never overwritten.
  *
  * @param savePath - Absolute path to the `.cdb` save file.
  * @param fn - Receives the open database and the validated save metadata, and
@@ -57,6 +61,11 @@ export function getGameDate(db: SaveDb): number | null {
 export async function withSaveDb<T extends Record<string, unknown>>(
 	savePath: string,
 	fn: (db: SaveDb, save: SaveFile) => T | Promise<T>,
+	config: {
+		queryOnly?: boolean;
+	} = {
+		queryOnly: true,
+	},
 ): Promise<CallToolResult> {
 	let db: SaveDb | undefined;
 	try {
@@ -66,7 +75,9 @@ export async function withSaveDb<T extends Record<string, unknown>>(
 		const cdbBuffer = await readFile(save.path);
 		db = cdbToSql(cdbBuffer, SQL);
 
-		db.run("PRAGMA query_only = ON;");
+		if (config.queryOnly) {
+			db.run("PRAGMA query_only = ON;");
+		}
 
 		const output = await fn(db, save);
 
@@ -78,4 +89,37 @@ export async function withSaveDb<T extends Record<string, unknown>>(
 	} finally {
 		db?.close();
 	}
+}
+
+/**
+ * Serialize an edited in-memory save back to a `.cdb` file at `outputPath`.
+ *
+ * Writes only ever go to a new file: this refuses to overwrite the source save
+ * (`sourcePath`), so the input `.cdb` is never modified. `sqlToCdb` re-encodes
+ * the sql.js database into PCM's compressed `.cdb` binary format.
+ *
+ * @param db - The (edited) in-memory database to serialize.
+ * @param outputPath - Absolute path of the `.cdb` file to write.
+ * @param sourcePath - Absolute path of the source save, used only to guard
+ *   against overwriting it.
+ * @returns The absolute path written.
+ * @throws if `outputPath` isn't a `.cdb` file or resolves to `sourcePath`.
+ */
+export async function writeSaveDb(
+	db: SaveDb,
+	outputPath: string,
+	sourcePath: string,
+): Promise<string> {
+	if (!outputPath.toLowerCase().endsWith(".cdb")) {
+		throw new Error(`Output must be a .cdb file: ${outputPath}`);
+	}
+	if (resolve(outputPath) === resolve(sourcePath)) {
+		throw new Error(
+			"outputPath must differ from the source save — the input .cdb is never overwritten.",
+		);
+	}
+
+	const cdb = sqlToCdb(db);
+	await writeFile(outputPath, Buffer.from(cdb));
+	return resolve(outputPath);
 }
