@@ -10,9 +10,7 @@ const outputSchema = z.object({
 	rowsModified: z
 		.number()
 		.describe("Number of rows changed by the statement (INSERT/UPDATE/DELETE)"),
-	statement: z
-		.string()
-		.describe("The normalized statement that was executed"),
+	statement: z.string().describe("The normalized statement that was executed"),
 });
 
 export function registerUpdateSave(server: McpServer): void {
