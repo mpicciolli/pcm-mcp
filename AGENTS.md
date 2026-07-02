@@ -77,6 +77,9 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
   forbidden-keyword guard).
 - **Guard against SQL injection** when interpolating identifiers: validate table
   names against `DB_STRUCTURE` before building queries (see `get_table_schema`).
+- **Save database conventions** (table prefixes, column typing, foreign keys,
+  display columns) are documented in [`DATABASE.md`](DATABASE.md). Consult it
+  before writing queries or joins.
 - **Tool responses** go through `validResponse` / `errorResponse`; declare both
   `inputSchema` and `outputSchema` with zod.
 - **Tool annotations** — every tool must include `readOnlyHint`, `destructiveHint`,
