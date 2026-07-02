@@ -6,6 +6,7 @@ import { registerGetTableSchema } from "./get-table-schema";
 import { registerGetPlayerInfo } from "./get-player-info";
 import { registerGetTeamRoster } from "./get-team-roster";
 import { registerQuerySave } from "./query-save";
+import { registerUpdateSave } from "./update-save";
 import { registerSearchCyclist } from "./search-cyclist";
 import { registerGenerateStartlistXml } from "./generate-startlist-xml";
 import { registerSearchTeam } from "./search-team";
@@ -18,6 +19,7 @@ export function registerTools(server: McpServer): void {
 	registerGetPlayerInfo(server);
 	registerGetTeamRoster(server);
 	registerQuerySave(server);
+	registerUpdateSave(server);
 	registerSearchCyclist(server);
 	registerGenerateStartlistXml(server);
 	registerSearchTeam(server);

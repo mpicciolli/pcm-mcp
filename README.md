@@ -18,7 +18,7 @@
 `pcm-mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants such as Claude Desktop, ChatGPT and Gemini query your [Pro Cycling Manager](https://www.cyanide-studio.com/) (PCM) game saves. Ask about a rider's ratings, browse a team's roster, run SQL against the save, or generate a race startlist — all in plain language.
 
 > [!IMPORTANT]
-> This server is strictly **read-only**. PCM stores careers as binary `.cdb` files; each call re-reads the `.cdb` from disk and loads it into an **in-memory** SQLite database. Your save files are **never written to or modified**.
+> This server never modifies your existing save files. PCM stores careers as binary `.cdb` files; each call re-reads the `.cdb` from disk and loads it into an **in-memory** SQLite database. Every read tool leaves the source untouched. The single write tool, `pcm_update_save`, serializes its changes to a **new** `.cdb` file (`outputPath`) and refuses to overwrite the input — keep your original save as a backup.
 
 ## Features
 
@@ -26,8 +26,9 @@
 - **Save discovery** — auto-detect PCM career saves on Windows, or point at any `.cdb` file directly.
 - **Rich queries** — search cyclists and teams, inspect rosters with full per-terrain ratings, and read player info.
 - **Raw SQL** — run guarded, read-only `SELECT` queries against any table in the save.
+- **Guarded edits** — apply a single `INSERT`/`UPDATE`/`DELETE` and write the result to a new `.cdb`, never touching the original.
 - **Startlist export** — generate a PCM-ready startlist XML from a set of teams and rosters.
-- **Safe by design** — every tool is annotated `readOnlyHint: true`, so clients can auto-approve them without prompts.
+- **Safe by design** — read tools are annotated `readOnlyHint: true` for auto-approval; the write tool writes only to a separate output file.
 
 ## Getting started
 
@@ -80,7 +81,7 @@ Auto-discovery via `pcm_list_saves` is therefore **Windows only**. On macOS/Linu
 
 ## Available tools
 
-All tools are prefixed with `pcm_`, are read-only, and carry `readOnlyHint: true` so clients like Claude Desktop can approve them automatically without a confirmation prompt.
+All tools are prefixed with `pcm_`. Every tool except `pcm_update_save` is read-only and carries `readOnlyHint: true` so clients like Claude Desktop can approve them automatically without a confirmation prompt. `pcm_update_save` is the one write tool; it never overwrites the source save.
 
 | Tool                           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -93,6 +94,7 @@ All tools are prefixed with `pcm_`, are read-only, and carry `readOnlyHint: true
 | **pcm_get_team_roster**        | List a team's roster (defaults to the active player's team when `teamId` is omitted). Joins DYN_cyclist with its active DYN_contract_cyclist and STA_type_rider; per rider returns name, country, age (derived from birth date and the current game date), rider type, overall ability, contract end year, wage, market value and all per-terrain ability ratings. Ordered by overall ability, highest first. Errors if `teamId` does not exist. |
 | **pcm_search_team**            | Search for a team by name (case-insensitive partial match against both the full name and short name). Returns up to 10 matches with the resolved division name, country name, evaluation and general manager.                                                                                                                                                                                                                                    |
 | **pcm_query_save**             | Run a read-only SQL query (`SELECT` / `WITH … SELECT` only) against any table in a save file. Write/DDL statements are rejected. Results are capped (default 100, max 1000 rows).                                                                                                                                                                                                                                                                |
+| **pcm_update_save**            | Apply a single `INSERT`/`UPDATE`/`DELETE` statement to a save and write the modified database to a **new** `.cdb` at `outputPath`. The source save is never overwritten (`outputPath` must differ from `savePath`); `SELECT`, schema changes (`DROP`/`CREATE`/`ALTER`) and stacked statements are rejected. Returns the written path and the number of rows changed.                                                                              |
 | **pcm_generate_startlist_xml** | Generate a PCM startlist XML document from a list of teams and their cyclist rosters. Looks up the race by `IDrace` in the save to derive the output file name from `STA_race.gene_sz_filename` (e.g. `c0_almeria.xml`), and returns both the file name and the XML as text. Team and cyclist IDs map to `DYN_team.IDteam` / `DYN_cyclist.IDcyclist` (look them up with `pcm_search_cyclist` or `pcm_query_save`).                               |
 
 ## Resources
@@ -103,11 +105,11 @@ All tools are prefixed with `pcm_`, are read-only, and carry `readOnlyHint: true
 
 ## How it works
 
-Tools are **stateless**: there is no "current save" held by the server. Every save-reading tool takes an absolute `savePath`, re-validates it, and re-reads the `.cdb` from disk into a fresh in-memory SQLite database (via [`cdb-converter`](https://www.npmjs.com/package/cdb-converter) + [`sql.js`](https://www.npmjs.com/package/sql.js)) for each call. The on-disk save is the single source of truth and is never mutated. A typical flow is:
+Tools are **stateless**: there is no "current save" held by the server. Every tool takes an absolute `savePath`, re-validates it, and re-reads the `.cdb` from disk into a fresh in-memory SQLite database (via [`cdb-converter`](https://www.npmjs.com/package/cdb-converter) + [`sql.js`](https://www.npmjs.com/package/sql.js)) for each call. The source save on disk is never mutated: read tools only ever read it, and `pcm_update_save` writes its changes to a separate output `.cdb`. A typical flow is:
 
 1. `pcm_list_saves` (Windows) or `pcm_select_save` with an explicit path to locate a save.
 2. `pcm_search_cyclist`, `pcm_get_team_roster`, `pcm_query_save`, … to explore it.
-3. `pcm_generate_startlist_xml` to produce a startlist file for a race.
+3. `pcm_generate_startlist_xml` to produce a startlist file for a race, or `pcm_update_save` to write an edited copy of the save.
 
 ## Development
 

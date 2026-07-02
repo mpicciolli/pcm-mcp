@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { DATABASE_REFERENCE_URI } from "../reference";
+import { explainQueryError, parseSingleStatement } from "../helpers";
 import { withSaveDb } from "../save-db";
 
 const DEFAULT_LIMIT = 100;
@@ -109,64 +110,23 @@ export function registerQuerySave(server: McpServer): void {
 }
 
 /**
- * Translate sql.js "no such table/column" errors into actionable messages that
- * point the caller at the schema-discovery tools. Other errors pass through.
- */
-function explainQueryError(error: unknown): Error {
-	const message = error instanceof Error ? error.message : String(error);
-
-	const missingTable = /no such table:\s*(\S+)/i.exec(message);
-	if (missingTable) {
-		return new Error(
-			`Table "${missingTable[1]}" does not exist in this save — use pcm_get_save_schema to list available tables.`,
-		);
-	}
-
-	const missingColumn = /no such column:\s*(\S+)/i.exec(message);
-	if (missingColumn) {
-		return new Error(
-			`Column "${missingColumn[1]}" does not exist — use pcm_get_table_schema to inspect the table's columns.`,
-		);
-	}
-
-	return error instanceof Error ? error : new Error(message);
-}
-
-/**
- * Reject anything that isn't a single read-only `SELECT`/`WITH` statement.
- * The save is loaded into an in-memory sql.js database (changes are never
- * written back to disk), but we still enforce read-only intent defensively.
+ * Enforce that a query is a single read-only statement.
+ *
+ * Parsing is delegated to {@link parseSingleStatement}, so a `;` inside a string
+ * literal, comment or quoted identifier is not mistaken for a statement
+ * separator. CTEs are classified by their leaf operation, so `WITH … SELECT`
+ * reads (`LISTING`) while `WITH … DELETE` writes (`MODIFICATION`) — only the
+ * former is accepted. `PRAGMA query_only = ON` (see {@link withSaveDb}) stays as
+ * the engine-level backstop.
  */
 export function assertReadOnlyQuery(rawQuery: string): string {
-	// Strip a single trailing semicolon, then reject any further statement
-	// separators to prevent stacked statements.
-	const query = rawQuery.trim().replace(/;\s*$/, "");
+	const { text, statement } = parseSingleStatement(rawQuery, "Query");
 
-	if (query.length === 0) {
-		throw new Error("Query is empty.");
-	}
-
-	if (query.includes(";")) {
-		throw new Error(
-			"Only a single statement is allowed — remove extra semicolons.",
-		);
-	}
-
-	if (!/^(select|with)\b/i.test(query)) {
+	if (statement.executionType !== "LISTING") {
 		throw new Error(
 			"Only read-only SELECT (or WITH … SELECT) queries are allowed.",
 		);
 	}
 
-	// Defense in depth: reject statements that could mutate or attach data.
-	const forbidden =
-		/\b(insert|update|delete|drop|create|alter|replace|attach|detach|reindex|vacuum|pragma|truncate)\b/i;
-	const match = forbidden.exec(query);
-	if (match) {
-		throw new Error(
-			`Write/DDL keyword "${match[0].toUpperCase()}" is not allowed — this tool is read-only.`,
-		);
-	}
-
-	return query;
+	return text;
 }
