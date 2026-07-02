@@ -97,11 +97,9 @@ All tools are prefixed with `pcm_`, are read-only, and carry `readOnlyHint: true
 
 ## Resources
 
-| URI                   | Description                                                                                                                                                                                                     |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| URI                   | Description                                                                                                                                                                                                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `pcm://docs/database` | The save-database reference (`DATABASE.md`): table prefixes (`DYN_`/`STA_`/`GAM_`), column typing, foreign-key conventions and display columns. Read this to write correct `pcm_query_save` queries and joins. |
-
-The same reference is embedded in the `pcm_query_save` tool description, so clients that don't surface MCP resources still get the query conventions in context.
 
 ## How it works
 
