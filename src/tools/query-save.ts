@@ -120,6 +120,19 @@ function explainQueryError(error: unknown): Error {
 }
 
 /**
+ * Matches a single SQL token whose contents should be ignored by structural
+ * scans: a string literal (`'…'`), a quoted identifier (`"…"`, backtick-quoted
+ * or `[…]`), or a line/block comment. Doubled-quote escaping (`''`, `""`) is
+ * handled by the alternations.
+ */
+const SQL_TEXT =
+	/'(?:[^']|'')*'|"(?:[^"]|"")*"|`(?:[^`]|``)*`|\[[^\]]*\]|--[^\n]*|\/\*[\s\S]*?\*\//g;
+
+function maskSqlText(sql: string): string {
+	return sql.replace(SQL_TEXT, " ");
+}
+
+/**
  * Enforce that a query is a single statement that opens as a read `SELECT`/`WITH`.
  *
  * Actual write protection is delegated to the SQLite engine via
@@ -141,7 +154,7 @@ export function assertReadOnlyQuery(rawQuery: string): string {
 		throw new Error("Query is empty.");
 	}
 
-	if (query.includes(";")) {
+	if (maskSqlText(query).includes(";")) {
 		throw new Error(
 			"Only a single statement is allowed — remove extra semicolons.",
 		);

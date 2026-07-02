@@ -103,6 +103,32 @@ describe("querySave", () => {
 				expect(assertReadOnlyQuery(q)).toBe(q);
 			});
 
+			it("accepts a SELECT with a semicolon inside a string literal", () => {
+				const q = "SELECT ';' AS semi";
+				expect(assertReadOnlyQuery(q)).toBe(q);
+			});
+
+			it("accepts a SELECT whose WHERE literal contains a semicolon", () => {
+				const q = "SELECT * FROM foo WHERE note = 'a;b'";
+				expect(assertReadOnlyQuery(q)).toBe(q);
+			});
+
+			it("accepts a SELECT with a semicolon inside a quoted identifier", () => {
+				const q = 'SELECT "weird;col" FROM foo';
+				expect(assertReadOnlyQuery(q)).toBe(q);
+			});
+
+			it("accepts a SELECT with a semicolon inside a comment", () => {
+				const q = "SELECT 1 -- ; not a statement";
+				expect(assertReadOnlyQuery(q)).toBe(q);
+			});
+
+			it("keeps the trailing-semicolon strip working alongside a literal semicolon", () => {
+				expect(assertReadOnlyQuery("SELECT ';' AS semi;")).toBe(
+					"SELECT ';' AS semi",
+				);
+			});
+
 			it("accepts a SELECT using the read-only REPLACE() function", () => {
 				const q = "SELECT REPLACE(name,'a','b') FROM foo";
 				expect(assertReadOnlyQuery(q)).toBe(q);
