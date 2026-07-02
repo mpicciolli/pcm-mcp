@@ -63,9 +63,7 @@ export async function withSaveDb<T extends Record<string, unknown>>(
 	fn: (db: SaveDb, save: SaveFile) => T | Promise<T>,
 	config: {
 		queryOnly?: boolean;
-	} = {
-		queryOnly: true,
-	},
+	} = {},
 ): Promise<CallToolResult> {
 	let db: SaveDb | undefined;
 	try {
@@ -75,7 +73,7 @@ export async function withSaveDb<T extends Record<string, unknown>>(
 		const cdbBuffer = await readFile(save.path);
 		db = cdbToSql(cdbBuffer, SQL);
 
-		if (config.queryOnly) {
+		if (config.queryOnly ?? true) {
 			db.run("PRAGMA query_only = ON;");
 		}
 
