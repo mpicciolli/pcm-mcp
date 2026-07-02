@@ -13,4 +13,10 @@ export default defineConfig({
 	banner: {
 		js: "#!/usr/bin/env node",
 	},
+	// Inline DATABASE.md into the bundle as a string (import in src/reference.ts)
+	// so the query-save description / pcm://docs/database resource carry the
+	// reference without shipping the file alongside dist/.
+	loader: {
+		".md": "text",
+	},
 });

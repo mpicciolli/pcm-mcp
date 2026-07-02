@@ -1,9 +1,17 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { DATABASE_REFERENCE } from "../reference";
 import { withSaveDb } from "../save-db";
 
 const DEFAULT_LIMIT = 100;
 const MAX_LIMIT = 1000;
+
+function buildDescription(): string {
+	const base =
+		"Run a read-only SQL query against any table in a Pro Cycling Manager `.cdb` save file. Only a single SELECT (or WITH … SELECT) statement is allowed; write/DDL statements are rejected and the save is never modified. Results are capped (default 100, max 1000 rows). Use `pcm_get_save_schema` to discover table names and `pcm_get_table_schema` to inspect their columns.";
+
+	return DATABASE_REFERENCE ? `${base}\n\n${DATABASE_REFERENCE}` : base;
+}
 
 const outputSchema = z.object({
 	columns: z.array(z.string()).describe("Column names returned by the query"),
@@ -22,8 +30,7 @@ export function registerQuerySave(server: McpServer): void {
 		"pcm_query_save",
 		{
 			title: "Query PCM save (read-only)",
-			description:
-				"Run a read-only SQL query against any table in a Pro Cycling Manager `.cdb` save file. Only a single SELECT (or WITH … SELECT) statement is allowed; write/DDL statements are rejected and the save is never modified. Results are capped (default 100, max 1000 rows). Use `pcm_get_save_schema` to discover table names and `pcm_get_table_schema` to inspect their columns.",
+			description: buildDescription(),
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				query: z

@@ -29,6 +29,9 @@ src/
   saves.ts        # save discovery + validation (listSaves, validateSave, getPcmRoot)
   save-db.ts      # withSaveDb(): open .cdb in-memory, run fn, always close db; getGameDate()
   helpers.ts      # validResponse / errorResponse → CallToolResult; ageFromYmd(); buildStartlistXml
+  reference.ts    # loads DATABASE.md (DATABASE_REFERENCE) for the query tool + resource
+  resources/
+    database.ts         # pcm://docs/database resource (serves DATABASE.md)
   schemas/
     cyclist.ts          # shared cyclist ratings: ratingsSchema / ratingsColumns() / mapRatings()
   tools/
@@ -79,7 +82,12 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
   names against `DB_STRUCTURE` before building queries (see `get_table_schema`).
 - **Save database conventions** (table prefixes, column typing, foreign keys,
   display columns) are documented in [`DATABASE.md`](DATABASE.md). Consult it
-  before writing queries or joins.
+  before writing queries or joins. It is the single source of truth and is
+  surfaced to the LLM client at runtime via `src/reference.ts` — embedded in the
+  `pcm_query_save` description and served as the `pcm://docs/database` resource.
+  Its contents are inlined into the bundle as a string at build time (esbuild
+  `text` loader in `tsup.config.ts`; mirrored by a Vite plugin in
+  `vitest.config.ts`), so nothing ships alongside `dist/`.
 - **Tool responses** go through `validResponse` / `errorResponse`; declare both
   `inputSchema` and `outputSchema` with zod.
 - **Tool annotations** — every tool must include `readOnlyHint`, `destructiveHint`,
