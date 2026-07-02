@@ -136,7 +136,16 @@ export async function writeSaveDb(
 	}
 
 	const cdb = sqlToCdb(db);
-	await writeFile(resolvedOutput, Buffer.from(cdb));
+	try {
+		await writeFile(resolvedOutput, Buffer.from(cdb), { flag: "wx" });
+	} catch (error) {
+		if ((error as NodeJS.ErrnoException).code === "EEXIST") {
+			throw new Error(
+				`outputPath already exists: ${resolvedOutput} — choose a new file name so no existing file is overwritten.`,
+			);
+		}
+		throw error;
+	}
 	return resolvedOutput;
 }
 
