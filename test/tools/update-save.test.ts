@@ -125,7 +125,7 @@ describe("updateSave", () => {
 		expect(result.isError).toBe(true);
 		expect(result.content[0]).toEqual({
 			type: "text",
-			text: 'Table \"not_a_table\" does not exist in this save — use pcm_get_save_schema to list available tables.',
+			text: 'Table "not_a_table" does not exist in this save — use pcm_get_save_schema to list available tables.',
 		});
 	});
 
@@ -163,6 +163,16 @@ describe("updateSave", () => {
 					"update foo set x = 1",
 				);
 			});
+
+			it("accepts a semicolon inside a string literal", () => {
+				const s = "UPDATE foo SET note = ';'";
+				expect(assertWriteStatement(s)).toBe(s);
+			});
+
+			it("accepts a WITH … UPDATE CTE (write behind a CTE)", () => {
+				const s = "WITH x AS (SELECT 1) UPDATE foo SET a = 1";
+				expect(assertWriteStatement(s)).toBe(s);
+			});
 		});
 
 		describe("empty / blank statements", () => {
@@ -194,9 +204,9 @@ describe("updateSave", () => {
 				);
 			});
 
-			it("rejects a WITH … statement", () => {
+			it("rejects a WITH … SELECT (a read behind a CTE)", () => {
 				expect(() =>
-					assertWriteStatement("WITH x AS (SELECT 1) UPDATE foo SET a = 1"),
+					assertWriteStatement("WITH x AS (SELECT 1) SELECT * FROM x"),
 				).toThrowError("Only a single INSERT, UPDATE or DELETE");
 			});
 

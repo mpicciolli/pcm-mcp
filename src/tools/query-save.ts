@@ -1,7 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { identify } from "sql-query-identifier";
 import { z } from "zod";
-import { explainQueryError } from "../helpers";
+import { explainQueryError, parseSingleStatement } from "../helpers";
 import { withSaveDb } from "../save-db";
 
 const DEFAULT_LIMIT = 100;
@@ -91,42 +90,23 @@ export function registerQuerySave(server: McpServer): void {
 }
 
 /**
- * Enforce that a query is a single statement that opens as a read `SELECT`/`WITH`.
+ * Enforce that a query is a single read-only statement.
  *
- * Parsing is delegated to `sql-query-identifier`, which tokenizes SQL properly:
- * a `;` inside a string literal, comment or quoted identifier is not mistaken
- * for a statement separator, and CTEs are classified by their leaf operation —
- * `WITH … SELECT` reads (`LISTING`) while `WITH … DELETE` writes
- * (`MODIFICATION`). Anything that isn't exactly one `LISTING` statement is
- * rejected here; `PRAGMA query_only = ON` (see {@link withSaveDb}) stays as the
- * engine-level backstop.
+ * Parsing is delegated to {@link parseSingleStatement}, so a `;` inside a string
+ * literal, comment or quoted identifier is not mistaken for a statement
+ * separator. CTEs are classified by their leaf operation, so `WITH … SELECT`
+ * reads (`LISTING`) while `WITH … DELETE` writes (`MODIFICATION`) — only the
+ * former is accepted. `PRAGMA query_only = ON` (see {@link withSaveDb}) stays as
+ * the engine-level backstop.
  */
 export function assertReadOnlyQuery(rawQuery: string): string {
-	// Strip a single trailing semicolon so a normal `SELECT …;` is accepted;
-	// the returned query is what gets prepared.
-	const query = rawQuery.trim().replace(/;\s*$/, "");
+	const { text, statement } = parseSingleStatement(rawQuery, "Query");
 
-	if (query.length === 0) {
-		throw new Error("Query is empty.");
-	}
-
-	const statements = identify(query, { strict: false, dialect: "sqlite" });
-
-	if (statements.length === 0) {
-		throw new Error("Query is empty.");
-	}
-
-	if (statements.length > 1) {
-		throw new Error(
-			"Only a single statement is allowed — remove extra semicolons.",
-		);
-	}
-
-	if (statements[0].executionType !== "LISTING") {
+	if (statement.executionType !== "LISTING") {
 		throw new Error(
 			"Only read-only SELECT (or WITH … SELECT) queries are allowed.",
 		);
 	}
 
-	return query;
+	return text;
 }

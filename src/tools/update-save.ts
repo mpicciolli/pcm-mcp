@@ -1,6 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { explainQueryError } from "../helpers";
+import { explainQueryError, parseSingleStatement } from "../helpers";
 import { withSaveDb, writeSaveDb } from "../save-db";
 
 const outputSchema = z.object({
@@ -72,41 +72,31 @@ export function registerUpdateSave(server: McpServer): void {
 	);
 }
 
+/** The only statement kinds this tool executes: plain data mutations. */
+const WRITE_STATEMENT_TYPES = new Set(["INSERT", "UPDATE", "DELETE"]);
+
 /**
  * Enforce that a statement is a single data-mutating write.
  *
- * Uses an opener whitelist (`INSERT`/`UPDATE`/`DELETE`) rather than a keyword
- * blocklist:
- *  - it rejects reads (`SELECT`/`WITH`) — those belong to `pcm_query_save`, and
- *  - it rejects DDL (`DROP`/`CREATE`/`ALTER`/`PRAGMA`/…), which would alter the
- *    schema and break the `sqlToCdb` round-trip (it needs the table structure /
- *    `DB_STRUCTURE` intact to re-encode the `.cdb`).
+ * Parsing is delegated to {@link parseSingleStatement}, which classifies the
+ * statement by its leaf operation. Only `INSERT`/`UPDATE`/`DELETE` are allowed
+ * (a `WITH … DELETE` CTE counts as a `DELETE`). Everything else is rejected:
+ *  - reads (`SELECT`, `WITH … SELECT`) — those belong to `pcm_query_save`, and
+ *  - DDL (`DROP`/`CREATE`/`ALTER`/…) and anything unknown (`PRAGMA`, `ATTACH`),
+ *    which would alter the schema and break the `sqlToCdb` round-trip (it needs
+ *    the table structure / `DB_STRUCTURE` intact to re-encode the `.cdb`).
  *
- * Stacked statements are rejected too (only the first would run anyway, and
- * banning the extra `;` also shuts out `ATTACH`/`DETACH`, which must stand
- * alone).
+ * A `;` inside a string literal no longer trips the single-statement check.
  */
 export function assertWriteStatement(rawStatement: string): string {
-	// Strip a single trailing semicolon, then reject any further statement
-	// separators to prevent stacked statements.
-	const statement = rawStatement.trim().replace(/;\s*$/, "");
+	const { text, statement } = parseSingleStatement(rawStatement, "Statement");
 
-	if (statement.length === 0) {
-		throw new Error("Statement is empty.");
-	}
-
-	if (statement.includes(";")) {
-		throw new Error(
-			"Only a single statement is allowed — remove extra semicolons.",
-		);
-	}
-
-	if (!/^(insert|update|delete)\b/i.test(statement)) {
+	if (!WRITE_STATEMENT_TYPES.has(statement.type)) {
 		throw new Error(
 			"Only a single INSERT, UPDATE or DELETE statement is allowed. " +
 				"Use pcm_query_save to read; schema changes (DROP/CREATE/ALTER) are not supported.",
 		);
 	}
 
-	return statement;
+	return text;
 }
