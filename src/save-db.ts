@@ -157,7 +157,10 @@ async function pathExists(path: string): Promise<boolean> {
 async function isDirectory(path: string): Promise<boolean> {
 	try {
 		return (await stat(path)).isDirectory();
-	} catch {
-		return false;
+	} catch (error) {
+		if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+			return false;
+		}
+		throw error;
 	}
 }
