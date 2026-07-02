@@ -22,8 +22,8 @@ const cdbToSqlMock = cdbToSql as Mock;
 
 let dir: string;
 let savePath: string;
-/** A fake sql.js database; we only care that it gets closed. */
-const fakeDb = { close: vi.fn() };
+/** A fake sql.js database; we only care that it gets closed and configured. */
+const fakeDb = { close: vi.fn(), run: vi.fn() };
 
 beforeEach(async () => {
 	dir = await mkdtemp(join(tmpdir(), "pcm-save-db-"));
@@ -33,6 +33,7 @@ beforeEach(async () => {
 	cdbToSqlMock.mockReset();
 	cdbToSqlMock.mockReturnValue(fakeDb);
 	fakeDb.close.mockReset();
+	fakeDb.run.mockReset();
 });
 
 afterEach(async () => {
@@ -58,6 +59,19 @@ describe("withSaveDb", () => {
 		expect(db).toBe(fakeDb);
 		expect(save.name).toBe("Career.cdb");
 		expect(save.path).toBe(savePath);
+	});
+
+	it("puts the database in read-only mode before running the callback", async () => {
+		const runOrder: string[] = [];
+		fakeDb.run.mockImplementation((sql: string) => runOrder.push(sql));
+
+		await withSaveDb(savePath, () => {
+			runOrder.push("callback");
+			return {};
+		});
+
+		expect(fakeDb.run).toHaveBeenCalledWith("PRAGMA query_only = ON;");
+		expect(runOrder).toEqual(["PRAGMA query_only = ON;", "callback"]);
 	});
 
 	it("supports async callbacks", async () => {

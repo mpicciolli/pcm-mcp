@@ -66,6 +66,8 @@ export async function withSaveDb<T extends Record<string, unknown>>(
 		const cdbBuffer = await readFile(save.path);
 		db = cdbToSql(cdbBuffer, SQL);
 
+		db.run("PRAGMA query_only = ON;");
+
 		const output = await fn(db, save);
 
 		return validResponse(output);

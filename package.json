@@ -51,6 +51,7 @@
 		"@anthropic-ai/mcpb": "^2.1.2",
 		"@modelcontextprotocol/sdk": "^1.29.0",
 		"cdb-converter": "^0.1.2",
+		"sql-query-identifier": "^3.1.1",
 		"sql.js": "^1.14.1",
 		"zod": "^3.25.76"
 	}

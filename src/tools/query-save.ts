@@ -1,4 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { identify } from "sql-query-identifier";
 import { z } from "zod";
 import { withSaveDb } from "../save-db";
 
@@ -109,42 +110,51 @@ function explainQueryError(error: unknown): Error {
 		);
 	}
 
+	// Raised by `PRAGMA query_only = ON` when a statement tries to write.
+	if (/readonly database|not authorized/i.test(message)) {
+		return new Error(
+			"This tool is read-only — the query attempted to modify the save, which is not allowed.",
+		);
+	}
+
 	return error instanceof Error ? error : new Error(message);
 }
 
 /**
- * Reject anything that isn't a single read-only `SELECT`/`WITH` statement.
- * The save is loaded into an in-memory sql.js database (changes are never
- * written back to disk), but we still enforce read-only intent defensively.
+ * Enforce that a query is a single read-only statement.
+ *
+ * Parsing is delegated to `sql-query-identifier`, which tokenizes SQL properly:
+ * a `;` inside a string literal, comment or quoted identifier is not mistaken
+ * for a statement separator, and CTEs are classified by their leaf operation —
+ * `WITH … SELECT` reads (`LISTING`) while `WITH … DELETE` writes
+ * (`MODIFICATION`). Anything that isn't exactly one `LISTING` statement is
+ * rejected here; `PRAGMA query_only = ON` (see {@link withSaveDb}) stays as the
+ * engine-level backstop.
  */
 export function assertReadOnlyQuery(rawQuery: string): string {
-	// Strip a single trailing semicolon, then reject any further statement
-	// separators to prevent stacked statements.
+	// Strip a single trailing semicolon so a normal `SELECT …;` is accepted;
+	// the returned query is what gets prepared.
 	const query = rawQuery.trim().replace(/;\s*$/, "");
 
 	if (query.length === 0) {
 		throw new Error("Query is empty.");
 	}
 
-	if (query.includes(";")) {
+	const statements = identify(query, { strict: false, dialect: "sqlite" });
+
+	if (statements.length === 0) {
+		throw new Error("Query is empty.");
+	}
+
+	if (statements.length > 1) {
 		throw new Error(
 			"Only a single statement is allowed — remove extra semicolons.",
 		);
 	}
 
-	if (!/^(select|with)\b/i.test(query)) {
+	if (statements[0].executionType !== "LISTING") {
 		throw new Error(
 			"Only read-only SELECT (or WITH … SELECT) queries are allowed.",
-		);
-	}
-
-	// Defense in depth: reject statements that could mutate or attach data.
-	const forbidden =
-		/\b(insert|update|delete|drop|create|alter|replace|attach|detach|reindex|vacuum|pragma|truncate)\b/i;
-	const match = forbidden.exec(query);
-	if (match) {
-		throw new Error(
-			`Write/DDL keyword "${match[0].toUpperCase()}" is not allowed — this tool is read-only.`,
 		);
 	}
 
