@@ -1,5 +1,5 @@
-import { readFile, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { cdbToSql, sqlToCdb } from "cdb-converter";
 import initSqlJs from "sql.js";
@@ -101,7 +101,8 @@ export async function withSaveDb<T extends Record<string, unknown>>(
  * @param sourcePath - Absolute path of the source save, used only to guard
  *   against overwriting it.
  * @returns The absolute path written.
- * @throws if `outputPath` isn't a `.cdb` file or resolves to `sourcePath`.
+ * @throws if `outputPath` isn't a `.cdb` file, resolves to `sourcePath`, points
+ *   into a missing directory, or would overwrite an existing file.
  */
 export async function writeSaveDb(
 	db: SaveDb,
@@ -111,13 +112,49 @@ export async function writeSaveDb(
 	if (!outputPath.toLowerCase().endsWith(".cdb")) {
 		throw new Error(`Output must be a .cdb file: ${outputPath}`);
 	}
-	if (resolve(outputPath) === resolve(sourcePath)) {
+
+	const resolvedOutput = resolve(outputPath);
+	if (resolvedOutput === resolve(sourcePath)) {
 		throw new Error(
 			"outputPath must differ from the source save — the input .cdb is never overwritten.",
 		);
 	}
 
+	// Never clobber an existing file: writes only ever create a new `.cdb`.
+	if (await pathExists(resolvedOutput)) {
+		throw new Error(
+			`outputPath already exists: ${resolvedOutput} — choose a new file name so no existing file is overwritten.`,
+		);
+	}
+
+	// Fail early with an actionable message rather than a raw ENOENT from writeFile.
+	const parent = dirname(resolvedOutput);
+	if (!(await isDirectory(parent))) {
+		throw new Error(
+			`Output directory does not exist: ${parent} — create it first or point outputPath at an existing directory.`,
+		);
+	}
+
 	const cdb = sqlToCdb(db);
-	await writeFile(outputPath, Buffer.from(cdb));
-	return resolve(outputPath);
+	await writeFile(resolvedOutput, Buffer.from(cdb));
+	return resolvedOutput;
+}
+
+/** True if `path` exists (file or directory). */
+async function pathExists(path: string): Promise<boolean> {
+	try {
+		await stat(path);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+/** True if `path` exists and is a directory. */
+async function isDirectory(path: string): Promise<boolean> {
+	try {
+		return (await stat(path)).isDirectory();
+	} catch {
+		return false;
+	}
 }

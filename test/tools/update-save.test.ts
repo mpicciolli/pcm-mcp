@@ -115,6 +115,47 @@ describe("updateSave", () => {
 
 	it.each(
 		saveFixtures,
+	)("refuses to overwrite an existing output file for %s", async (_name, path) => {
+		const outputPath = join(outDir, "edited.cdb");
+		// First write succeeds and creates the file.
+		const first = await mcp.callTool("pcm_update_save", {
+			savePath: path,
+			outputPath,
+			statement: "UPDATE GAM_config SET gene_i_date = 20991231",
+		});
+		expect(first.isError).toBeUndefined();
+
+		// A second write to the same path must not clobber it.
+		const second = await mcp.callTool("pcm_update_save", {
+			savePath: path,
+			outputPath,
+			statement: "UPDATE GAM_config SET gene_i_date = 20991231",
+		});
+		expect(second.isError).toBe(true);
+		expect(second.content[0]).toEqual({
+			type: "text",
+			text: expect.stringMatching(/already exists/),
+		});
+	});
+
+	it.each(
+		saveFixtures,
+	)("errors when the output directory does not exist for %s", async (_name, path) => {
+		const result = await mcp.callTool("pcm_update_save", {
+			savePath: path,
+			outputPath: join(outDir, "missing", "edited.cdb"),
+			statement: "UPDATE GAM_config SET gene_i_date = 20991231",
+		});
+
+		expect(result.isError).toBe(true);
+		expect(result.content[0]).toEqual({
+			type: "text",
+			text: expect.stringMatching(/Output directory does not exist/),
+		});
+	});
+
+	it.each(
+		saveFixtures,
 	)("maps a missing table to a schema-discovery hint for %s", async (_name, path) => {
 		const result = await mcp.callTool("pcm_update_save", {
 			savePath: path,

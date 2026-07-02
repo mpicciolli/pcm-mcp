@@ -27,7 +27,7 @@ export function registerUpdateSave(server: McpServer): void {
 				outputPath: z
 					.string()
 					.describe(
-						"Absolute path of the .cdb file to write the modified save to (must differ from savePath)",
+						"Absolute path of the .cdb file to write the modified save to. Must differ from savePath, sit in an existing directory, and not already exist (existing files are never overwritten).",
 					),
 				statement: z
 					.string()
