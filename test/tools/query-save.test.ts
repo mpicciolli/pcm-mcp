@@ -32,13 +32,9 @@ describe("querySave", () => {
 		expect(result.structuredContent).toMatchObject({ rowCount: 1 });
 	});
 
-	// A `WITH … DELETE` CTE slips past the static SELECT/WITH guard, so the write
-	// is only stopped by `PRAGMA query_only = ON` in the engine. That surfaces a
-	// "readonly database" error, which explainQueryError maps to a friendly
-	// message — this covers that branch end-to-end.
 	it.each(
 		saveFixtures,
-	)("maps a query_only write rejection to a read-only message for %s", async (_name, path) => {
+	)("rejects a WITH … DELETE CTE before touching the save for %s", async (_name, path) => {
 		const result = await mcp.callTool("pcm_query_save", {
 			savePath: path,
 			query: "WITH x AS (SELECT 1) DELETE FROM STA_race",
@@ -48,7 +44,7 @@ describe("querySave", () => {
 		expect(result.content).toEqual([
 			{
 				type: "text",
-				text: "This tool is read-only — the query attempted to modify the save, which is not allowed.",
+				text: "Only read-only SELECT (or WITH … SELECT) queries are allowed.",
 			},
 		]);
 	});
@@ -240,13 +236,22 @@ describe("querySave", () => {
 			});
 		});
 
-		describe("write enforcement delegated to the engine", () => {
-			it("passes a WITH … DELETE CTE through the static guard", () => {
-				const q = "WITH x AS (SELECT 1) DELETE FROM foo";
-				expect(assertReadOnlyQuery(q)).toBe(q);
+		describe("write detection via the statement identifier", () => {
+			it("rejects a WITH … DELETE CTE (write behind a read opener)", () => {
+				expect(() =>
+					assertReadOnlyQuery("WITH x AS (SELECT 1) DELETE FROM foo"),
+				).toThrowError("Only read-only SELECT");
 			});
 
-			it("passes a SELECT mentioning a write keyword through the static guard", () => {
+			it("rejects a WITH … INSERT CTE", () => {
+				expect(() =>
+					assertReadOnlyQuery(
+						"WITH x AS (SELECT 1) INSERT INTO foo SELECT * FROM x",
+					),
+				).toThrowError("Only read-only SELECT");
+			});
+
+			it("accepts a SELECT merely mentioning a write keyword in a literal", () => {
 				const q = "SELECT * FROM foo WHERE note = 'please update'";
 				expect(assertReadOnlyQuery(q)).toBe(q);
 			});

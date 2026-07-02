@@ -1,4 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { identify } from "sql-query-identifier";
 import { z } from "zod";
 import { withSaveDb } from "../save-db";
 
@@ -120,47 +121,38 @@ function explainQueryError(error: unknown): Error {
 }
 
 /**
- * Matches a single SQL token whose contents should be ignored by structural
- * scans: a string literal (`'…'`), a quoted identifier (`"…"`, backtick-quoted
- * or `[…]`), or a line/block comment. Doubled-quote escaping (`''`, `""`) is
- * handled by the alternations.
- */
-const SQL_TEXT =
-	/'(?:[^']|'')*'|"(?:[^"]|"")*"|`(?:[^`]|``)*`|\[[^\]]*\]|--[^\n]*|\/\*[\s\S]*?\*\//g;
-
-function maskSqlText(sql: string): string {
-	return sql.replace(SQL_TEXT, " ");
-}
-
-/**
- * Enforce that a query is a single statement that opens as a read `SELECT`/`WITH`.
+ * Enforce that a query is a single read-only statement.
  *
- * Actual write protection is delegated to the SQLite engine via
- * `PRAGMA query_only = ON` (see {@link withSaveDb}), which reliably rejects any
- * mutating statement — including tricks a text scan would miss, such as a
- * `WITH … DELETE` CTE. These static checks only cover what the engine can't:
- *  - blocking stacked statements (SQLite prepares just the first one anyway, so
- *    the extra semicolon check keeps intent explicit and errors clear), which
- *    also shuts out `ATTACH`/`DETACH` since those can only appear as their own
- *    statement, and
- *  - giving a fast, friendly error for an obviously non-read opener.
+ * Parsing is delegated to `sql-query-identifier`, which tokenizes SQL properly:
+ * a `;` inside a string literal, comment or quoted identifier is not mistaken
+ * for a statement separator, and CTEs are classified by their leaf operation —
+ * `WITH … SELECT` reads (`LISTING`) while `WITH … DELETE` writes
+ * (`MODIFICATION`). Anything that isn't exactly one `LISTING` statement is
+ * rejected here; `PRAGMA query_only = ON` (see {@link withSaveDb}) stays as the
+ * engine-level backstop.
  */
 export function assertReadOnlyQuery(rawQuery: string): string {
-	// Strip a single trailing semicolon, then reject any further statement
-	// separators to prevent stacked statements.
+	// Strip a single trailing semicolon so a normal `SELECT …;` is accepted;
+	// the returned query is what gets prepared.
 	const query = rawQuery.trim().replace(/;\s*$/, "");
 
 	if (query.length === 0) {
 		throw new Error("Query is empty.");
 	}
 
-	if (maskSqlText(query).includes(";")) {
+	const statements = identify(query, { strict: false, dialect: "sqlite" });
+
+	if (statements.length === 0) {
+		throw new Error("Query is empty.");
+	}
+
+	if (statements.length > 1) {
 		throw new Error(
 			"Only a single statement is allowed — remove extra semicolons.",
 		);
 	}
 
-	if (!/^(select|with)\b/i.test(query)) {
+	if (statements[0].executionType !== "LISTING") {
 		throw new Error(
 			"Only read-only SELECT (or WITH … SELECT) queries are allowed.",
 		);
