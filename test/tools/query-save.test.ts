@@ -34,7 +34,7 @@ describe("querySave", () => {
 
 	it.each(
 		saveFixtures,
-	)("rejects a WITH … DELETE CTE before touching the save for %s", async (_name, path) => {
+	)("rejects a WITH … DELETE CTE for %s", async (_name, path) => {
 		const result = await mcp.callTool("pcm_query_save", {
 			savePath: path,
 			query: "WITH x AS (SELECT 1) DELETE FROM STA_race",
