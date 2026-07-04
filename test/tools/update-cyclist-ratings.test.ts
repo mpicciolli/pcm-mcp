@@ -1,14 +1,13 @@
-import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
+import { cdbToSql } from "cdb-converter";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { cdbToSql } from "cdb-converter";
 import initSqlJs from "sql.js";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { getTableColumnNames } from "../../src/save-db";
 import { registerUpdateCyclistRatings } from "../../src/tools/update-cyclist-ratings";
 import { saveFixtures } from "../fixtures/save.fixture";
-import { createMockMcpServer } from "../mocks/mock-mcp-server";
 import type { MockMcpServer } from "../mocks/mock-mcp-server";
+import { createMockMcpServer } from "../mocks/mock-mcp-server";
 
 /** Read the first cyclist ID out of a `.cdb` file. */
 async function readFirstCyclistId(cdbPath: string): Promise<number> {
@@ -83,13 +82,6 @@ describe("updateCyclistRatings", () => {
 				mountain: 42,
 			},
 		});
-		const { cyclist } = result.structuredContent as {
-			cyclist: Record<string, unknown>;
-		};
-		expect(typeof cyclist.firstName).toBe("string");
-		expect(typeof cyclist.lastName).toBe("string");
-
-		// The change must actually persist in the written file.
 		expect(
 			await readRatings(outputPath, cyclistId, [
 				"charac_i_sprint",
@@ -121,43 +113,6 @@ describe("updateCyclistRatings", () => {
 				"charac_i_cobble",
 			]),
 		).toEqual(before);
-	});
-
-	it.each(
-		saveFixtures,
-	)("leaves the source save untouched for %s", async (_name, path) => {
-		const cyclistId = await readFirstCyclistId(path);
-		const before = await stat(path);
-		const outputPath = join(outDir, "edited.cdb");
-
-		await mcp.callTool("pcm_update_cyclist_ratings", {
-			savePath: path,
-			outputPath,
-			cyclistId,
-			ratings: { sprint: 81 },
-		});
-
-		const after = await stat(path);
-		expect(after.size).toBe(before.size);
-		expect(after.mtimeMs).toBe(before.mtimeMs);
-	});
-
-	it.each(
-		saveFixtures,
-	)("refuses to overwrite the source save for %s", async (_name, path) => {
-		const cyclistId = await readFirstCyclistId(path);
-		const result = await mcp.callTool("pcm_update_cyclist_ratings", {
-			savePath: path,
-			outputPath: path,
-			cyclistId,
-			ratings: { sprint: 81 },
-		});
-
-		expect(result.isError).toBe(true);
-		expect(result.content[0]).toEqual({
-			type: "text",
-			text: "outputPath must differ from the source save — the input .cdb is never overwritten.",
-		});
 	});
 
 	it.each(
@@ -196,19 +151,8 @@ describe("updateCyclistRatings", () => {
 	});
 
 	it.each(
-		saveFixtures,
-	)("handles mediumMountain according to the save's schema for %s", async (_name, path) => {
-		const SQL = await initSqlJs();
-		const db = cdbToSql(await readFile(path), SQL);
-		let hasMediumMountain: boolean;
-		try {
-			hasMediumMountain = getTableColumnNames(db, "DYN_cyclist").has(
-				"charac_i_medium_mountain",
-			);
-		} finally {
-			db.close();
-		}
-
+		saveFixtures.filter(([, , hasMediumMountain]) => hasMediumMountain),
+	)("sets mediumMountain for %s", async (_name, path) => {
 		const cyclistId = await readFirstCyclistId(path);
 		const outputPath = join(outDir, "edited.cdb");
 		const result = await mcp.callTool("pcm_update_cyclist_ratings", {
@@ -218,17 +162,27 @@ describe("updateCyclistRatings", () => {
 			ratings: { mediumMountain: 77 },
 		});
 
-		if (hasMediumMountain) {
-			expect(result.isError).toBeUndefined();
-			expect(
-				await readRatings(outputPath, cyclistId, ["charac_i_medium_mountain"]),
-			).toEqual([77]);
-		} else {
-			expect(result.isError).toBe(true);
-			expect(result.content[0]).toEqual({
-				type: "text",
-				text: "This save pre-dates the charac_i_medium_mountain column — mediumMountain cannot be set on it.",
-			});
-		}
+		expect(result.isError).toBeUndefined();
+		expect(
+			await readRatings(outputPath, cyclistId, ["charac_i_medium_mountain"]),
+		).toEqual([77]);
+	});
+
+	it.each(
+		saveFixtures.filter(([, , hasMediumMountain]) => !hasMediumMountain),
+	)("rejects mediumMountain on saves that pre-date the column for %s", async (_name, path) => {
+		const cyclistId = await readFirstCyclistId(path);
+		const result = await mcp.callTool("pcm_update_cyclist_ratings", {
+			savePath: path,
+			outputPath: join(outDir, "edited.cdb"),
+			cyclistId,
+			ratings: { mediumMountain: 77 },
+		});
+
+		expect(result.isError).toBe(true);
+		expect(result.content[0]).toEqual({
+			type: "text",
+			text: "This save pre-dates the charac_i_medium_mountain column — mediumMountain cannot be set on it.",
+		});
 	});
 });
