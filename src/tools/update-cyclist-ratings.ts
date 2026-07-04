@@ -124,8 +124,6 @@ export function registerUpdateCyclistRatings(server: McpServer): void {
 						);
 					}
 
-					// Column names come from the trusted `ratingColumns` map, never from
-					// input; values and the ID are bound as parameters.
 					const setClause = changes
 						.map(([field]) => `${ratingColumns[field]} = ?`)
 						.join(", ");
