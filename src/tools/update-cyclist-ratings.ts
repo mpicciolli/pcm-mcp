@@ -133,9 +133,19 @@ export function registerUpdateCyclistRatings(server: McpServer): void {
 					]);
 
 					if (db.getRowsModified() === 0) {
-						throw new Error(
-							`No cyclist with IDcyclist = ${cyclistId} in this save — use pcm_search_cyclist to find the right ID.`,
+						const check = db.prepare(
+							"SELECT 1 FROM DYN_cyclist WHERE IDcyclist = ? LIMIT 1",
 						);
+						try {
+							check.bind([cyclistId]);
+							if (!check.step()) {
+								throw new Error(
+									`No cyclist with IDcyclist = ${cyclistId} in this save — use pcm_search_cyclist to find the right ID.`,
+								);
+							}
+						} finally {
+							check.free();
+						}
 					}
 
 					const stmt = db.prepare(
