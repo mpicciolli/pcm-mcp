@@ -7,7 +7,7 @@ import {
 	ratingsColumns,
 	ratingsSchema,
 } from "../schemas/cyclist";
-import { withSaveDb, writeSaveDb } from "../save-db";
+import { getTableColumnNames, withSaveDb, writeSaveDb } from "../save-db";
 
 const ratingValue = z.number().int().min(55).max(85);
 
@@ -115,11 +115,9 @@ export function registerUpdateCyclistRatings(server: McpServer): void {
 						);
 					}
 
-					const columnInfo = db.exec(`PRAGMA table_info("DYN_cyclist")`);
-					const columnNames = new Set(
-						(columnInfo[0]?.values ?? []).map((r) => String(r[1])),
+					const hasMediumMountain = getTableColumnNames(db, "DYN_cyclist").has(
+						"charac_i_medium_mountain",
 					);
-					const hasMediumMountain = columnNames.has("charac_i_medium_mountain");
 					if (!hasMediumMountain && ratings.mediumMountain !== undefined) {
 						throw new Error(
 							"This save pre-dates the charac_i_medium_mountain column — mediumMountain cannot be set on it.",

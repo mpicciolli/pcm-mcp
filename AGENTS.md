@@ -28,13 +28,13 @@ never-touch-the-source guarantee.
 ```
 src/
   index.ts        # entrypoint: builds McpServer, registers tools, connects stdio
-  saves.ts        # save discovery + validation (listSaves, validateSave, getPcmRoot)
-  save-db.ts      # withSaveDb(): open .cdb in-memory, run fn, always close db; writeSaveDb(); getGameDate()
-  helpers.ts      # validResponse / errorResponse → CallToolResult; ageFromYmd(); buildStartlistXml
+  saves.ts        # discover .cdb saves on disk and validate paths passed by tools
+  save-db.ts      # everything touching the database: open a save in memory, serialize an edited copy, schema/game-date introspection
+  helpers.ts      # cross-cutting utilities: MCP tool responses, SQL statement parsing/errors, dates, startlist XML
   schemas/
-    cyclist.ts          # shared cyclist ratings: ratingsSchema / ratingsColumns() / mapRatings()
+    cyclist.ts          # shared cyclist ratings schema and its SQL read/write mappings
   tools/
-    index.ts              # registerTools() — wires every tool onto the server
+    index.ts              # wires every tool onto the server
     list-saves.ts         # pcm_list_saves
     select-save.ts        # pcm_select_save
     get-save-schema.ts    # pcm_get_save_schema

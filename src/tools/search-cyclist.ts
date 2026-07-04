@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { mapRatings, ratingsColumns, ratingsSchema } from "../schemas/cyclist";
-import { withSaveDb } from "../save-db";
+import { getTableColumnNames, withSaveDb } from "../save-db";
 
 const cyclistSchema = z.object({
 	id: z.number().describe("Cyclist ID (IDcyclist)"),
@@ -56,10 +56,7 @@ export function registerSearchCyclist(server: McpServer): void {
 		},
 		async ({ savePath, firstName = "", lastName = "" }) =>
 			withSaveDb(savePath, (db) => {
-				const columnInfo = db.exec(`PRAGMA table_info("DYN_cyclist")`);
-				const columnNames = new Set(
-					(columnInfo[0]?.values ?? []).map((r) => String(r[1])),
-				);
+				const columnNames = getTableColumnNames(db, "DYN_cyclist");
 				const hasMediumMountain = columnNames.has("charac_i_medium_mountain");
 				const hasCurrentAbility = columnNames.has("value_f_current_ability");
 

@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { cdbToSql } from "cdb-converter";
 import initSqlJs from "sql.js";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { getTableColumnNames } from "../../src/save-db";
 import { registerUpdateCyclistRatings } from "../../src/tools/update-cyclist-ratings";
 import { saveFixtures } from "../fixtures/save.fixture";
 import { createMockMcpServer } from "../mocks/mock-mcp-server";
@@ -201,9 +202,8 @@ describe("updateCyclistRatings", () => {
 		const db = cdbToSql(await readFile(path), SQL);
 		let hasMediumMountain: boolean;
 		try {
-			const columnInfo = db.exec(`PRAGMA table_info("DYN_cyclist")`);
-			hasMediumMountain = (columnInfo[0]?.values ?? []).some(
-				(r) => String(r[1]) === "charac_i_medium_mountain",
+			hasMediumMountain = getTableColumnNames(db, "DYN_cyclist").has(
+				"charac_i_medium_mountain",
 			);
 		} finally {
 			db.close();
