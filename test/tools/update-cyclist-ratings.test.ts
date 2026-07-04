@@ -70,7 +70,7 @@ describe("updateCyclistRatings", () => {
 			savePath: path,
 			outputPath,
 			cyclistId,
-			ratings: { sprint: 81, mountain: 42 },
+			ratings: { sprint: 81, mountain: 72 },
 		});
 
 		expect(result.isError).toBeUndefined();
@@ -79,7 +79,7 @@ describe("updateCyclistRatings", () => {
 			cyclist: {
 				id: cyclistId,
 				sprint: 81,
-				mountain: 42,
+				mountain: 72,
 			},
 		});
 		expect(
@@ -87,7 +87,7 @@ describe("updateCyclistRatings", () => {
 				"charac_i_sprint",
 				"charac_i_mountain",
 			]),
-		).toEqual([81, 42]);
+		).toEqual([81, 72]);
 	});
 
 	it.each(
