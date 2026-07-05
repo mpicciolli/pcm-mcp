@@ -11,7 +11,7 @@ const cyclistSchema = z.object({
 	country: z
 		.string()
 		.nullable()
-		.describe("Country name (STA_country.CONSTANT)"),
+		.describe("Country name (STA_country.gene_sz_flag), e.g. `France`"),
 	age: z
 		.number()
 		.nullable()
@@ -138,7 +138,7 @@ export function registerGetTeamRoster(server: McpServer): void {
 						tr.CONSTANT                AS type,
 						ct.iYearEnd                AS contractEndYear,
 						ct.finan_i_period_wage     AS wage,
-						co.CONSTANT                AS country,
+						co.gene_sz_flag            AS country,
 						${ratingsColumns(hasMediumMountain)}
 					FROM DYN_cyclist c
 					LEFT JOIN STA_type_rider tr ON c.fkIDtype_rider = tr.IDtype_rider

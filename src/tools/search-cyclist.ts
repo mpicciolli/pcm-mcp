@@ -10,7 +10,7 @@ const cyclistSchema = z.object({
 	country: z
 		.string()
 		.nullable()
-		.describe("Country name (STA_country.CONSTANT)"),
+		.describe("Country name (STA_country.gene_sz_flag), e.g. `France`"),
 	...ratingsSchema.shape,
 	currentAbility: z
 		.number()
@@ -70,7 +70,7 @@ export function registerSearchCyclist(server: McpServer): void {
 						c.gene_sz_lastname,
 						${ratingsColumns(hasMediumMountain)},
 						${hasCurrentAbility ? "c.value_f_current_ability" : "NULL"} AS currentAbility,
-						co.CONSTANT                AS country
+						co.gene_sz_flag            AS country
 					FROM DYN_cyclist c
 					LEFT JOIN STA_region r   ON c.fkIDregion = r.IDregion
 					LEFT JOIN STA_country co ON r.fkIDcountry = co.IDcountry
