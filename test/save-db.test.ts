@@ -11,7 +11,7 @@ import {
 	type Mock,
 	vi,
 } from "vitest";
-import { withSaveDb } from "../src/save-db";
+import { getTableColumnNames, withSaveDb } from "../src/save-db";
 
 // withSaveDb reads a real .cdb file but the cdb->SQL conversion needs the real
 // binary format, so we stub it out and hand back a fake in-memory database.
@@ -102,5 +102,40 @@ describe("withSaveDb", () => {
 		expect(result.isError).toBe(true);
 		expect(cdbToSqlMock).not.toHaveBeenCalled();
 		expect(fakeDb.close).not.toHaveBeenCalled();
+	});
+});
+
+describe("getTableColumnNames", () => {
+	// sql.js is mocked at module level for the withSaveDb tests; these tests
+	// need a real in-memory database, so pull in the actual module.
+	async function realDatabase() {
+		const { default: initSqlJs } =
+			await vi.importActual<typeof import("sql.js")>("sql.js");
+		const SQL = await initSqlJs();
+		return new SQL.Database();
+	}
+
+	it("returns the column names of a known table", async () => {
+		const db = await realDatabase();
+		try {
+			db.run(
+				"CREATE TABLE DYN_cyclist (IDcyclist INTEGER PRIMARY KEY, charac_i_sprint INTEGER)",
+			);
+
+			expect(getTableColumnNames(db, "DYN_cyclist")).toEqual(
+				new Set(["IDcyclist", "charac_i_sprint"]),
+			);
+		} finally {
+			db.close();
+		}
+	});
+
+	it("returns an empty set for an unknown table", async () => {
+		const db = await realDatabase();
+		try {
+			expect(getTableColumnNames(db, "not_a_table")).toEqual(new Set());
+		} finally {
+			db.close();
+		}
 	});
 });
