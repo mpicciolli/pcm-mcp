@@ -214,6 +214,7 @@ exports[`searchCyclist > finds cyclists by last name for Pro cycling manager 201
       "timeTrial": 59,
     },
   ],
+  "truncated": true,
 }
 `;
 
@@ -431,6 +432,7 @@ exports[`searchCyclist > finds cyclists by last name for Pro cycling manager 201
       "timeTrial": 59,
     },
   ],
+  "truncated": true,
 }
 `;
 
@@ -648,6 +650,7 @@ exports[`searchCyclist > finds cyclists by last name for Pro cycling manager 202
       "timeTrial": 68,
     },
   ],
+  "truncated": true,
 }
 `;
 
@@ -865,5 +868,6 @@ exports[`searchCyclist > finds cyclists by last name for Pro cycling manager 202
       "timeTrial": 62,
     },
   ],
+  "truncated": true,
 }
 `;

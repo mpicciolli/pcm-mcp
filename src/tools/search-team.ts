@@ -22,8 +22,15 @@ const teamSchema = z.object({
 		.describe("General manager name (gene_sz_manager_general)"),
 });
 
+const MAX_RESULTS = 10;
+
 const outputSchema = z.object({
 	teams: z.array(teamSchema).describe("Matching teams"),
+	truncated: z
+		.boolean()
+		.describe(
+			`Whether more matches exist beyond the ${MAX_RESULTS} returned — narrow the search with a longer name to see them`,
+		),
 });
 
 export function registerSearchTeam(server: McpServer): void {
@@ -32,7 +39,7 @@ export function registerSearchTeam(server: McpServer): void {
 		{
 			title: "Search PCM team by name",
 			description:
-				"Search for a team in a Pro Cycling Manager `.cdb` save file by name (case-insensitive partial match against both the full name and the short name). Returns up to 10 matching teams with their division name, country name, evaluation and general manager.",
+				"Search for a team in a Pro Cycling Manager `.cdb` save file by name (case-insensitive partial match against both the full name and the short name). Returns up to 10 matching teams with their division name, country name, evaluation and general manager; `truncated` is true when more matches exist beyond the 10 returned.",
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				name: z
@@ -65,10 +72,11 @@ export function registerSearchTeam(server: McpServer): void {
 					LEFT JOIN STA_country c ON t.fkIDcountry = c.IDcountry
 					WHERE LOWER(t.gene_sz_name)      LIKE LOWER(:name)
 					   OR LOWER(t.gene_sz_shortname) LIKE LOWER(:name)
-					LIMIT 10`,
+					LIMIT ${MAX_RESULTS + 1}`,
 				);
 
 				const teams: z.infer<typeof teamSchema>[] = [];
+				let truncated = false;
 				try {
 					const query = name.trim();
 					if (query.length === 0) {
@@ -78,6 +86,10 @@ export function registerSearchTeam(server: McpServer): void {
 					stmt.bind({ ":name": `%${query}%` });
 
 					while (stmt.step()) {
+						if (teams.length >= MAX_RESULTS) {
+							truncated = true;
+							break;
+						}
 						const row = stmt.getAsObject();
 						teams.push({
 							id: Number(row.id),
@@ -95,6 +107,7 @@ export function registerSearchTeam(server: McpServer): void {
 
 				const output: z.infer<typeof outputSchema> = {
 					teams,
+					truncated,
 				};
 				return output;
 			}),
