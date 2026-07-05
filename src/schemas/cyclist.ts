@@ -35,6 +35,30 @@ export const ratingsSchema = z.object({
 	baroudeur: z.number().describe("Baroudeur rating (charac_i_baroudeur)"),
 });
 
+/**
+ * Maps each {@link ratingsSchema} field to its `DYN_cyclist` column. Single
+ * source of truth for tools that write ratings back (the read path keeps its
+ * own aliased fragment in {@link ratingsColumns}).
+ */
+export const ratingColumns = {
+	plain: "charac_i_plain",
+	mountain: "charac_i_mountain",
+	mediumMountain: "charac_i_medium_mountain",
+	downhilling: "charac_i_downhilling",
+	cobble: "charac_i_cobble",
+	timeTrial: "charac_i_timetrial",
+	prologue: "charac_i_prologue",
+	sprint: "charac_i_sprint",
+	acceleration: "charac_i_acceleration",
+	endurance: "charac_i_endurance",
+	resistance: "charac_i_resistance",
+	recuperation: "charac_i_recuperation",
+	hill: "charac_i_hill",
+	baroudeur: "charac_i_baroudeur",
+} as const satisfies Record<keyof z.infer<typeof ratingsSchema>, string>;
+
+export type RatingField = keyof typeof ratingColumns;
+
 /** SQL `SELECT` fragment that aliases the rating columns to {@link ratingsSchema}'s
  * field names. `mediumMountain` falls back to `NULL` on saves that pre-date the
  * `charac_i_medium_mountain` column. */

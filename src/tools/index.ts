@@ -1,11 +1,12 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { registerListSaves } from "./list-saves";
-import { registerSelectSave } from "./select-save";
+import { registerValidateSave } from "./validate-save";
 import { registerGetSaveSchema } from "./get-save-schema";
 import { registerGetTableSchema } from "./get-table-schema";
 import { registerGetPlayerInfo } from "./get-player-info";
 import { registerGetTeamRoster } from "./get-team-roster";
 import { registerQuerySave } from "./query-save";
+import { registerUpdateCyclistRatings } from "./update-cyclist-ratings";
 import { registerUpdateSave } from "./update-save";
 import { registerSearchCyclist } from "./search-cyclist";
 import { registerGenerateStartlistXml } from "./generate-startlist-xml";
@@ -13,13 +14,14 @@ import { registerSearchTeam } from "./search-team";
 
 export function registerTools(server: McpServer): void {
 	registerListSaves(server);
-	registerSelectSave(server);
+	registerValidateSave(server);
 	registerGetSaveSchema(server);
 	registerGetTableSchema(server);
 	registerGetPlayerInfo(server);
 	registerGetTeamRoster(server);
 	registerQuerySave(server);
 	registerUpdateSave(server);
+	registerUpdateCyclistRatings(server);
 	registerSearchCyclist(server);
 	registerGenerateStartlistXml(server);
 	registerSearchTeam(server);

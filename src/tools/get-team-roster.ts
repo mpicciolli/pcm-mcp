@@ -2,7 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { mapRatings, ratingsColumns, ratingsSchema } from "../schemas/cyclist";
 import { ageFromYmd } from "../helpers";
-import { getGameDate, withSaveDb } from "../save-db";
+import { getGameDate, getTableColumnNames, withSaveDb } from "../save-db";
 
 const cyclistSchema = z.object({
 	id: z.number().describe("Cyclist ID (IDcyclist)"),
@@ -11,7 +11,7 @@ const cyclistSchema = z.object({
 	country: z
 		.string()
 		.nullable()
-		.describe("Country name (STA_country.CONSTANT)"),
+		.describe("Country name (STA_country.gene_sz_flag), e.g. `France`"),
 	age: z
 		.number()
 		.nullable()
@@ -117,12 +117,7 @@ export function registerGetTeamRoster(server: McpServer): void {
 				// The current in-game date (YYYYMMDD) is the reference point for age.
 				const currentYmd = getGameDate(db);
 
-				// Some columns are absent on saves that pre-date them — detect them so
-				// the query stays valid across PCM versions.
-				const columnInfo = db.exec(`PRAGMA table_info("DYN_cyclist")`);
-				const columnNames = new Set(
-					(columnInfo[0]?.values ?? []).map((r) => String(r[1])),
-				);
+				const columnNames = getTableColumnNames(db, "DYN_cyclist");
 				const hasCurrentAbility = columnNames.has("value_f_current_ability");
 				const hasCapital = columnNames.has("value_f_capital");
 				const hasMediumMountain = columnNames.has("charac_i_medium_mountain");
@@ -138,7 +133,7 @@ export function registerGetTeamRoster(server: McpServer): void {
 						tr.CONSTANT                AS type,
 						ct.iYearEnd                AS contractEndYear,
 						ct.finan_i_period_wage     AS wage,
-						co.CONSTANT                AS country,
+						co.gene_sz_flag            AS country,
 						${ratingsColumns(hasMediumMountain)}
 					FROM DYN_cyclist c
 					LEFT JOIN STA_type_rider tr ON c.fkIDtype_rider = tr.IDtype_rider

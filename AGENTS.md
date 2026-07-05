@@ -4,13 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A **read-only** Model Context Protocol (MCP) server that exposes Pro Cycling Manager
-(PCM) game saves to an LLM client over stdio. PCM stores careers as binary `.cdb`
-files; this server discovers and inspects those saves but **never writes to or
-modifies them**. Each call re-reads the `.cdb` from disk and loads it into an
-in-memory sql.js (SQLite) database (via `cdb-converter`), so the on-disk save is
-the single source of truth and is never mutated. Any new tool must keep this
-read-only guarantee.
+A Model Context Protocol (MCP) server that exposes Pro Cycling Manager (PCM) game
+saves to an LLM client over stdio. PCM stores careers as binary `.cdb` files; this
+server discovers and inspects those saves and **never modifies the source save**.
+Each call re-reads the `.cdb` from disk and loads it into an in-memory sql.js
+(SQLite) database (via `cdb-converter`), so the on-disk save is the single source
+of truth. Write tools (`pcm_update_save`, `pcm_update_cyclist_ratings`) mutate the
+in-memory copy and serialize it to a **new** `.cdb` via `writeSaveDb`, which
+refuses to overwrite the source or any existing file. Any new tool must keep this
+never-touch-the-source guarantee.
 
 ## Stack
 
@@ -26,15 +28,15 @@ read-only guarantee.
 ```
 src/
   index.ts        # entrypoint: builds McpServer, registers tools, connects stdio
-  saves.ts        # save discovery + validation (listSaves, validateSave, getPcmRoot)
-  save-db.ts      # withSaveDb(): open .cdb in-memory, run fn, always close db; getGameDate()
-  helpers.ts      # validResponse / errorResponse → CallToolResult; ageFromYmd(); buildStartlistXml
+  saves.ts        # discover .cdb saves on disk and validate paths passed by tools
+  save-db.ts      # everything touching the database: open a save in memory, serialize an edited copy, schema/game-date introspection
+  helpers.ts      # cross-cutting utilities: MCP tool responses, SQL statement parsing/errors, dates, startlist XML
   schemas/
-    cyclist.ts          # shared cyclist ratings: ratingsSchema / ratingsColumns() / mapRatings()
+    cyclist.ts          # shared cyclist ratings schema and its SQL read/write mappings
   tools/
-    index.ts              # registerTools() — wires every tool onto the server
+    index.ts              # wires every tool onto the server
     list-saves.ts         # pcm_list_saves
-    select-save.ts        # pcm_select_save
+    validate-save.ts      # pcm_validate_save
     get-save-schema.ts    # pcm_get_save_schema
     get-table-schema.ts   # pcm_get_table_schema
     get-player-info.ts    # pcm_get_player_info
@@ -42,18 +44,20 @@ src/
     search-cyclist.ts     # pcm_search_cyclist
     search-team.ts        # pcm_search_team
     query-save.ts         # pcm_query_save
+    update-save.ts        # pcm_update_save
+    update-cyclist-ratings.ts  # pcm_update_cyclist_ratings
     generate-startlist-xml.ts  # pcm_generate_startlist_xml
 test/                 # vitest specs (test/**/*.test.ts)
 ```
 
 ## Tools
 
-All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructiveHint: false` annotations so clients can auto-approve them.
+All tools are prefixed with `pcm_`. Read tools carry `readOnlyHint: true` / `destructiveHint: false` annotations so clients can auto-approve them. The two write tools (`pcm_update_save`, `pcm_update_cyclist_ratings`) carry `readOnlyHint: false`, but also `destructiveHint: false`: `writeSaveDb` refuses `outputPath === savePath` and refuses to overwrite an existing file at `outputPath`, so the operation can only ever create a brand-new `.cdb` — it never destroys existing data.
 
 | Tool                         | Purpose                                                                                                                                                                                                                                               |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `pcm_list_saves`             | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).                                                                                                                                          |
-| `pcm_select_save`            | Validate a `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools.                                                                                                                                |
+| `pcm_validate_save`          | Validate a `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools.                                                                                                                                |
 | `pcm_get_save_schema`        | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                                                                                                                                                             |
 | `pcm_get_table_schema`       | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                                                                                                                                                    |
 | `pcm_get_player_info`        | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                                                                                                                                                    |
@@ -61,6 +65,8 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 | `pcm_search_cyclist`         | Search cyclist by first/last name (partial, case-insensitive).                                                                                                                                                                                        |
 | `pcm_search_team`            | Search team by name (partial, case-insensitive; matches full name and short name).                                                                                                                                                                    |
 | `pcm_query_save`             | Run a single read-only `SELECT`/`WITH … SELECT`. Write/DDL rejected; results capped (default 100, max 1000).                                                                                                                                          |
+| `pcm_update_save`            | Apply a single `INSERT`/`UPDATE`/`DELETE` to a save and write the result to a **new** `.cdb` (`outputPath` must differ from `savePath`). SELECT/DDL/stacked statements rejected.                                                                      |
+| `pcm_update_cyclist_ratings` | Change one or more `charac_i_*` ratings of a cyclist (by `IDcyclist`, ratings 55–85) and write the result to a **new** `.cdb`. Returns the cyclist's full ratings after the update.                                                                   |
 | `pcm_generate_startlist_xml` | Build a PCM startlist XML from teams + rosters; derives the file name from `STA_race.gene_sz_filename` for the given `IDrace`.                                                                                                                        |
 
 ## Conventions
@@ -80,13 +86,16 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 - **Tool responses** go through `validResponse` / `errorResponse`; declare both
   `inputSchema` and `outputSchema` with zod.
 - **Tool annotations** — every tool must include `readOnlyHint`, `destructiveHint`,
-  `idempotentHint`, and `openWorldHint`. All current tools are read-only
-  (`readOnlyHint: true`, `destructiveHint: false`).
+  `idempotentHint`, and `openWorldHint`. Read tools use `readOnlyHint: true` /
+  `destructiveHint: false`; write tools the inverse.
 - **Tool naming** — all tools are prefixed with `pcm_` (e.g. `pcm_list_saves`) to
   avoid conflicts when used alongside other MCP servers.
 - **Platform:** auto-discovery is Windows-only. On macOS/Linux (Wine/Proton),
-  `pcm_list_saves`/`getPcmRoot` throw — pass an absolute `.cdb` path to `pcm_select_save`.
+  `pcm_list_saves`/`getPcmRoot` throw — pass an absolute `.cdb` path to `pcm_validate_save`.
 - **Logging** must go to `stderr` (`console.error`); stdout is the MCP transport.
+- **Country fields** must use `STA_country.gene_sz_flag` (human-readable name, e.g.
+  `France`), never `STA_country.CONSTANT` (internal constant). Keep this consistent
+  across all tools that expose a cyclist/team country.
 
 ## README maintenance
 
