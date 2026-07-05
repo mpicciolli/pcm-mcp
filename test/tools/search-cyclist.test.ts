@@ -39,6 +39,7 @@ describe("searchCyclist", () => {
 			cyclists: unknown[];
 			truncated: boolean;
 		};
+		expect(result.isError).toBe(false);
 		expect(output.cyclists).toHaveLength(10);
 		expect(output.truncated).toBe(true);
 	});
