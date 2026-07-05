@@ -28,7 +28,7 @@
 - **Raw SQL** — run guarded, read-only `SELECT` queries against any table in the save.
 - **Guarded edits** — apply a single `INSERT`/`UPDATE`/`DELETE`, or edit a cyclist's ratings directly, and write the result to a new `.cdb`, never touching the original.
 - **Startlist export** — generate a PCM-ready startlist XML from a set of teams and rosters.
-- **Safe by design** — read tools are annotated `readOnlyHint: true` for auto-approval; the write tools write only to a separate output file and never overwrite an existing one.
+- **Safe by design** — read tools are auto-approved by MCP clients; the write tools write only to a separate output file and never overwrite an existing one.
 
 ## Getting started
 
@@ -81,7 +81,7 @@ Auto-discovery via `pcm_list_saves` is therefore **Windows only**. On macOS/Linu
 
 ## Available tools
 
-All tools are prefixed with `pcm_`. Every tool except `pcm_update_save` and `pcm_update_cyclist_ratings` is read-only and carries `readOnlyHint: true` so clients like Claude Desktop can approve them automatically without a confirmation prompt. The write tools never overwrite the source save.
+All tools are prefixed with `pcm_`. Every tool except `pcm_update_save` and `pcm_update_cyclist_ratings` is read-only, so clients like Claude Desktop can approve them automatically without a confirmation prompt. The two write tools never overwrite the source save or any existing file — they can only create a new `.cdb`.
 
 | Tool                           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

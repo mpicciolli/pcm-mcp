@@ -52,7 +52,7 @@ test/                 # vitest specs (test/**/*.test.ts)
 
 ## Tools
 
-All tools are prefixed with `pcm_`. Read tools carry `readOnlyHint: true` / `destructiveHint: false` annotations so clients can auto-approve them; the two write tools (`pcm_update_save`, `pcm_update_cyclist_ratings`) carry `readOnlyHint: false` / `destructiveHint: true`.
+All tools are prefixed with `pcm_`. Read tools carry `readOnlyHint: true` / `destructiveHint: false` annotations so clients can auto-approve them. The two write tools (`pcm_update_save`, `pcm_update_cyclist_ratings`) carry `readOnlyHint: false`, but also `destructiveHint: false`: `writeSaveDb` refuses `outputPath === savePath` and refuses to overwrite an existing file at `outputPath`, so the operation can only ever create a brand-new `.cdb` — it never destroys existing data.
 
 | Tool                         | Purpose                                                                                                                                                                                                                                               |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
