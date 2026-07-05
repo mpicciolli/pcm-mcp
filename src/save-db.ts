@@ -37,6 +37,23 @@ export function getGameDate(db: SaveDb): number | null {
 }
 
 /**
+ * Column names of `tableName` as a Set, via `PRAGMA table_info`.
+ *
+ * Some columns are absent on saves that pre-date them — check membership with
+ * `.has()` so queries stay valid across PCM versions. Returns an empty set for
+ * unknown tables.
+ */
+export function getTableColumnNames(
+	db: SaveDb,
+	tableName: string,
+): Set<string> {
+	const columnInfo = db.exec(
+		`PRAGMA table_info("${tableName.replaceAll('"', '""')}")`,
+	);
+	return new Set((columnInfo[0]?.values ?? []).map((r) => String(r[1])));
+}
+
+/**
  * Open a Pro Cycling Manager `.cdb` save as an in-memory SQL database, run
  * `fn`, and wrap the result in an MCP tool response.
  *
