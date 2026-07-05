@@ -35,7 +35,7 @@ const CLOUD_DIR = "Cloud";
  * a SteamID64 or a profile name). On macOS/Linux the
  * saves live inside a Wine/Proton prefix that we can't reliably locate, so
  * auto-discovery is unsupported there — pass an absolute `.cdb` path to
- * `select_save` instead.
+ * `pcm_select_save` instead.
  *
  * @throws on non-Windows platforms.
  */
@@ -44,7 +44,7 @@ export function getPcmRoot(): string {
 		throw new Error(
 			"Pro Cycling Manager save auto-discovery is only supported on Windows. " +
 				"On macOS/Linux the saves live inside a Wine/Proton prefix — " +
-				"pass an absolute .cdb path to select_save instead.",
+				"pass an absolute .cdb path to pcm_select_save instead.",
 		);
 	}
 	return process.env.APPDATA ?? join(homedir(), "AppData", "Roaming");
@@ -128,7 +128,7 @@ export async function listSaves(
 		throw new Error(
 			`No Pro Cycling Manager data found. Expected a "Pro Cycling Manager <year>" folder under: ${root}. ` +
 				"PCM may not be installed, or its saves live in a custom location — " +
-				"pass an absolute .cdb path to select_save instead.",
+				"pass an absolute .cdb path to pcm_select_save instead.",
 		);
 	}
 
