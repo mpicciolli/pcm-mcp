@@ -1,10 +1,31 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { DATABASE_REFERENCE_URI } from "../reference";
 import { explainQueryError, parseSingleStatement } from "../helpers";
 import { withSaveDb } from "../save-db";
 
 const DEFAULT_LIMIT = 100;
 const MAX_LIMIT = 1000;
+
+/**
+ * A condensed save-schema cheatsheet kept in the tool description (returned on
+ * every turn) so the model can write correct joins without an extra lookup.
+ * Deliberately short — the full reference (FK exceptions, examples) lives in the
+ * `pcm://docs/database` resource; keep this in sync with `DATABASE.md`.
+ */
+const SCHEMA_CHEATSHEET = `## Save schema cheatsheet
+Full reference: read the \`${DATABASE_REFERENCE_URI}\` resource.
+- **Table prefixes**: \`DYN_\` = mutable career data (\`DYN_cyclist\`, \`DYN_team\`, \`DYN_contract_cyclist\`); \`STA_\` = static lookups/enums (\`STA_country\`, \`STA_race\`, \`STA_type_rider\`); \`GAM_\` = session/player state; \`DB_STRUCTURE\` lists every table.
+- **Column type by prefix**: \`_i_\`/\`fkID\`/\`ID\` = INTEGER, \`_sz_\` = TEXT, \`_f_\` = REAL, \`_b_\` = boolean, \`_ilist_\` = serialized int list. Declared types carry a numeric offset (e.g. \`INTEGER 499717\`) — match on affinity, not equality.
+- **Foreign keys**: \`fkID{Suffix}\` → \`{DYN|STA|GAM}_{Suffix}\`, joined on the target's \`ID{Suffix}\`. The suffix is semantic — watch exceptions (\`fkIDteam_duplicate\` → \`DYN_team.IDteam\`; \`fkIDnextdivision\` → \`STA_division.IDdivision\`).
+- **Display labels**: \`DYN_*\` use \`gene_sz_name\`; \`STA_*\` usually key off \`CONSTANT\` (enum string), with exceptions like \`STA_country.gene_sz_flag\`. \`gene_strID_*\` are string-table indices, not labels.`;
+
+function buildDescription(): string {
+	const base =
+		"Run a read-only SQL query against any table in a Pro Cycling Manager `.cdb` save file. Only a single SELECT (or WITH … SELECT) statement is allowed; write/DDL statements are rejected and the save is never modified. Results are capped (default 100, max 1000 rows). Use `pcm_get_save_schema` to discover table names and `pcm_get_table_schema` to inspect their columns.";
+
+	return `${base}\n\n${SCHEMA_CHEATSHEET}`;
+}
 
 const outputSchema = z.object({
 	columns: z.array(z.string()).describe("Column names returned by the query"),
@@ -23,8 +44,7 @@ export function registerQuerySave(server: McpServer): void {
 		"pcm_query_save",
 		{
 			title: "Query PCM save (read-only)",
-			description:
-				"Run a read-only SQL query against any table in a Pro Cycling Manager `.cdb` save file. Only a single SELECT (or WITH … SELECT) statement is allowed; write/DDL statements are rejected and the save is never modified. Results are capped (default 100, max 1000 rows). Use `pcm_get_save_schema` to discover table names and `pcm_get_table_schema` to inspect their columns.",
+			description: buildDescription(),
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				query: z

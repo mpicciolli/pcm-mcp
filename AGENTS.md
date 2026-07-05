@@ -29,6 +29,9 @@ src/
   saves.ts        # save discovery + validation (listSaves, validateSave, getPcmRoot)
   save-db.ts      # withSaveDb(): open .cdb in-memory, run fn, always close db; getGameDate()
   helpers.ts      # validResponse / errorResponse → CallToolResult; ageFromYmd(); buildStartlistXml
+  reference.ts    # loads DATABASE.md (DATABASE_REFERENCE) for the query tool + resource
+  resources/
+    database.ts         # pcm://docs/database resource (serves DATABASE.md)
   schemas/
     cyclist.ts          # shared cyclist ratings: ratingsSchema / ratingsColumns() / mapRatings()
   tools/
@@ -77,6 +80,22 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
   forbidden-keyword guard).
 - **Guard against SQL injection** when interpolating identifiers: validate table
   names against `DB_STRUCTURE` before building queries (see `get_table_schema`).
+- **Save database conventions** (table prefixes, column typing, foreign keys,
+  display columns) are documented in [`DATABASE.md`](DATABASE.md), the single
+  source of truth. It is surfaced to the LLM two ways: the full document is
+  served as the `pcm://docs/database` resource (imported in `src/reference.ts`
+  and inlined into the bundle at build time via the esbuild `text` loader in
+  `tsup.config.ts`, mirrored by a Vite plugin in `vitest.config.ts`, so nothing
+  ships alongside `dist/`); a **condensed cheatsheet** (`SCHEMA_CHEATSHEET` in
+  `query-save.ts`) is kept in the `pcm_query_save` description to stay cheap on
+  every turn.
+  - **Whenever you change [`DATABASE.md`](DATABASE.md), update the
+    `SCHEMA_CHEATSHEET` in `query-save.ts` in the same change** so the tool
+    description stays in sync. The resource picks up `DATABASE.md`
+    automatically, but the cheatsheet is a hand-maintained summary and will
+    drift otherwise. Only the essentials (table/column prefixes, the FK
+    pattern with its key exceptions, display columns) belong in the cheatsheet —
+    the full detail lives in `DATABASE.md` / the resource.
 - **Tool responses** go through `validResponse` / `errorResponse`; declare both
   `inputSchema` and `outputSchema` with zod.
 - **Tool annotations** — every tool must include `readOnlyHint`, `destructiveHint`,

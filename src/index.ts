@@ -1,7 +1,8 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { registerRessources } from "./resources";
 import { registerTools } from "./tools/index";
 
 const { version } = JSON.parse(
@@ -14,6 +15,7 @@ const server = new McpServer({
 });
 
 registerTools(server);
+registerRessources(server);
 
 async function main() {
 	const transport = new StdioServerTransport();
