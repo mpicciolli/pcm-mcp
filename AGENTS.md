@@ -87,6 +87,9 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 - **Platform:** auto-discovery is Windows-only. On macOS/Linux (Wine/Proton),
   `pcm_list_saves`/`getPcmRoot` throw — pass an absolute `.cdb` path to `pcm_select_save`.
 - **Logging** must go to `stderr` (`console.error`); stdout is the MCP transport.
+- **Country fields** must use `STA_country.gene_sz_flag` (human-readable name, e.g.
+  `France`), never `STA_country.CONSTANT` (internal constant). Keep this consistent
+  across all tools that expose a cyclist/team country.
 
 ## README maintenance
 
