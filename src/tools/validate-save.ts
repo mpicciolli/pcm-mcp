@@ -14,11 +14,11 @@ const outputSchema = z.object({
 	sizeBytes: z.number().describe("File size in bytes"),
 });
 
-export function registerSelectSave(server: McpServer): void {
+export function registerValidateSave(server: McpServer): void {
 	server.registerTool(
-		"pcm_select_save",
+		"pcm_validate_save",
 		{
-			title: "Select PCM save",
+			title: "Validate PCM save",
 			description:
 				"Validate that an absolute path points to an existing Pro Cycling Manager `.cdb` save file and return its metadata. Stateless: nothing is stored — keep the returned path in conversation context to pass to later tools.",
 			inputSchema: {
