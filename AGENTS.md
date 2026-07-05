@@ -34,7 +34,7 @@ src/
   tools/
     index.ts              # registerTools() — wires every tool onto the server
     list-saves.ts         # pcm_list_saves
-    select-save.ts        # pcm_select_save
+    validate-save.ts      # pcm_validate_save
     get-save-schema.ts    # pcm_get_save_schema
     get-table-schema.ts   # pcm_get_table_schema
     get-player-info.ts    # pcm_get_player_info
@@ -53,7 +53,7 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 | Tool                         | Purpose                                                                                                                                                                                                                                               |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `pcm_list_saves`             | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).                                                                                                                                          |
-| `pcm_select_save`            | Validate a `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools.                                                                                                                                |
+| `pcm_validate_save`            | Validate a `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools.                                                                                                                                |
 | `pcm_get_save_schema`        | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                                                                                                                                                             |
 | `pcm_get_table_schema`       | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                                                                                                                                                    |
 | `pcm_get_player_info`        | Active human player + team (joins `GAM_user` `game_i_active = 1` with `DYN_team`).                                                                                                                                                                    |
@@ -85,7 +85,7 @@ All tools are prefixed with `pcm_` and carry `readOnlyHint: true` / `destructive
 - **Tool naming** — all tools are prefixed with `pcm_` (e.g. `pcm_list_saves`) to
   avoid conflicts when used alongside other MCP servers.
 - **Platform:** auto-discovery is Windows-only. On macOS/Linux (Wine/Proton),
-  `pcm_list_saves`/`getPcmRoot` throw — pass an absolute `.cdb` path to `pcm_select_save`.
+  `pcm_list_saves`/`getPcmRoot` throw — pass an absolute `.cdb` path to `pcm_validate_save`.
 - **Logging** must go to `stderr` (`console.error`); stdout is the MCP transport.
 
 ## README maintenance
