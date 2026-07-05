@@ -97,7 +97,7 @@ export function registerUpdateCyclistRatings(server: McpServer): void {
 			outputSchema,
 			annotations: {
 				readOnlyHint: false,
-				destructiveHint: true,
+				destructiveHint: false,
 				idempotentHint: false,
 				openWorldHint: false,
 			},
