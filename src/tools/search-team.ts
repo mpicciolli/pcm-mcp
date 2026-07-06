@@ -72,6 +72,7 @@ export function registerSearchTeam(server: McpServer): void {
 					LEFT JOIN STA_country c ON t.fkIDcountry = c.IDcountry
 					WHERE LOWER(t.gene_sz_name)      LIKE LOWER(:name)
 					   OR LOWER(t.gene_sz_shortname) LIKE LOWER(:name)
+					ORDER BY t.gene_sz_name, t.IDteam
 					LIMIT ${MAX_RESULTS + 1}`,
 				);
 

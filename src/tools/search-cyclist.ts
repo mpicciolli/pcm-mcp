@@ -80,6 +80,7 @@ export function registerSearchCyclist(server: McpServer): void {
 					LEFT JOIN STA_country co ON r.fkIDcountry = co.IDcountry
 					WHERE LOWER(c.gene_sz_lastname)  LIKE LOWER(:lastName)
 					  AND LOWER(c.gene_sz_firstname) LIKE LOWER(:firstName)
+					ORDER BY c.gene_sz_lastname, c.gene_sz_firstname, c.IDcyclist
 					LIMIT ${MAX_RESULTS + 1}`,
 				);
 
