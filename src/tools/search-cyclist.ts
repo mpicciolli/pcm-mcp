@@ -36,8 +36,7 @@ export function registerSearchCyclist(server: McpServer): void {
 		"pcm_search_cyclist",
 		{
 			title: "Search PCM cyclist by name",
-			description:
-				"Search for a cyclist in a Pro Cycling Manager `.cdb` save file by first name and/or last name (case-insensitive partial match). Returns up to 10 matching cyclists with all their ratings and their country name; `truncated` is true when more matches exist beyond the 10 returned.",
+			description: `Search for a cyclist in a Pro Cycling Manager \`.cdb\` save file by first name and/or last name (case-insensitive partial match). Returns up to ${MAX_RESULTS} matching cyclists with all their ratings and their country name; \`truncated\` is true when more matches exist beyond the ${MAX_RESULTS} returned.`,
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				firstName: z

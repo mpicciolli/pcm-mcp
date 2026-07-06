@@ -38,8 +38,7 @@ export function registerSearchTeam(server: McpServer): void {
 		"pcm_search_team",
 		{
 			title: "Search PCM team by name",
-			description:
-				"Search for a team in a Pro Cycling Manager `.cdb` save file by name (case-insensitive partial match against both the full name and the short name). Returns up to 10 matching teams with their division name, country name, evaluation and general manager; `truncated` is true when more matches exist beyond the 10 returned.",
+			description: `Search for a team in a Pro Cycling Manager \`.cdb\` save file by name (case-insensitive partial match against both the full name and the short name). Returns up to ${MAX_RESULTS} matching teams with their division name, country name, evaluation and general manager; \`truncated\` is true when more matches exist beyond the ${MAX_RESULTS} returned.`,
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				name: z
