@@ -20,8 +20,15 @@ const cyclistSchema = z.object({
 		),
 });
 
+const MAX_RESULTS = 10;
+
 const outputSchema = z.object({
 	cyclists: z.array(cyclistSchema).describe("Matching cyclists"),
+	truncated: z
+		.boolean()
+		.describe(
+			`Whether more matches exist beyond the ${MAX_RESULTS} returned — narrow the search with a longer name to see them`,
+		),
 });
 
 export function registerSearchCyclist(server: McpServer): void {
@@ -29,8 +36,7 @@ export function registerSearchCyclist(server: McpServer): void {
 		"pcm_search_cyclist",
 		{
 			title: "Search PCM cyclist by name",
-			description:
-				"Search for a cyclist in a Pro Cycling Manager `.cdb` save file by first name and/or last name (case-insensitive partial match). Returns up to 10 matching cyclists with all their ratings and their country name.",
+			description: `Search for a cyclist in a Pro Cycling Manager \`.cdb\` save file by first name and/or last name (case-insensitive partial match). Returns up to ${MAX_RESULTS} matching cyclists with all their ratings and their country name; \`truncated\` is true when more matches exist beyond the ${MAX_RESULTS} returned.`,
 			inputSchema: {
 				savePath: z.string().describe("Absolute path to the .cdb save file"),
 				firstName: z
@@ -73,10 +79,12 @@ export function registerSearchCyclist(server: McpServer): void {
 					LEFT JOIN STA_country co ON r.fkIDcountry = co.IDcountry
 					WHERE LOWER(c.gene_sz_lastname)  LIKE LOWER(:lastName)
 					  AND LOWER(c.gene_sz_firstname) LIKE LOWER(:firstName)
-					LIMIT 10`,
+					ORDER BY c.gene_sz_lastname, c.gene_sz_firstname, c.IDcyclist
+					LIMIT ${MAX_RESULTS + 1}`,
 				);
 
 				const cyclists: z.infer<typeof cyclistSchema>[] = [];
+				let truncated = false;
 				try {
 					const first = firstName.trim();
 					const last = lastName.trim();
@@ -90,6 +98,10 @@ export function registerSearchCyclist(server: McpServer): void {
 					});
 
 					while (stmt.step()) {
+						if (cyclists.length >= MAX_RESULTS) {
+							truncated = true;
+							break;
+						}
 						const row = stmt.getAsObject();
 						cyclists.push({
 							id: Number(row.IDcyclist),
@@ -107,6 +119,7 @@ export function registerSearchCyclist(server: McpServer): void {
 
 				const output: z.infer<typeof outputSchema> = {
 					cyclists,
+					truncated,
 				};
 				return output;
 			}),

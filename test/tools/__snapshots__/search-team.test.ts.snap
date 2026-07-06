@@ -13,6 +13,7 @@ exports[`searchTeam > finds teams by name for Pro cycling manager 2018 1`] = `
       "shortName": "Movistar",
     },
   ],
+  "truncated": false,
 }
 `;
 
@@ -29,6 +30,7 @@ exports[`searchTeam > finds teams by name for Pro cycling manager 2019 1`] = `
       "shortName": "Movistar",
     },
   ],
+  "truncated": false,
 }
 `;
 
@@ -45,6 +47,7 @@ exports[`searchTeam > finds teams by name for Pro cycling manager 2021 1`] = `
       "shortName": "Movistar",
     },
   ],
+  "truncated": false,
 }
 `;
 
@@ -61,5 +64,6 @@ exports[`searchTeam > finds teams by name for Pro cycling manager 2025 1`] = `
       "shortName": "Movistar",
     },
   ],
+  "truncated": false,
 }
 `;

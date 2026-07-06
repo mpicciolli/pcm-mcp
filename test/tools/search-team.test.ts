@@ -27,6 +27,20 @@ describe("searchTeam", () => {
 		expect(result.structuredContent).toMatchSnapshot();
 	});
 
+	it("caps results at 10 and flags truncation for a broad search", async () => {
+		const result = await mcp.callTool("pcm_search_team", {
+			savePath: saveFixtures[0][1],
+			name: "a",
+		});
+
+		const output = result.structuredContent as {
+			teams: unknown[];
+			truncated: boolean;
+		};
+		expect(output.teams).toHaveLength(10);
+		expect(output.truncated).toBe(true);
+	});
+
 	it("returns an error when the name is empty", async () => {
 		const result = await mcp.callTool("pcm_search_team", {
 			savePath: saveFixtures[0][1],

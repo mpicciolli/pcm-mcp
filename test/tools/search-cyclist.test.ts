@@ -29,6 +29,20 @@ describe("searchCyclist", () => {
 		expect(result.structuredContent).toMatchSnapshot();
 	});
 
+	it("caps results at 10 and flags truncation for a broad search", async () => {
+		const result = await mcp.callTool("pcm_search_cyclist", {
+			savePath: saveFixtures[0][1],
+			lastName: "a",
+		});
+
+		const output = result.structuredContent as {
+			cyclists: unknown[];
+			truncated: boolean;
+		};
+		expect(output.cyclists).toHaveLength(10);
+		expect(output.truncated).toBe(true);
+	});
+
 	it("returns an error when neither name is provided", async () => {
 		const result = await mcp.callTool("pcm_search_cyclist", {
 			savePath: saveFixtures[0][1],
