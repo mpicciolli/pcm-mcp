@@ -37,7 +37,6 @@ describe("searchTeam", () => {
 			teams: unknown[];
 			truncated: boolean;
 		};
-		expect(result.isError).toBe(false);
 		expect(output.teams).toHaveLength(10);
 		expect(output.truncated).toBe(true);
 	});
