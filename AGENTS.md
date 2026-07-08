@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 A Model Context Protocol (MCP) server that exposes Pro Cycling Manager (PCM) game
-saves to an LLM client over stdio. PCM stores careers as binary `.cdb` files; this
+save files to an LLM client over stdio. PCM stores databases and saves as binary `.cdb` files; this
 server discovers and inspects those saves and **never modifies the source save**.
 Each call re-reads the `.cdb` from disk and loads it into an in-memory sql.js
 (SQLite) database (via `cdb-converter`), so the on-disk save is the single source
@@ -56,7 +56,7 @@ All tools are prefixed with `pcm_`. Read tools carry `readOnlyHint: true` / `des
 
 | Tool                         | Purpose                                                                                                                                                                                                                                               |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pcm_list_saves`             | Discover `.cdb` careers by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).                                                                                                                                          |
+| `pcm_list_saves`             | Discover `.cdb` save files by scanning `Pro Cycling Manager <year>/Cloud` under `%APPDATA%` (**Windows only**).                                                                                                                                       |
 | `pcm_validate_save`          | Validate a `.cdb` path and return metadata. Stateless — the path must be kept in conversation context for later tools.                                                                                                                                |
 | `pcm_get_save_schema`        | List all tables (id + name) in a save via `DB_STRUCTURE`.                                                                                                                                                                                             |
 | `pcm_get_table_schema`       | Inspect one table: columns (name, type, NOT NULL, PK) + row count.                                                                                                                                                                                    |

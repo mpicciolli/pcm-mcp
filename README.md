@@ -15,7 +15,7 @@
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-compatible-blue.svg" alt="MCP compatible" /></a>
 </p>
 
-`pcm-mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants such as Claude Desktop, ChatGPT and Gemini query your [Pro Cycling Manager](https://www.cyanide-studio.com/) (PCM) game saves. Ask about a rider's ratings, browse a team's roster, run SQL against the save, or generate a race startlist — all in plain language.
+`pcm-mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants such as Claude Desktop, ChatGPT and Gemini query your [Pro Cycling Manager](https://www.cyanide-studio.com/) (PCM) game saves. Ask about a rider's ratings, browse a team's roster, run SQL against the database, or generate a race startlist — all in plain language.
 
 > [!IMPORTANT]
 > This server never modifies your existing save files. PCM stores saves as binary `.cdb` files; each call re-reads the `.cdb` from disk and loads it into an **in-memory** SQLite database. Every read tool leaves the source untouched. The write tools, `pcm_update_save` and `pcm_update_cyclist_ratings`, serialize their changes to a **new** `.cdb` file (`outputPath`) and refuse to overwrite the input — keep your original save as a backup.
