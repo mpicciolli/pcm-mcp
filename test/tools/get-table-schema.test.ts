@@ -17,15 +17,16 @@ describe("getTableSchema", () => {
 		expect(mcp.registerTool).toHaveBeenCalledOnce();
 	});
 
-	it.each(
-		saveFixtures,
-	)("returns STA_race table schema for %s", async (name, path) => {
-		const result = await mcp.callTool("pcm_get_table_schema", {
-			savePath: path,
-			tableName: "STA_race",
-		});
+	it.each(saveFixtures)(
+		"returns STA_race table schema for %s",
+		async (name, path) => {
+			const result = await mcp.callTool("pcm_get_table_schema", {
+				savePath: path,
+				tableName: "STA_race",
+			});
 
-		expect(result.structuredContent).toBeDefined();
-		expect(result.structuredContent).toMatchSnapshot();
-	});
+			expect(result.structuredContent).toBeDefined();
+			expect(result.structuredContent).toMatchSnapshot();
+		},
+	);
 });

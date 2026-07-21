@@ -17,17 +17,18 @@ describe("getTeamRoster", () => {
 		expect(mcp.registerTool).toHaveBeenCalledOnce();
 	});
 
-	it.each(
-		saveFixtures,
-	)("returns the roster for a given team for %s", async (name, path) => {
-		const result = await mcp.callTool("pcm_get_team_roster", {
-			savePath: path,
-			teamId: 1,
-		});
+	it.each(saveFixtures)(
+		"returns the roster for a given team for %s",
+		async (name, path) => {
+			const result = await mcp.callTool("pcm_get_team_roster", {
+				savePath: path,
+				teamId: 1,
+			});
 
-		expect(result.structuredContent).toBeDefined();
-		expect(result.structuredContent).toMatchSnapshot();
-	});
+			expect(result.structuredContent).toBeDefined();
+			expect(result.structuredContent).toMatchSnapshot();
+		},
+	);
 
 	it("returns an error for an unknown team", async () => {
 		const result = await mcp.callTool("pcm_get_team_roster", {
