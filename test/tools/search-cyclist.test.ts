@@ -17,17 +17,18 @@ describe("searchCyclist", () => {
 		expect(mcp.registerTool).toHaveBeenCalledOnce();
 	});
 
-	it.each(
-		saveFixtures,
-	)("finds cyclists by last name for %s", async (name, path) => {
-		const result = await mcp.callTool("pcm_search_cyclist", {
-			savePath: path,
-			lastName: "van der",
-		});
+	it.each(saveFixtures)(
+		"finds cyclists by last name for %s",
+		async (name, path) => {
+			const result = await mcp.callTool("pcm_search_cyclist", {
+				savePath: path,
+				lastName: "van der",
+			});
 
-		expect(result.structuredContent).toBeDefined();
-		expect(result.structuredContent).toMatchSnapshot();
-	});
+			expect(result.structuredContent).toBeDefined();
+			expect(result.structuredContent).toMatchSnapshot();
+		},
+	);
 
 	it("caps results at 10 and flags truncation for a broad search", async () => {
 		const result = await mcp.callTool("pcm_search_cyclist", {

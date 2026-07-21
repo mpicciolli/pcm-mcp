@@ -60,129 +60,135 @@ describe("updateCyclistRatings", () => {
 		expect(mcp.registerTool).toHaveBeenCalledOnce();
 	});
 
-	it.each(
-		saveFixtures,
-	)("updates ratings and writes the change to a new .cdb for %s", async (_name, path) => {
-		const cyclistId = await readFirstCyclistId(path);
-		const outputPath = join(outDir, "edited.cdb");
+	it.each(saveFixtures)(
+		"updates ratings and writes the change to a new .cdb for %s",
+		async (_name, path) => {
+			const cyclistId = await readFirstCyclistId(path);
+			const outputPath = join(outDir, "edited.cdb");
 
-		const result = await mcp.callTool("pcm_update_cyclist_ratings", {
-			savePath: path,
-			outputPath,
-			cyclistId,
-			ratings: { sprint: 81, mountain: 72 },
-		});
+			const result = await mcp.callTool("pcm_update_cyclist_ratings", {
+				savePath: path,
+				outputPath,
+				cyclistId,
+				ratings: { sprint: 81, mountain: 72 },
+			});
 
-		expect(result.isError).toBeUndefined();
-		expect(result.structuredContent).toMatchObject({
-			outputPath,
-			cyclist: {
-				id: cyclistId,
-				sprint: 81,
-				mountain: 72,
-			},
-		});
-		expect(
-			await readRatings(outputPath, cyclistId, [
-				"charac_i_sprint",
-				"charac_i_mountain",
-			]),
-		).toEqual([81, 72]);
-	});
+			expect(result.isError).toBeUndefined();
+			expect(result.structuredContent).toMatchObject({
+				outputPath,
+				cyclist: {
+					id: cyclistId,
+					sprint: 81,
+					mountain: 72,
+				},
+			});
+			expect(
+				await readRatings(outputPath, cyclistId, [
+					"charac_i_sprint",
+					"charac_i_mountain",
+				]),
+			).toEqual([81, 72]);
+		},
+	);
 
-	it.each(
-		saveFixtures,
-	)("only changes the ratings that were passed for %s", async (_name, path) => {
-		const cyclistId = await readFirstCyclistId(path);
-		const before = await readRatings(path, cyclistId, [
-			"charac_i_plain",
-			"charac_i_cobble",
-		]);
-		const outputPath = join(outDir, "edited.cdb");
-
-		await mcp.callTool("pcm_update_cyclist_ratings", {
-			savePath: path,
-			outputPath,
-			cyclistId,
-			ratings: { sprint: 81 },
-		});
-
-		expect(
-			await readRatings(outputPath, cyclistId, [
+	it.each(saveFixtures)(
+		"only changes the ratings that were passed for %s",
+		async (_name, path) => {
+			const cyclistId = await readFirstCyclistId(path);
+			const before = await readRatings(path, cyclistId, [
 				"charac_i_plain",
 				"charac_i_cobble",
-			]),
-		).toEqual(before);
-	});
+			]);
+			const outputPath = join(outDir, "edited.cdb");
 
-	it.each(
-		saveFixtures,
-	)("errors on an unknown cyclist ID for %s", async (_name, path) => {
-		const result = await mcp.callTool("pcm_update_cyclist_ratings", {
-			savePath: path,
-			outputPath: join(outDir, "edited.cdb"),
-			cyclistId: 999999999,
-			ratings: { sprint: 81 },
-		});
+			await mcp.callTool("pcm_update_cyclist_ratings", {
+				savePath: path,
+				outputPath,
+				cyclistId,
+				ratings: { sprint: 81 },
+			});
 
-		expect(result.isError).toBe(true);
-		expect(result.content[0]).toEqual({
-			type: "text",
-			text: "No cyclist with IDcyclist = 999999999 in this save — use pcm_search_cyclist to find the right ID.",
-		});
-	});
+			expect(
+				await readRatings(outputPath, cyclistId, [
+					"charac_i_plain",
+					"charac_i_cobble",
+				]),
+			).toEqual(before);
+		},
+	);
 
-	it.each(
-		saveFixtures,
-	)("errors when no rating is provided for %s", async (_name, path) => {
-		const cyclistId = await readFirstCyclistId(path);
-		const result = await mcp.callTool("pcm_update_cyclist_ratings", {
-			savePath: path,
-			outputPath: join(outDir, "edited.cdb"),
-			cyclistId,
-			ratings: {},
-		});
+	it.each(saveFixtures)(
+		"errors on an unknown cyclist ID for %s",
+		async (_name, path) => {
+			const result = await mcp.callTool("pcm_update_cyclist_ratings", {
+				savePath: path,
+				outputPath: join(outDir, "edited.cdb"),
+				cyclistId: 999999999,
+				ratings: { sprint: 81 },
+			});
 
-		expect(result.isError).toBe(true);
-		expect(result.content[0]).toEqual({
-			type: "text",
-			text: "Provide at least one rating to change in `ratings`.",
-		});
-	});
+			expect(result.isError).toBe(true);
+			expect(result.content[0]).toEqual({
+				type: "text",
+				text: "No cyclist with IDcyclist = 999999999 in this save — use pcm_search_cyclist to find the right ID.",
+			});
+		},
+	);
 
-	it.each(
-		saveFixtures.filter(([, , hasMediumMountain]) => hasMediumMountain),
-	)("sets mediumMountain for %s", async (_name, path) => {
-		const cyclistId = await readFirstCyclistId(path);
-		const outputPath = join(outDir, "edited.cdb");
-		const result = await mcp.callTool("pcm_update_cyclist_ratings", {
-			savePath: path,
-			outputPath,
-			cyclistId,
-			ratings: { mediumMountain: 77 },
-		});
+	it.each(saveFixtures)(
+		"errors when no rating is provided for %s",
+		async (_name, path) => {
+			const cyclistId = await readFirstCyclistId(path);
+			const result = await mcp.callTool("pcm_update_cyclist_ratings", {
+				savePath: path,
+				outputPath: join(outDir, "edited.cdb"),
+				cyclistId,
+				ratings: {},
+			});
 
-		expect(result.isError).toBeUndefined();
-		expect(
-			await readRatings(outputPath, cyclistId, ["charac_i_medium_mountain"]),
-		).toEqual([77]);
-	});
+			expect(result.isError).toBe(true);
+			expect(result.content[0]).toEqual({
+				type: "text",
+				text: "Provide at least one rating to change in `ratings`.",
+			});
+		},
+	);
 
-	it.each(
-		saveFixtures.filter(([, , hasMediumMountain]) => !hasMediumMountain),
-	)("rejects mediumMountain on saves that pre-date the column for %s", async (_name, path) => {
-		const cyclistId = await readFirstCyclistId(path);
-		const result = await mcp.callTool("pcm_update_cyclist_ratings", {
-			savePath: path,
-			outputPath: join(outDir, "edited.cdb"),
-			cyclistId,
-			ratings: { mediumMountain: 77 },
-		});
+	it.each(saveFixtures.filter(([, , hasMediumMountain]) => hasMediumMountain))(
+		"sets mediumMountain for %s",
+		async (_name, path) => {
+			const cyclistId = await readFirstCyclistId(path);
+			const outputPath = join(outDir, "edited.cdb");
+			const result = await mcp.callTool("pcm_update_cyclist_ratings", {
+				savePath: path,
+				outputPath,
+				cyclistId,
+				ratings: { mediumMountain: 77 },
+			});
 
-		expect(result.isError).toBe(true);
-		expect(result.content[0]).toEqual({
-			type: "text",
-			text: "This save pre-dates the charac_i_medium_mountain column — mediumMountain cannot be set on it.",
-		});
-	});
+			expect(result.isError).toBeUndefined();
+			expect(
+				await readRatings(outputPath, cyclistId, ["charac_i_medium_mountain"]),
+			).toEqual([77]);
+		},
+	);
+
+	it.each(saveFixtures.filter(([, , hasMediumMountain]) => !hasMediumMountain))(
+		"rejects mediumMountain on saves that pre-date the column for %s",
+		async (_name, path) => {
+			const cyclistId = await readFirstCyclistId(path);
+			const result = await mcp.callTool("pcm_update_cyclist_ratings", {
+				savePath: path,
+				outputPath: join(outDir, "edited.cdb"),
+				cyclistId,
+				ratings: { mediumMountain: 77 },
+			});
+
+			expect(result.isError).toBe(true);
+			expect(result.content[0]).toEqual({
+				type: "text",
+				text: "This save pre-dates the charac_i_medium_mountain column — mediumMountain cannot be set on it.",
+			});
+		},
+	);
 });

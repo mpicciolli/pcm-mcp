@@ -20,34 +20,36 @@ describe("querySave", () => {
 		expect(mcp.registerTool).toHaveBeenCalledOnce();
 	});
 
-	it.each(
-		saveFixtures,
-	)("runs a read-only SELECT against %s", async (_name, path) => {
-		const result = await mcp.callTool("pcm_query_save", {
-			savePath: path,
-			query: "SELECT COUNT(*) AS n FROM STA_race",
-		});
+	it.each(saveFixtures)(
+		"runs a read-only SELECT against %s",
+		async (_name, path) => {
+			const result = await mcp.callTool("pcm_query_save", {
+				savePath: path,
+				query: "SELECT COUNT(*) AS n FROM STA_race",
+			});
 
-		expect(result.isError).toBeUndefined();
-		expect(result.structuredContent).toMatchObject({ rowCount: 1 });
-	});
+			expect(result.isError).toBeUndefined();
+			expect(result.structuredContent).toMatchObject({ rowCount: 1 });
+		},
+	);
 
-	it.each(
-		saveFixtures,
-	)("rejects a WITH … DELETE CTE for %s", async (_name, path) => {
-		const result = await mcp.callTool("pcm_query_save", {
-			savePath: path,
-			query: "WITH x AS (SELECT 1) DELETE FROM STA_race",
-		});
+	it.each(saveFixtures)(
+		"rejects a WITH … DELETE CTE for %s",
+		async (_name, path) => {
+			const result = await mcp.callTool("pcm_query_save", {
+				savePath: path,
+				query: "WITH x AS (SELECT 1) DELETE FROM STA_race",
+			});
 
-		expect(result.isError).toBe(true);
-		expect(result.content).toEqual([
-			{
-				type: "text",
-				text: "Only read-only SELECT (or WITH … SELECT) queries are allowed.",
-			},
-		]);
-	});
+			expect(result.isError).toBe(true);
+			expect(result.content).toEqual([
+				{
+					type: "text",
+					text: "Only read-only SELECT (or WITH … SELECT) queries are allowed.",
+				},
+			]);
+		},
+	);
 
 	describe("assertReadOnlyQuery", () => {
 		describe("allowed queries", () => {
