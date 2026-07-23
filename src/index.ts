@@ -11,6 +11,8 @@ const { version } = JSON.parse(
 const server = new McpServer({
 	name: "pcm-mcp",
 	version,
+	description:
+		"Pro Cycling Manager MCP server for reading and validating .cdb database files",
 });
 
 registerTools(server);

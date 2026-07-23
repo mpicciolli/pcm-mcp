@@ -5,7 +5,7 @@
 <h1 align="center">Pro Cycling Manager MCP Server</h1>
 
 <p align="center">
-  Explore your <strong>Pro Cycling Manager</strong> career saves with an AI assistant — riders, teams, rosters and startlists, straight from the game's database.
+  Explore your <strong>Pro Cycling Manager</strong> saves with an AI assistant — riders, teams, rosters and startlists, straight from the game's database.
 </p>
 
 <p align="center">
@@ -15,15 +15,15 @@
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-compatible-blue.svg" alt="MCP compatible" /></a>
 </p>
 
-`pcm-mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants such as Claude Desktop, ChatGPT and Gemini query your [Pro Cycling Manager](https://www.cyanide-studio.com/) (PCM) game saves. Ask about a rider's ratings, browse a team's roster, run SQL against the save, or generate a race startlist — all in plain language.
+`pcm-mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants such as Claude Desktop, ChatGPT and Gemini query your [Pro Cycling Manager](https://www.cyanide-studio.com/) (PCM) game saves. Ask about a rider's ratings, browse a team's roster, run SQL against the database, or generate a race startlist — all in plain language.
 
 > [!IMPORTANT]
-> This server never modifies your existing save files. PCM stores careers as binary `.cdb` files; each call re-reads the `.cdb` from disk and loads it into an **in-memory** SQLite database. Every read tool leaves the source untouched. The write tools, `pcm_update_save` and `pcm_update_cyclist_ratings`, serialize their changes to a **new** `.cdb` file (`outputPath`) and refuse to overwrite the input — keep your original save as a backup.
+> This server never modifies your existing save files. PCM stores saves as binary `.cdb` files; each call re-reads the `.cdb` from disk and loads it into an **in-memory** SQLite database. Every read tool leaves the source untouched. The write tools, `pcm_update_save` and `pcm_update_cyclist_ratings`, serialize their changes to a **new** `.cdb` file (`outputPath`) and refuse to overwrite the input — keep your original save as a backup.
 
 ## Features
 
 - **Zero setup** — run it with a single `npx` command, or install a `.mcpb` bundle with no terminal at all.
-- **Save discovery** — auto-detect PCM career saves on Windows, or point at any `.cdb` file directly.
+- **Save discovery** — auto-detect PCM saves on Windows, or point at any `.cdb` file directly.
 - **Rich queries** — search cyclists and teams, inspect rosters with full per-terrain ratings, and read player info.
 - **Raw SQL** — run guarded, read-only `SELECT` queries against any table in the save.
 - **Guarded edits** — apply a single `INSERT`/`UPDATE`/`DELETE`, or edit a cyclist's ratings directly, and write the result to a new `.cdb`, never touching the original.
@@ -35,7 +35,7 @@
 ### Prerequisites
 
 - [Node.js](https://nodejs.org) 22 or later (not required for the `.mcpb` bundle install)
-- A Pro Cycling Manager career save (a `.cdb` file)
+- A Pro Cycling Manager save (a `.cdb` file)
 
 ### Install
 
@@ -71,7 +71,7 @@ Once configured, restart your client and ask it something like _"list my PCM sav
 
 ## Platform support
 
-PCM only ships on Windows, where careers live under:
+PCM only ships on Windows, where saves live under:
 
 ```
 %APPDATA%/Pro Cycling Manager <year>/Cloud/<profile>/
@@ -85,7 +85,7 @@ All tools are prefixed with `pcm_`. Every tool except `pcm_update_save` and `pcm
 
 | Tool                           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **pcm_list_saves**             | Discover PCM `.cdb` career save files on this machine by scanning the `Pro Cycling Manager <year>/Cloud` folders under `%APPDATA%` (Windows only). Returns each save's absolute path, file name, last modified date and size (newest first).                                                                                                                                                                                                                                                                                                                                      |
+| **pcm_list_saves**             | Discover PCM `.cdb` save files on this machine by scanning the `Pro Cycling Manager <year>/Cloud` folders under `%APPDATA%` (Windows only). Returns each save's absolute path, file name, last modified date and size (newest first).                                                                                                                                                                                                                                                                                                                                             |
 | **pcm_validate_save**          | Validate that an absolute path points to an existing `.cdb` save file and return its metadata. Stateless — keep the returned path in conversation context to pass to later tools.                                                                                                                                                                                                                                                                                                                                                                                                 |
 | **pcm_get_save_schema**        | List every table inside a `.cdb` save file, with its ID and name, plus the total table count.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **pcm_get_table_schema**       | Inspect a single table by name. Returns its columns (name, SQL type, NOT NULL and primary key flags) and its row count. Use `pcm_get_save_schema` first to discover available table names.                                                                                                                                                                                                                                                                                                                                                                                        |
