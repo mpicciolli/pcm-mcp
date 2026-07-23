@@ -20,13 +20,14 @@ describe("getPlayerInfo", () => {
 	// The official-release fixtures are databases, not played careers, so they
 	// have no active human player (GAM_user.game_i_active = 1). The tool should
 	// surface that as a graceful error rather than throwing.
-	it.each(
-		saveFixtures,
-	)("errors when there is no active player for %s", async (name, path) => {
-		const result = await mcp.callTool("pcm_get_player_info", {
-			savePath: path,
-		});
+	it.each(saveFixtures)(
+		"errors when there is no active player for %s",
+		async (name, path) => {
+			const result = await mcp.callTool("pcm_get_player_info", {
+				savePath: path,
+			});
 
-		expect(result.isError).toBe(true);
-	});
+			expect(result.isError).toBe(true);
+		},
+	);
 });
